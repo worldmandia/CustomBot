@@ -2,16 +2,17 @@ package ua.mani123.Listeners;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import ua.mani123.DTBot;
 import ua.mani123.ticket.TicketButton;
-import ua.mani123.ticket.TicketType;
+import ua.mani123.utils.Utils;
 
 public class UseCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getName().equals(DTBot.getLang().getString("commands.embed.name", "ticketembed"))){
-            TicketButton ticketButton = (TicketButton) DTBot.getTickets().get(TicketType.valueOf(event.getOption("type").getName()));
+            TicketButton ticketButton = (TicketButton) Utils.getTicketById(event.getOption("id", OptionMapping::getAsString), DTBot.getTickets());
             event.replyEmbeds(ticketButton.getEmbed()).addActionRow(ticketButton.getButton()).queue();
         }
     }

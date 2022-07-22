@@ -1,6 +1,6 @@
 package ua.mani123.utils;
 
-import com.electronwill.nightconfig.core.CommentedConfig;
+import com.electronwill.nightconfig.core.Config;
 import ua.mani123.DTBot;
 import ua.mani123.ticket.Ticket;
 import ua.mani123.ticket.TicketBlank;
@@ -14,23 +14,25 @@ import java.util.Map;
 
 public class Utils {
     public static Map<TicketType, Ticket> ticketSorter(String path) {
+        Map<TicketType, Config> mapListStrings = DTBot.getConfig().getTicketMap(path);
         Map<TicketType, Ticket> map = new HashMap<>();
-        for (Map.Entry<TicketType, CommentedConfig> ticket : DTBot.getConfig().getTicketMap(path).entrySet()) {
-            switch (ticket.getKey()) {
-                case TICKET_BUTTON -> map.put(ticket.getKey(), new TicketButton(
-                        ticket.getValue().get("id"),
-                        ticket.getValue().get("title"),
-                        ticket.getValue().get("description"),
-                        ticket.getValue().get("category"),
-                        ticket.getValue().get("button-style"),
-                        ticket.getValue().get("button-text"),
-                        ticket.getValue().get("button-emoji")
-                ));
-                case TICKET_FORM -> map.put(ticket.getKey(), new TicketBlank());
-                case TICKET_BLANK -> map.put(ticket.getKey(), new TicketBlank());
-                default -> map.put(ticket.getKey(), new TicketBlank());
+            for (Map.Entry<TicketType, Config> ticket : mapListStrings.entrySet()) {
+                switch (ticket.getKey()) {
+                    case TICKET_BUTTON -> map.put(ticket.getKey(), new TicketButton(
+                            ticket.getValue().get("id"),
+                            ticket.getValue().getOrElse("title", "Not found"),
+                            ticket.getValue().getOrElse("description", "Not found"),
+                            ticket.getValue().getOrElse("embed-color", "#000000"),
+                            ticket.getValue().getOrElse("category", "0"),
+                            ticket.getValue().getOrElse("button-style", "SECONDARY"),
+                            ticket.getValue().get("button-id"),
+                            ticket.getValue().getOrElse("button-text", "Not found")
+                    ));
+                    //case TICKET_FORM -> map.put(ticket.getKey(), new TicketBlank());
+                    //case TICKET_BLANK -> map.put(ticket.getKey(), new TicketBlank());
+                    default -> map.put(ticket.getKey(), new TicketBlank());
+                }
             }
-        }
         return map;
     }
 
@@ -42,6 +44,15 @@ public class Utils {
             }
         }
         return ids;
+    }
+
+    public static Ticket getTicketById(String id, Map<TicketType, Ticket> tickets){
+        for (Map.Entry<TicketType, Ticket> entry: tickets.entrySet()) {
+            if (entry.getValue().getId().equals(id)){
+                return entry.getValue();
+            }
+        }
+        return new TicketBlank();
     }
 
     public static Map<TicketType, List<String>> getSortedMapIds(Map<TicketType, Ticket> ticketMap) {

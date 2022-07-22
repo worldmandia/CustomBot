@@ -76,8 +76,8 @@ public class DTBot {
     }
 
     static void loadUtils() {
-        tickets = Utils.ticketSorter("ticket");
-        idsByType = Utils.getSortedMapIds(tickets);
+            tickets = Utils.ticketSorter("ticket");
+            idsByType = Utils.getSortedMapIds(tickets);
     }
 
     public static Map<TicketType, Ticket> getTickets() {

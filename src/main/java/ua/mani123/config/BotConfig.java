@@ -1,6 +1,7 @@
 package ua.mani123.config;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
+import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.file.FileConfig;
 import ua.mani123.ticket.TicketType;
 
@@ -31,15 +32,11 @@ public class BotConfig {
         return config.get(path);
     }
 
-
-    /*
-    TODO need edit
-     */
-    public Map<TicketType, CommentedConfig> getTicketMap(String path) {
+    public Map<TicketType, Config> getTicketMap(String path) {
         List<CommentedConfig> list = config.get(path);
-        Map<TicketType, CommentedConfig> map = new HashMap<>();
+        Map<TicketType, Config> map = new HashMap<>();
         for (CommentedConfig ticket: list) {
-            map.put(TicketType.valueOf(ticket.get("type"), "TICKET_BLANK"), ticket);
+            map.put(TicketType.valueOf(ticket.get("type").toString()), ticket);
         }
         return map;
     }
