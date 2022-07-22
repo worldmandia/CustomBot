@@ -1,0 +1,58 @@
+package ua.mani123.config;
+
+import com.electronwill.nightconfig.core.CommentedConfig;
+import com.electronwill.nightconfig.core.file.FileConfig;
+import ua.mani123.ticket.TicketType;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class BotConfig {
+
+    protected FileConfig config;
+
+    public BotConfig(String file) {
+        this.config = FileConfig.of(file);
+        config.load();
+    }
+
+    public String getString(String path, String defaultValue) {
+        if (config.get(path).equals("")) return defaultValue;
+        return config.getOrElse(path, defaultValue).toString();
+    }
+
+    public FileConfig get() {
+        return config;
+    }
+
+
+    public List<CommentedConfig> getList(String path) {
+        return config.get(path);
+    }
+
+
+    /*
+    TODO need edit
+     */
+    public Map<TicketType, CommentedConfig> getTicketMap(String path) {
+        List<CommentedConfig> list = config.get(path);
+        Map<TicketType, CommentedConfig> map = new HashMap<>();
+        for (CommentedConfig ticket: list) {
+            map.put(TicketType.valueOf(ticket.get("type"), "TICKET_BLANK"), ticket);
+        }
+        return map;
+    }
+
+    public String getString(String path) {
+        return config.getOrElse(path, null).toString();
+    }
+
+    public void reload() {
+        config.load();
+    }
+
+    public void save() {
+        config.save();
+    }
+}

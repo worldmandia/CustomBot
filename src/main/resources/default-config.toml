@@ -1,0 +1,25 @@
+# Configuration of DoubleTickets bot
+[bot-custom]
+activity = "PLAYING" # Enter PLAYING, STREAMING, LISTENING, WATCHING, COMPETING
+activity-text = "tickets %tickets%" # Enter custom activity text, for get count of tickets use %tickets%
+status = "ONLINE" # Enter DO_NOT_DISTURB, ONLINE, IDLE, INVISIBLE, OFFLINE
+
+# Configure your tickets here.
+[[ticket]]
+type = "TICKET_BUTTON"
+id = "tickets"
+title = "Create ticket"
+description = "Create ticket for get support"
+category = "997558530037010593"
+button-style = "SUCCESS"
+button-text = "Create ticket"
+button-emoji = "😋"
+[[ticket]]
+type = "TICKET_BUTTON"
+id = "ticketspremuim"
+title = "Create premuim ticket"
+description = "Create ticket for get premuim support"
+category = "997558530037010593"
+button-style = "SUCCESS"
+button-text = "Create ticket"
+button-emoji = "😋"

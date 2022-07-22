@@ -1,0 +1,4 @@
+[commands]
+embed.name = "ticketembed"
+embed.description = "This command create embed for interact with ticket system"
+embed.permission = "perm1role " # Name or id of role or user
