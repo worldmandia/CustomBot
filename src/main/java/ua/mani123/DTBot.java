@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.mani123.Command.RegisterCommands;
 import ua.mani123.Listeners.AutoComplete;
+import ua.mani123.Listeners.ButtonListener;
 import ua.mani123.Listeners.UseCommand;
 import ua.mani123.config.BotConfig;
 import ua.mani123.config.BotFilesManager;
@@ -67,6 +68,7 @@ public class DTBot {
                     .setCompression(Compression.ZLIB)
                     .addEventListeners(
                             new AutoComplete(),
+                            new ButtonListener(),
                             new UseCommand()
                     )
                     .build();
