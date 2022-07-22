@@ -4,8 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
-
-import java.awt.*;
+import ua.mani123.utils.Utils;
 
 public class TicketButton implements Ticket{
     String id;
@@ -29,7 +28,7 @@ public class TicketButton implements Ticket{
     }
 
     public MessageEmbed getEmbed(){
-        return new EmbedBuilder().setAuthor(title).setDescription(description).setColor(Color.decode(embedColor)).build();
+        return new EmbedBuilder().setAuthor(title).setDescription(description).setColor(Utils.decode(embedColor)).build();
     }
 
     public Button getButton(){
