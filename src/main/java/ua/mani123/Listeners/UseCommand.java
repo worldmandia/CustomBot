@@ -11,9 +11,11 @@ public class UseCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        if (event.getName().equals(DTBot.getLang().getString("commands.embed.name", "ticketembed"))){
+        if (event.getName().equals(DTBot.getLang().getString("commands.ticketembed.name", "ticketembed"))){
             TicketButton ticketButton = (TicketButton) Utils.getTicketById(event.getOption("id", OptionMapping::getAsString), DTBot.getTickets());
-            event.replyEmbeds(ticketButton.getEmbed()).addActionRow(ticketButton.getButton()).queue();
+            if (ticketButton != null){
+                event.replyEmbeds(ticketButton.getEmbed()).addActionRow(ticketButton.getButton()).queue();
+            }
         }
     }
 }

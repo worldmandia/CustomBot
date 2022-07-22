@@ -53,7 +53,7 @@ public class Utils {
                 return entry.getValue();
             }
         }
-        return new TicketBlank();
+        return null;
     }
 
     public static Map<TicketType, List<String>> getSortedMapIds(Map<TicketType, Ticket> ticketMap) {
