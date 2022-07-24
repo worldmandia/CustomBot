@@ -58,10 +58,6 @@ public class DTBot {
     }
 
     static void startBot() {
-            /*
-    TODO
-    Create ticket module
-     */
         try {
             BotApi = JDABuilder.createDefault(TOKEN)
                     .setStatus(OnlineStatus.valueOf(config.getString("bot-custom.status".toUpperCase(), "ONLINE")))
