@@ -5,3 +5,5 @@ ticketembed.permission = "perm1role " # Name or id of role or user
 [embeds]
 error.button.title = "🔴 Error"
 error.button.description = "This button is wrong"
+success.cmd.title = "🟢 Success"
+success.cmd.description = "This command was completed successfully"
