@@ -21,7 +21,7 @@ public enum TicketType {
 
     public static List<String> getStrings() {
         List<String> list = new ArrayList<>();
-        for (TicketType type: TicketType.values()) {
+        for (TicketType type : TicketType.values()) {
             list.add(type.getKey());
         }
         return list;

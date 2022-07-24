@@ -36,7 +36,7 @@ public class BotConfig {
     public Map<TicketType, Config> getTicketMap(String path) {
         List<CommentedConfig> list = config.get(path);
         Map<TicketType, Config> map = new HashMap<>();
-        for (CommentedConfig ticket: list) {
+        for (CommentedConfig ticket : list) {
             map.put(TicketType.valueOf(ticket.get("type").toString()), ticket);
         }
         return map;

@@ -11,7 +11,7 @@ import ua.mani123.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TicketButton implements Ticket{
+public class TicketButton implements Ticket {
     String id;
     String title;
     String description;
@@ -28,19 +28,21 @@ public class TicketButton implements Ticket{
         this.buttonIds = buttonIds;
     }
 
-    public MessageEmbed getEmbed(){
+    public MessageEmbed getEmbed() {
         return new EmbedBuilder().setAuthor(title).setDescription(description).setColor(Utils.decode(embedColor)).build();
     }
 
-    public List<Button> getButtons(){
+    public List<Button> getButtons() {
         List<Button> buttons = new ArrayList<>();
-        for (String id: buttonIds) {
-            for (CommentedConfig cfg: DTBot.getButton().getList("button")) {
-                if (cfg.get("button-id").equals(id)){
+        for (String id : buttonIds) {
+            for (CommentedConfig cfg : DTBot.getButton().getList("button")) {
+                if (cfg.get("button-id").equals(id)) {
                     buttons.add(Button.of(
                             ButtonStyle.valueOf(cfg.getOrElse("button-style", "SUCCESS")),
                             cfg.getOrElse("button-id", "0"),
                             cfg.getOrElse("button-text", "Not found text in button")));
+                } else {
+                    DTBot.getLOGGER().warn("Button with id: " + id + "not found");
                 }
             }
         }
