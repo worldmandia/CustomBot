@@ -39,7 +39,7 @@ public class TicketButton implements Ticket{
                 if (cfg.get("button-id").equals(id)){
                     buttons.add(Button.of(
                             ButtonStyle.valueOf(cfg.getOrElse("button-style", "SUCCESS")),
-                            cfg.getOrElse("button-id", null),
+                            cfg.getOrElse("button-id", "0"),
                             cfg.getOrElse("button-text", "Not found text in button")));
                 }
             }

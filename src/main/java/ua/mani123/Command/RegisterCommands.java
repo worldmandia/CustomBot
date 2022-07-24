@@ -10,7 +10,8 @@ public class RegisterCommands {
     public RegisterCommands(JDA api, BotConfig lang) {
         try {
             api.updateCommands().addCommands(
-                    Commands.slash(lang.getString("commands.ticketembed.name", "ticketembed"), lang.getString("commands.embed.description"))
+                    Commands.slash(lang.getString("commands.ticketembed.name", "ticketembed"),
+                                    lang.getString("commands.ticketembed.description", "Not found description"))
                             .addOption(OptionType.STRING, "type", "type of ticket", true, true)
                             .addOption(OptionType.STRING, "id", "id of ticket", true, true)
             ).addCommands(Commands.slash("test", "test"))

@@ -19,7 +19,7 @@ public class BotConfig {
     }
 
     public String getString(String path, String defaultValue) {
-        if (config.get(path).equals("")) return defaultValue;
+        if (config.get(path).equals("") || config.get(path) == null) return defaultValue;
         return config.getOrElse(path, defaultValue).toString();
     }
 

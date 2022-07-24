@@ -14,7 +14,7 @@ public class AutoComplete extends ListenerAdapter {
 
     @Override
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event) {
-        if (event.getName().equals(DTBot.getLang().getString("commands.embed.name", "ticketembed")) && event.getFocusedOption().getName().equals("type")) {
+        if (event.getName().equals(DTBot.getLang().getString("commands.ticketembed.name", "ticketembed")) && event.getFocusedOption().getName().equals("type")) {
             List<Command.Choice> options = TicketType.getStrings()
                     .stream()
                     .filter(s -> s.startsWith(event.getFocusedOption().getValue()))
@@ -22,7 +22,7 @@ public class AutoComplete extends ListenerAdapter {
                     .collect(Collectors.toList());
             event.replyChoices(options).queue();
         }
-        if (event.getName().equals(DTBot.getLang().getString("commands.embed.name", "ticketembed")) && event.getFocusedOption().getName().equals("id")) {
+        if (event.getName().equals(DTBot.getLang().getString("commands.ticketembed.name", "ticketembed")) && event.getFocusedOption().getName().equals("id")) {
             List<Command.Choice> options = DTBot.getIdsByType().get(TicketType.valueOf(event.getOption("type", OptionMapping::getAsString)))
                     .stream()
                     .filter(s -> s.startsWith(event.getFocusedOption().getValue()))
