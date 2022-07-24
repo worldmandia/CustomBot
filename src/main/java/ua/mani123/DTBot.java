@@ -24,6 +24,7 @@ import java.util.Map;
 public class DTBot {
     protected static BotConfig config;
     protected static BotConfig lang;
+    protected static BotConfig button;
     protected static Map<TicketType, Ticket> tickets;
     protected static Map<TicketType, List<String>> idsByType;
     protected static String TOKEN;
@@ -39,17 +40,18 @@ public class DTBot {
     }
 
     static void createConfigs() {
-        BotFilesManager.createFile(Constants.DEFAULTTOKENCONFIGNAME);
-        BotFilesManager.createResourceFile("default-config.toml", Constants.DEFAULTCONFIGNAME);
-        BotFilesManager.createResourceFile("default-lang.toml", Constants.DEFAULTLANGNAME);
+        BotFilesManager.createFile(Constants.DEFAULT_TOKEN_CONFIG_NAME);
+        BotFilesManager.createResourceFile("default-config.toml", Constants.DEFAULT_CONFIG_NAME);
+        BotFilesManager.createResourceFile("default-lang.toml", Constants.DEFAULT_LANG_NAME);
+        BotFilesManager.createResourceFile("default-button.toml", Constants.DEFAULT_BUTTON_NAME);
     }
 
     static void loadConfigs() {
         try {
-            TOKEN = BotFilesManager.readFile(Constants.DEFAULTTOKENCONFIGNAME).readLine();
-            config = new BotConfig(Constants.DEFAULTCONFIGNAME);
-            lang = new BotConfig(Constants.DEFAULTLANGNAME);
-            //ticketButtons = TicketButton.initTickets(config.getList("ticket"));
+            TOKEN = BotFilesManager.readFile(Constants.DEFAULT_TOKEN_CONFIG_NAME).readLine();
+            config = new BotConfig(Constants.DEFAULT_CONFIG_NAME);
+            lang = new BotConfig(Constants.DEFAULT_LANG_NAME);
+            button = new BotConfig(Constants.DEFAULT_BUTTON_NAME);
         } catch (Exception e) {
             getLOGGER().error(e.getMessage() + ", check or reset cfg files");
         }
@@ -96,6 +98,10 @@ public class DTBot {
 
     public static BotConfig getLang() {
         return lang;
+    }
+
+    public static BotConfig getButton() {
+        return button;
     }
 
     public static Logger getLOGGER() {

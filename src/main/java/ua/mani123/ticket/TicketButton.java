@@ -1,10 +1,15 @@
 package ua.mani123.ticket;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
+import ua.mani123.DTBot;
 import ua.mani123.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TicketButton implements Ticket{
     String id;
@@ -12,34 +17,37 @@ public class TicketButton implements Ticket{
     String description;
     String embedColor;
     String category;
-    String buttonStyle;
-    String buttonId;
-    String buttonText;
+    List<String> buttonIds;
 
-    public TicketButton(String id, String title, String description, String embedColor, String category, String buttonStyle, String buttonText, String buttonEmoji) {
+    public TicketButton(String id, String title, String description, String embedColor, String category, List<String> buttonIds) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.embedColor = embedColor;
         this.category = category;
-        this.buttonStyle = buttonStyle;
-        this.buttonId = buttonText;
-        this.buttonText = buttonEmoji;
+        this.buttonIds = buttonIds;
     }
 
     public MessageEmbed getEmbed(){
         return new EmbedBuilder().setAuthor(title).setDescription(description).setColor(Utils.decode(embedColor)).build();
     }
 
-    public Button getButton(){
-        return Button.of(ButtonStyle.valueOf(buttonStyle), buttonId, buttonText);
+    public List<Button> getButtons(){
+        List<Button> buttons = new ArrayList<>();
+        for (String id: buttonIds) {
+            for (CommentedConfig cfg: DTBot.getButton().getList("button")) {
+                if (cfg.get("button-id").equals(id)){
+                    buttons.add(Button.of(
+                            ButtonStyle.valueOf(cfg.getOrElse("button-style", "SUCCESS")),
+                            cfg.getOrElse("button-id", null),
+                            cfg.getOrElse("button-text", "Not found text in button")));
+                }
+            }
+        }
+        return buttons;
     }
 
     public String getId() {
         return id;
-    }
-
-    public String getCategory() {
-        return category;
     }
 }

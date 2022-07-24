@@ -1,0 +1,12 @@
+[[button]]
+button-id = "btn2"
+button-style = "SUCCESS"
+button-text = "😋 Create Ticket"
+action = "CREATE_CHAT"
+category = "997558530037010593"
+[[button]]
+button-id = "btn1"
+button-style = "SUCCESS"
+button-text = "😋 Create a premuim Ticket"
+action = "CREATE_CHAT"
+category = "997558530037010593"
