@@ -14,7 +14,7 @@ public class UseCommand extends ListenerAdapter {
        if (event.getName().equals(DTBot.getLang().getString("commands.ticketembed.name", "ticketembed"))){
            TicketButton ticketButton = (TicketButton) Utils.getTicketById(event.getOption("id", OptionMapping::getAsString), DTBot.getTickets());
            if (ticketButton != null){
-               event.replyEmbeds(ticketButton.getEmbed()).addActionRow(ticketButton.getButtons()).queue();
+               event.getInteraction().getChannel().sendMessageEmbeds(ticketButton.getEmbed()).setActionRow(ticketButton.getButtons()).queue();
            }
        }
     }

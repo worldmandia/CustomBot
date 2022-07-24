@@ -25,7 +25,7 @@ public class Utils {
                         ticket.getValue().getOrElse("description", "Not found"),
                         ticket.getValue().getOrElse("embed-color", "#000000"),
                         ticket.getValue().getOrElse("category", "0"),
-                        ticket.getValue().get("button-id")
+                        ticket.getValue().get("button-ids")
                 ));
                 //case TICKET_FORM -> map.put(ticket.getKey(), new TicketBlank());
                 //case TICKET_BLANK -> map.put(ticket.getKey(), new TicketBlank());
