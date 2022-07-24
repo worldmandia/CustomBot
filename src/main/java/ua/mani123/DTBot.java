@@ -64,9 +64,9 @@ public class DTBot {
      */
         try {
             BotApi = JDABuilder.createDefault(TOKEN)
-                    .setStatus(OnlineStatus.valueOf(config.getString("bot-custom.status", "ONLINE")))
-                    .setActivity(Activity.of(config.get().getEnumOrElse("bot-custom.activity", Activity.ActivityType.PLAYING),
-                            config.getString("bot-custom.activity-text", "tickets %tickets%").replace("%tickets%", Integer.toString(11))))
+                    .setStatus(OnlineStatus.valueOf(config.getString("bot-custom.status".toUpperCase(), "ONLINE")))
+                    .setActivity(Activity.of(Activity.ActivityType.valueOf(config.getString("bot-custom.activity".toUpperCase(), "PLAYING")),
+                            config.getString("bot-custom.activity-text", "tickets %tickets%").replace("%tickets%", String.valueOf(tickets.size()))))
                     .setCompression(Compression.ZLIB)
                     .addEventListeners(
                             new AutoComplete(),

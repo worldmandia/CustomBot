@@ -37,7 +37,7 @@ public class BotConfig {
         List<CommentedConfig> list = config.get(path);
         Map<TicketType, Config> map = new HashMap<>();
         for (CommentedConfig ticket : list) {
-            map.put(TicketType.valueOf(ticket.get("type").toString()), ticket);
+            map.put(TicketType.valueOf(ticket.get("type").toString().toUpperCase()), ticket);
         }
         return map;
     }
