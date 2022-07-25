@@ -9,6 +9,9 @@ public class ButtonListener extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
+        //for (Map.Entry<InteractionType, Interaction> buttons: DTBot.getInteractions().entrySet()) {
+        //
+        //}
         if (event.getComponentId().equals("otheraction")) {
             // soon
         } else {

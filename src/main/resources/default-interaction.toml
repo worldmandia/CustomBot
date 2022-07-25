@@ -1,10 +1,12 @@
-[[button]]
+[[interaction]]
+type = "Button"
 button-id = "btn2"
 button-style = "SUCCESS"
 button-text = "😋 Create Ticket"
 action = "CREATE_CHAT"
 category = "997558530037010593"
-[[button]]
+[[interaction]]
+type = "Button"
 button-id = "btn1"
 button-style = "SUCCESS"
 button-text = "😋 Create a premuim Ticket"

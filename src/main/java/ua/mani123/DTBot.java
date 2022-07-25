@@ -13,9 +13,12 @@ import ua.mani123.Listeners.ButtonListener;
 import ua.mani123.Listeners.UseCommand;
 import ua.mani123.config.BotConfig;
 import ua.mani123.config.BotFilesManager;
+import ua.mani123.interaction.Interaction;
+import ua.mani123.interaction.InteractionType;
+import ua.mani123.interaction.InteractionUtils;
 import ua.mani123.ticket.Ticket;
 import ua.mani123.ticket.TicketType;
-import ua.mani123.utils.Utils;
+import ua.mani123.ticket.TicketUtils;
 
 import javax.security.auth.login.LoginException;
 import java.util.List;
@@ -26,6 +29,7 @@ public class DTBot {
     protected static BotConfig lang;
     protected static BotConfig button;
     protected static Map<TicketType, Ticket> tickets;
+    protected static Map<InteractionType, Interaction> interactions;
     protected static Map<TicketType, List<String>> idsByType;
     protected static String TOKEN;
     protected static Logger LOGGER = LoggerFactory.getLogger(DTBot.class);
@@ -43,7 +47,7 @@ public class DTBot {
         BotFilesManager.createFile(Constants.DEFAULT_TOKEN_CONFIG_NAME);
         BotFilesManager.createResourceFile("default-config.toml", Constants.DEFAULT_CONFIG_NAME);
         BotFilesManager.createResourceFile("default-lang.toml", Constants.DEFAULT_LANG_NAME);
-        BotFilesManager.createResourceFile("default-button.toml", Constants.DEFAULT_BUTTON_NAME);
+        BotFilesManager.createResourceFile("default-interaction.toml", Constants.DEFAULT_BUTTON_NAME);
     }
 
     static void loadConfigs() {
@@ -62,7 +66,7 @@ public class DTBot {
             BotApi = JDABuilder.createDefault(TOKEN)
                     .setStatus(OnlineStatus.valueOf(config.getString("bot-custom.status".toUpperCase(), "ONLINE")))
                     .setActivity(Activity.of(Activity.ActivityType.valueOf(config.getString("bot-custom.activity".toUpperCase(), "PLAYING")),
-                            config.getString("bot-custom.activity-text", "tickets %tickets%").replace("%tickets%", String.valueOf(tickets.size()))))
+                            config.getString("bot-custom.activity-text", "tickets %tickets%").replace("%tickets%", String.valueOf(69))))
                     .setCompression(Compression.ZLIB)
                     .addEventListeners(
                             new AutoComplete(),
@@ -76,9 +80,12 @@ public class DTBot {
     }
 
     static void loadUtils() {
-        tickets = Utils.ticketSorter("ticket");
-        idsByType = Utils.getSortedMapIds(tickets);
+        tickets = TicketUtils.ticketSorter("ticket");
+        idsByType = TicketUtils.getSortedMapIds(tickets);
+        interactions = InteractionUtils.interactionSorter("interaction");
     }
+
+    public static Map<InteractionType, Interaction> getInteractions() {return interactions;}
 
     public static Map<TicketType, Ticket> getTickets() {
         return tickets;

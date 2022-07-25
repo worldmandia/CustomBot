@@ -3,6 +3,7 @@ package ua.mani123.config;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.file.FileConfig;
+import ua.mani123.interaction.InteractionType;
 import ua.mani123.ticket.TicketType;
 
 import java.util.HashMap;
@@ -38,6 +39,15 @@ public class BotConfig {
         Map<TicketType, Config> map = new HashMap<>();
         for (CommentedConfig ticket : list) {
             map.put(TicketType.valueOf(ticket.get("type").toString().toUpperCase()), ticket);
+        }
+        return map;
+    }
+
+    public Map<InteractionType, Config> getInteractionMap(String path) {
+        List<CommentedConfig> list = config.get(path);
+        Map<InteractionType, Config> map = new HashMap<>();
+        for (CommentedConfig interaction : list) {
+            map.put(InteractionType.valueOf(interaction.get("type").toString().toUpperCase()), interaction);
         }
         return map;
     }
