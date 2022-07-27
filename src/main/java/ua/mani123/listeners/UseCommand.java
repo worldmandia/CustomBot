@@ -17,9 +17,9 @@ public class UseCommand extends ListenerAdapter {
             switch (TicketType.valueOf(event.getOption("type", OptionMapping::getAsString))) {
                 case TICKET_BUTTON -> {
                     try {
-                    TicketButton ticketButton = (TicketButton) TicketUtils.getTicketById(event.getOption("type", OptionMapping::getAsString),
-                            event.getOption("id", OptionMapping::getAsString),
-                            DTBot.getTickets());
+                        TicketButton ticketButton = (TicketButton) TicketUtils.getTicketById(event.getOption("type", OptionMapping::getAsString),
+                                event.getOption("id", OptionMapping::getAsString),
+                                DTBot.getTickets());
                         event.getInteraction().getChannel().sendMessageEmbeds(ticketButton.getEmbed()).setActionRow(ticketButton.getButtons()).queue();
                         event.replyEmbeds(new EmbedBuilder()
                                 .setAuthor(DTBot.getLang().getString("embeds.success.cmd.title", "Not found **embeds.success.cmd.title**"))

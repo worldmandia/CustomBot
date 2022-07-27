@@ -12,7 +12,7 @@ public class InteractionUtils {
     public static Map<InteractionType, List<Interaction>> interactionSorter(String path) {
         List<CommentedConfig> mapListStrings = Utils.getMap(path, DTBot.getInteraction().getFileConfig());
         Map<InteractionType, List<Interaction>> map = new HashMap<>();
-        for (InteractionType type: InteractionType.values()) {
+        for (InteractionType type : InteractionType.values()) {
             map.put(type, new ArrayList<>());
         }
         for (CommentedConfig interaction : mapListStrings) {
@@ -27,7 +27,7 @@ public class InteractionUtils {
                     ));
                     default -> DTBot.getLogger().info(interaction.get("id") + " wrong type");
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 DTBot.getLogger().error("Error: " + e.getMessage());
             }
         }

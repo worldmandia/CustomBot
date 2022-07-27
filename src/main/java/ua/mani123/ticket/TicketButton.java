@@ -7,7 +7,6 @@ import ua.mani123.DTBot;
 import ua.mani123.interaction.ButtonInteraction;
 import ua.mani123.interaction.Interaction;
 import ua.mani123.interaction.InteractionType;
-import ua.mani123.interaction.InteractionUtils;
 import ua.mani123.utils.Utils;
 
 import java.util.ArrayList;
@@ -36,8 +35,8 @@ public class TicketButton implements Ticket {
     public List<Button> getButtons() {
         List<Button> buttons = new ArrayList<>();
         for (String id : buttonIds) {
-            for (Interaction interaction: DTBot.getInteractions().get(InteractionType.BUTTON)) {
-                if (interaction.getId().equals(id)){
+            for (Interaction interaction : DTBot.getInteractions().get(InteractionType.BUTTON)) {
+                if (interaction.getId().equals(id)) {
                     ButtonInteraction buttonInteraction = (ButtonInteraction) interaction;
                     buttons.add(buttonInteraction.getInteraction());
                     interactions.add(buttonInteraction);
@@ -46,6 +45,7 @@ public class TicketButton implements Ticket {
         }
         return buttons;
     }
+
     public String getId() {
         return id;
     }

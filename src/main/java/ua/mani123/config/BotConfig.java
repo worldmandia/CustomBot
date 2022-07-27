@@ -1,6 +1,7 @@
 package ua.mani123.config;
 
 import com.electronwill.nightconfig.core.file.FileConfig;
+
 public class BotConfig {
     protected FileConfig fileConfig;
 
@@ -11,7 +12,7 @@ public class BotConfig {
 
     public String getString(String path, String defaultValue) {
         if (fileConfig.get(path) == null || fileConfig.get(path).equals("")) return defaultValue;
-        return fileConfig.getOrElse(path, defaultValue).toString();
+        return fileConfig.getOrElse(path, defaultValue);
     }
 
     public FileConfig getFileConfig() {

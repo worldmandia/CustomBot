@@ -19,9 +19,10 @@ public class ButtonInteraction implements Interaction {
         this.category = category;
     }
 
-    public Button getInteraction(){
+    public Button getInteraction() {
         return Button.of(buttonStyle, id, buttonText);
     }
+
     public String getId() {
         return id;
     }

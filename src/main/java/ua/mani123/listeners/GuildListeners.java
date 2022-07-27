@@ -19,8 +19,8 @@ public class GuildListeners extends ListenerAdapter {
             .addOption(OptionType.STRING, "id", "id of ticket", true, true));
 
     @Override
-    public void onGuildReady(@NotNull GuildReadyEvent event){
-       event.getGuild().updateCommands().addCommands(commandDataList).queue();
+    public void onGuildReady(@NotNull GuildReadyEvent event) {
+        event.getGuild().updateCommands().addCommands(commandDataList).queue();
     }
 
     @Override
