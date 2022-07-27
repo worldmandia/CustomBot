@@ -1,7 +1,6 @@
 package ua.mani123.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Category;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import ua.mani123.DTBot;
@@ -17,10 +16,13 @@ public class ButtonListener extends ListenerAdapter {
             if (interact.getId().equals(event.getComponentId())) {
                 ButtonInteraction buttonInteraction = (ButtonInteraction) interact;
                 switch (buttonInteraction.getActions()) {
-                    case CREATE_CHAT ->
-                    {
-                        event.getGuild().createTextChannel(event.getInteraction().getMember().getNickname(), event.getGuild().getCategoryById(buttonInteraction.getCategory()));
-                        event.getInteraction().replyEmbeds(new EmbedBuilder().setAuthor("Success").setDescription("You created chanel: @" + event.getInteraction().getMember().getNickname()).build()).setEphemeral(true).queue();
+                    case CREATE_TEXT_CHAT -> {
+                        event.getGuild().createTextChannel(event.getUser().getAsTag(), event.getGuild().getCategoryById(buttonInteraction.getCategory())).queue();
+                        event.getInteraction().replyEmbeds(new EmbedBuilder().setAuthor("Success").setDescription("You created chanel: " + event.getUser().getAsTag()).build()).setEphemeral(true).queue();
+                    }
+                    case CREATE_VOICE_CHAT -> {
+                        event.getGuild().createVoiceChannel(event.getUser().getAsTag(), event.getGuild().getCategoryById(buttonInteraction.getCategory())).queue();
+                        event.getInteraction().replyEmbeds(new EmbedBuilder().setAuthor("Success").setDescription("You created chanel: " + event.getUser().getAsTag()).build()).setEphemeral(true).queue();
                     }
                 }
             }

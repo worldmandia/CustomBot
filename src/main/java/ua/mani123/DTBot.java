@@ -1,21 +1,23 @@
 package ua.mani123;
 
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.Compression;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.mani123.command.RegisterCommands;
-import ua.mani123.listeners.AutoComplete;
-import ua.mani123.listeners.ButtonListener;
-import ua.mani123.listeners.UseCommand;
 import ua.mani123.config.BotConfig;
 import ua.mani123.config.BotFilesManager;
 import ua.mani123.interaction.Interaction;
 import ua.mani123.interaction.InteractionType;
 import ua.mani123.interaction.InteractionUtils;
+import ua.mani123.listeners.AutoComplete;
+import ua.mani123.listeners.ButtonListener;
+import ua.mani123.listeners.GuildListeners;
+import ua.mani123.listeners.UseCommand;
 import ua.mani123.ticket.Ticket;
 import ua.mani123.ticket.TicketType;
 import ua.mani123.ticket.TicketUtils;
@@ -35,7 +37,7 @@ public class DTBot {
     protected static Logger logger = LoggerFactory.getLogger(DTBot.class);
 
     protected static Activity activity = Activity.of(Activity.ActivityType.LISTENING, "Loading...");
-    protected static JDA BotApi;
+    protected static DefaultShardManagerBuilder BotApi;
 
     // Main method
 
@@ -44,7 +46,6 @@ public class DTBot {
         loadConfigs();
         startBot();
         loadUtils();
-        new RegisterCommands(getBotApi(), getLang());
     }
 
     // Methods for start bot
@@ -69,16 +70,20 @@ public class DTBot {
 
     static void startBot() {
         try {
-            BotApi = JDABuilder.createDefault(TOKEN)
-                    .setStatus(OnlineStatus.valueOf(config.getString("bot-custom.status".toUpperCase(), "ONLINE")))
-                    .setActivity(activity)
-                    .setCompression(Compression.ZLIB)
-                    .addEventListeners(
-                            new AutoComplete(),
-                            new ButtonListener(),
-                            new UseCommand()
-                    )
-                    .build();
+            BotApi = DefaultShardManagerBuilder.createDefault(TOKEN);
+            BotApi.addEventListeners(
+                    new AutoComplete(),
+                    new ButtonListener(),
+                    new GuildListeners(),
+                    new UseCommand()
+            );
+            BotApi.setCompression(Compression.ZLIB);
+            BotApi.setActivity(activity);
+            BotApi.setStatus(OnlineStatus.valueOf(config.getString("bot-custom.status".toUpperCase(), "ONLINE")));
+            BotApi.setMemberCachePolicy(MemberCachePolicy.ALL);
+            BotApi.setEnabledIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT);
+            BotApi.setChunkingFilter(ChunkingFilter.ALL);
+            BotApi.build();
         } catch (LoginException e) {
             getLogger().error("LoginException, wrong TOKEN");
         }
@@ -117,7 +122,7 @@ public class DTBot {
         return logger;
     }
 
-    public static JDA getBotApi() {
+    public static DefaultShardManagerBuilder getBotApi() {
         return BotApi;
     }
 
