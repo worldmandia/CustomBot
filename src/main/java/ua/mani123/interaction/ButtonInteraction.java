@@ -26,4 +26,11 @@ public class ButtonInteraction implements Interaction {
         return id;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public Actions getActions() {
+        return actions;
+    }
 }
