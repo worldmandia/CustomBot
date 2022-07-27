@@ -1,4 +1,4 @@
-package ua.mani123.Listeners;
+package ua.mani123.listeners;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -23,10 +23,10 @@ public class AutoComplete extends ListenerAdapter {
             event.replyChoices(options).queue();
         }
         if (event.getName().equals(DTBot.getLang().getString("commands.ticketembed.name", "ticketembed")) && event.getFocusedOption().getName().equals("id")) {
-            List<Command.Choice> options = DTBot.getIdsByType().get(TicketType.valueOf(event.getOption("type", OptionMapping::getAsString)))
+            List<Command.Choice> options = DTBot.getTickets().get(TicketType.valueOf(event.getOption("type", OptionMapping::getAsString)))
                     .stream()
-                    .filter(s -> s.startsWith(event.getFocusedOption().getValue()))
-                    .map(s -> new Command.Choice(s, s))
+                    .filter(s -> s.getId().startsWith(event.getFocusedOption().getValue()))
+                    .map(s -> new Command.Choice(s.getId(), s.getId()))
                     .collect(Collectors.toList());
             event.replyChoices(options).queue();
         }

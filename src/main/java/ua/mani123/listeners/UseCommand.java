@@ -1,4 +1,4 @@
-package ua.mani123.Listeners;
+package ua.mani123.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -7,14 +7,15 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import ua.mani123.DTBot;
 import ua.mani123.ticket.TicketButton;
 import ua.mani123.ticket.TicketUtils;
-import ua.mani123.utils.Utils;
 
 public class UseCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getName().equals(DTBot.getLang().getString("commands.ticketembed.name", "ticketembed"))) {
-            TicketButton ticketButton = (TicketButton) TicketUtils.getTicketById(event.getOption("id", OptionMapping::getAsString), DTBot.getTickets());
+            TicketButton ticketButton = (TicketButton) TicketUtils.getTicketById(event.getOption("type", OptionMapping::getAsString),
+                    event.getOption("id", OptionMapping::getAsString),
+                    DTBot.getTickets());
             if (ticketButton != null) {
                 try {
                     event.getInteraction().getChannel().sendMessageEmbeds(ticketButton.getEmbed()).setActionRow(ticketButton.getButtons()).queue();
@@ -23,7 +24,7 @@ public class UseCommand extends ListenerAdapter {
                             .setDescription(DTBot.getLang().getString("embeds.success.cmd.description", "Not found **embeds.success.cmd.description**"))
                             .build()).setEphemeral(true).queue();
                 } catch (Exception e) {
-                    DTBot.getLOGGER().error("Commands error: " + e.getMessage());
+                    DTBot.getLogger().error("Commands error: " + e.getMessage());
                 }
             }
         }

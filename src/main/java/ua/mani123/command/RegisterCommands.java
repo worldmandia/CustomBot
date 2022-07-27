@@ -1,4 +1,4 @@
-package ua.mani123.Command;
+package ua.mani123.command;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -17,7 +17,7 @@ public class RegisterCommands {
                     ).addCommands(Commands.slash("test", "test"))
                     .queue();
         } catch (IllegalArgumentException e) {
-            DTBot.getLOGGER().error(e.getMessage() + ", in lang you need change cmd ");
+            DTBot.getLogger().error(e.getMessage() + ", in lang you need change cmd ");
         }
     }
 }

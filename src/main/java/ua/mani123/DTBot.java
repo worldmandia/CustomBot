@@ -7,10 +7,10 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.utils.Compression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.mani123.Command.RegisterCommands;
-import ua.mani123.Listeners.AutoComplete;
-import ua.mani123.Listeners.ButtonListener;
-import ua.mani123.Listeners.UseCommand;
+import ua.mani123.command.RegisterCommands;
+import ua.mani123.listeners.AutoComplete;
+import ua.mani123.listeners.ButtonListener;
+import ua.mani123.listeners.UseCommand;
 import ua.mani123.config.BotConfig;
 import ua.mani123.config.BotFilesManager;
 import ua.mani123.interaction.Interaction;
@@ -27,13 +27,17 @@ import java.util.Map;
 public class DTBot {
     protected static BotConfig config;
     protected static BotConfig lang;
-    protected static BotConfig button;
-    protected static Map<TicketType, Ticket> tickets;
-    protected static Map<InteractionType, Interaction> interactions;
-    protected static Map<TicketType, List<String>> idsByType;
+
+    protected static BotConfig interaction;
+    protected static Map<TicketType, List<Ticket>> tickets;
+    protected static Map<InteractionType, List<Interaction>> interactions;
     protected static String TOKEN;
-    protected static Logger LOGGER = LoggerFactory.getLogger(DTBot.class);
+    protected static Logger logger = LoggerFactory.getLogger(DTBot.class);
+
+    protected static Activity activity = Activity.of(Activity.ActivityType.LISTENING, "Loading...");
     protected static JDA BotApi;
+
+    // Main method
 
     public static void main(String[] args) {
         createConfigs();
@@ -43,11 +47,13 @@ public class DTBot {
         new RegisterCommands(getBotApi(), getLang());
     }
 
+    // Methods for start bot
+
     static void createConfigs() {
         BotFilesManager.createFile(Constants.DEFAULT_TOKEN_CONFIG_NAME);
         BotFilesManager.createResourceFile("default-config.toml", Constants.DEFAULT_CONFIG_NAME);
         BotFilesManager.createResourceFile("default-lang.toml", Constants.DEFAULT_LANG_NAME);
-        BotFilesManager.createResourceFile("default-interaction.toml", Constants.DEFAULT_BUTTON_NAME);
+        BotFilesManager.createResourceFile("default-interaction.toml", Constants.DEFAULT_INTERACTION_NAME);
     }
 
     static void loadConfigs() {
@@ -55,9 +61,9 @@ public class DTBot {
             TOKEN = BotFilesManager.readFile(Constants.DEFAULT_TOKEN_CONFIG_NAME).readLine();
             config = new BotConfig(Constants.DEFAULT_CONFIG_NAME);
             lang = new BotConfig(Constants.DEFAULT_LANG_NAME);
-            button = new BotConfig(Constants.DEFAULT_BUTTON_NAME);
+            interaction = new BotConfig(Constants.DEFAULT_INTERACTION_NAME);
         } catch (Exception e) {
-            getLOGGER().error(e.getMessage() + ", check or reset cfg files");
+            getLogger().error(e.getMessage() + ", check or reset cfg files");
         }
     }
 
@@ -65,8 +71,7 @@ public class DTBot {
         try {
             BotApi = JDABuilder.createDefault(TOKEN)
                     .setStatus(OnlineStatus.valueOf(config.getString("bot-custom.status".toUpperCase(), "ONLINE")))
-                    .setActivity(Activity.of(Activity.ActivityType.valueOf(config.getString("bot-custom.activity".toUpperCase(), "PLAYING")),
-                            config.getString("bot-custom.activity-text", "tickets %tickets%").replace("%tickets%", String.valueOf(69))))
+                    .setActivity(activity)
                     .setCompression(Compression.ZLIB)
                     .addEventListeners(
                             new AutoComplete(),
@@ -75,24 +80,25 @@ public class DTBot {
                     )
                     .build();
         } catch (LoginException e) {
-            getLOGGER().error("LoginException, wrong TOKEN");
+            getLogger().error("LoginException, wrong TOKEN");
         }
     }
 
     static void loadUtils() {
         tickets = TicketUtils.ticketSorter("ticket");
-        idsByType = TicketUtils.getSortedMapIds(tickets);
         interactions = InteractionUtils.interactionSorter("interaction");
+        activity = Activity.of(Activity.ActivityType.valueOf(config.getString("bot-custom.activity".toUpperCase(), "PLAYING")),
+                config.getString("bot-custom.activity-text", "tickets %tickets%").replace("%tickets%", String.valueOf(tickets.size())));
     }
 
-    public static Map<InteractionType, Interaction> getInteractions() {return interactions;}
+    // Getters
 
-    public static Map<TicketType, Ticket> getTickets() {
+    public static Map<InteractionType, List<Interaction>> getInteractions() {
+        return interactions;
+    }
+
+    public static Map<TicketType, List<Ticket>> getTickets() {
         return tickets;
-    }
-
-    public static Map<TicketType, List<String>> getIdsByType() {
-        return idsByType;
     }
 
     public static BotConfig getConfig() {
@@ -103,12 +109,12 @@ public class DTBot {
         return lang;
     }
 
-    public static BotConfig getButton() {
-        return button;
+    public static BotConfig getInteraction() {
+        return interaction;
     }
 
-    public static Logger getLOGGER() {
-        return LOGGER;
+    public static Logger getLogger() {
+        return logger;
     }
 
     public static JDA getBotApi() {

@@ -1,4 +1,4 @@
-package ua.mani123.Listeners;
+package ua.mani123.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;

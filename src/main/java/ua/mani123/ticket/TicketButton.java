@@ -13,14 +13,13 @@ import ua.mani123.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TicketButton extends Ticket {
+public class TicketButton implements Ticket {
     String id;
     String title;
     String description;
     String embedColor;
     List<String> buttonIds;
-
-    List<Interaction> interactions;
+    List<ButtonInteraction> interactions = new ArrayList<>();
 
     public TicketButton(String id, String title, String description, String embedColor, List<String> buttonIds) {
         this.id = id;
@@ -36,24 +35,17 @@ public class TicketButton extends Ticket {
 
     public List<Button> getButtons() {
         List<Button> buttons = new ArrayList<>();
-        List<Interaction> interactionList = InteractionUtils.getInteractionByType(DTBot.getInteractions(), InteractionType.BUTTON);
         for (String id : buttonIds) {
-            for (Interaction interaction: interactionList) {
+            for (Interaction interaction: DTBot.getInteractions().get(InteractionType.BUTTON)) {
                 if (interaction.getId().equals(id)){
-                    ButtonInteraction buttonInteraction = (ButtonInteraction)interaction;
-                    interactions.add(interaction);
+                    ButtonInteraction buttonInteraction = (ButtonInteraction) interaction;
                     buttons.add(buttonInteraction.getInteraction());
+                    interactions.add(buttonInteraction);
                 }
             }
         }
         return buttons;
     }
-
-    public List<Interaction> getInteractions() {
-        return interactions;
-    }
-
-    @Override
     public String getId() {
         return id;
     }
