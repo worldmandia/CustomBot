@@ -1,5 +1,6 @@
 package ua.mani123.listeners;
 
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -21,6 +22,9 @@ public class GuildListeners extends ListenerAdapter {
     @Override
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         event.getGuild().updateCommands().addCommands(commandDataList).queue();
+        event.getJDA().getPresence().setPresence(Activity.of(Activity.ActivityType.valueOf(DTBot.getConfig().getString("bot-custom.activity".toUpperCase(), "PLAYING")),
+                DTBot.getConfig().getString("bot-custom.activity-text", "tickets %tickets%").replace("%tickets%", String.valueOf(DTBot.getTickets().size()))),
+                false);
     }
 
     @Override

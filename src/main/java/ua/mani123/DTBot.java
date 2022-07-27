@@ -35,8 +35,6 @@ public class DTBot {
     protected static Map<InteractionType, List<Interaction>> interactions;
     protected static String TOKEN;
     protected static Logger logger = LoggerFactory.getLogger(DTBot.class);
-
-    protected static Activity activity = Activity.of(Activity.ActivityType.LISTENING, "Loading...");
     protected static DefaultShardManagerBuilder BotApi;
 
     // Main method
@@ -78,7 +76,7 @@ public class DTBot {
                     new UseCommand()
             );
             BotApi.setCompression(Compression.ZLIB);
-            BotApi.setActivity(activity);
+            BotApi.setActivity(Activity.of(Activity.ActivityType.LISTENING, "Loading..."));
             BotApi.setStatus(OnlineStatus.valueOf(config.getString("bot-custom.status".toUpperCase(), "ONLINE")));
             BotApi.setMemberCachePolicy(MemberCachePolicy.ALL);
             BotApi.setEnabledIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT);
@@ -92,8 +90,6 @@ public class DTBot {
     static void loadUtils() {
         tickets = TicketUtils.ticketSorter("ticket");
         interactions = InteractionUtils.interactionSorter("interaction");
-        activity = Activity.of(Activity.ActivityType.valueOf(config.getString("bot-custom.activity".toUpperCase(), "PLAYING")),
-                config.getString("bot-custom.activity-text", "tickets %tickets%").replace("%tickets%", String.valueOf(tickets.size())));
     }
 
     // Getters
