@@ -13,21 +13,25 @@ public class TicketUtils {
     public static Map<TicketType, List<Ticket>> ticketSorter(String path) {
         List<CommentedConfig> mapListStrings = Utils.getMap(path, DTBot.getConfig().getFileConfig());
         Map<TicketType, List<Ticket>> map = new HashMap<>();
-        for (TicketType type: TicketType.values()) {
+        for (TicketType type : TicketType.values()) {
             map.put(type, new ArrayList<>());
         }
         for (CommentedConfig ticket : mapListStrings) {
-            switch (TicketType.valueOf(ticket.get("type"))) {
-                case TICKET_BUTTON -> map.get(TicketType.TICKET_BUTTON).add(new TicketButton(
-                        ticket.get("id"),
-                        ticket.getOrElse("title", "Not found"),
-                        ticket.getOrElse("description", "Not found"),
-                        ticket.getOrElse("embed-color", "#000000"),
-                        ticket.get("button-ids")
-                ));
-                //case TICKET_FORM -> map.put(ticket.getKey(), new TicketBlank());
-                //case TICKET_BLANK -> map.put(ticket.getKey(), new TicketBlank());
-                default -> DTBot.getLogger().info(ticket.get("id") + " wrong type");
+            try {
+                switch (TicketType.valueOf(ticket.get("type"))) {
+                    case TICKET_BUTTON -> map.get(TicketType.TICKET_BUTTON).add(new TicketButton(
+                            ticket.get("id"),
+                            ticket.getOrElse("title", "Not found"),
+                            ticket.getOrElse("description", "Not found"),
+                            ticket.getOrElse("embed-color", "#000000"),
+                            ticket.get("button-ids")
+                    ));
+                    //case TICKET_FORM -> map.put(ticket.getKey(), new TicketBlank());
+                    //case TICKET_BLANK -> map.put(ticket.getKey(), new TicketBlank());
+                    default -> DTBot.getLogger().info(ticket.get("id") + " wrong type");
+                }
+            } catch (Exception e) {
+                DTBot.getLogger().error("Error: " + e.getMessage());
             }
         }
         return map;

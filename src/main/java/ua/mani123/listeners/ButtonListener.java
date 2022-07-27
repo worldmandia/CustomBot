@@ -24,6 +24,7 @@ public class ButtonListener extends ListenerAdapter {
                         event.getGuild().createVoiceChannel(event.getUser().getAsTag(), event.getGuild().getCategoryById(buttonInteraction.getCategory())).queue();
                         event.getInteraction().replyEmbeds(new EmbedBuilder().setAuthor("Success").setDescription("You created chanel: " + event.getUser().getAsTag()).build()).setEphemeral(true).queue();
                     }
+                    default -> event.getInteraction().replyEmbeds(new EmbedBuilder().setAuthor("Error").setDescription("Action not found").build()).setEphemeral(true).queue();
                 }
             }
         }

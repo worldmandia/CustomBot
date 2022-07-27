@@ -5,10 +5,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 import ua.mani123.DTBot;
 import ua.mani123.utils.Utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InteractionUtils {
 
@@ -19,15 +16,19 @@ public class InteractionUtils {
             map.put(type, new ArrayList<>());
         }
         for (CommentedConfig interaction : mapListStrings) {
-            switch (InteractionType.valueOf(interaction.get("type"))) {
-                case BUTTON -> map.get(InteractionType.BUTTON).add(new ButtonInteraction(
-                        interaction.get("button-id"),
-                        ButtonStyle.valueOf(interaction.getOrElse("buttonStyle", "SUCCESS").toUpperCase()),
-                        interaction.getOrElse("button-text", "Not found"),
-                        Actions.valueOf(interaction.getOrElse("action", "CREATE_CHAT").toUpperCase()),
-                        interaction.get("category")
-                ));
-                default -> DTBot.getLogger().info(interaction.get("id") + " wrong type");
+            try {
+                switch (InteractionType.valueOf(interaction.get("type").toString().toUpperCase())) {
+                    case BUTTON -> map.get(InteractionType.BUTTON).add(new ButtonInteraction(
+                            interaction.get("button-id"),
+                            ButtonStyle.valueOf(interaction.getOrElse("buttonStyle", "SUCCESS").toUpperCase()),
+                            interaction.getOrElse("button-text", "Not found"),
+                            Actions.valueOf(interaction.getOrElse("action", "CREATE_CHAT").toUpperCase()),
+                            interaction.get("category")
+                    ));
+                    default -> DTBot.getLogger().info(interaction.get("id") + " wrong type");
+                }
+            } catch (Exception e){
+                DTBot.getLogger().error("Error: " + e.getMessage());
             }
         }
         return map;
