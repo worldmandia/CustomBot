@@ -1,7 +1,6 @@
 package ua.mani123.interaction;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
-import com.electronwill.nightconfig.core.Config;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 import ua.mani123.DTBot;
 import ua.mani123.utils.Utils;
@@ -16,7 +15,9 @@ public class InteractionUtils {
     public static Map<InteractionType, List<Interaction>> interactionSorter(String path) {
         List<CommentedConfig> mapListStrings = Utils.getMap(path, DTBot.getInteraction().getFileConfig());
         Map<InteractionType, List<Interaction>> map = new HashMap<>();
-        map.put(InteractionType.BUTTON, new ArrayList<>());
+        for (InteractionType type: InteractionType.values()) {
+            map.put(type, new ArrayList<>());
+        }
         for (CommentedConfig interaction : mapListStrings) {
             switch (InteractionType.valueOf(interaction.get("type"))) {
                 case BUTTON -> map.get(InteractionType.BUTTON).add(new ButtonInteraction(
