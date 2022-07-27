@@ -21,7 +21,9 @@ repositories {
 }
 
 dependencies {
-    implementation("net.dv8tion:JDA:$jdaVersion")
+    implementation("net.dv8tion:JDA:$jdaVersion") {
+        exclude module: 'opus-java'
+    }
     implementation("com.electronwill.night-config:toml:$tomlVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
 }
