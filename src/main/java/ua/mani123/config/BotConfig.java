@@ -25,5 +25,6 @@ public class BotConfig {
 
     public void save() {
         fileConfig.save();
+        fileConfig.load();
     }
 }

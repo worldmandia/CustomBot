@@ -1,5 +1,6 @@
 package ua.mani123.interaction;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 
@@ -9,14 +10,14 @@ public class ButtonInteraction implements Interaction {
     ButtonStyle buttonStyle;
     String buttonText;
     Actions actions;
-    String category;
+    CommentedConfig customs;
 
-    public ButtonInteraction(String id, ButtonStyle buttonStyle, String buttonText, Actions actions, String category) {
+    public ButtonInteraction(String id, ButtonStyle buttonStyle, String buttonText, Actions actions, CommentedConfig customs) {
         this.id = id;
         this.buttonStyle = buttonStyle;
         this.buttonText = buttonText;
         this.actions = actions;
-        this.category = category;
+        this.customs = customs;
     }
 
     public Button getInteraction() {
@@ -27,8 +28,8 @@ public class ButtonInteraction implements Interaction {
         return id;
     }
 
-    public String getCategory() {
-        return category;
+    public CommentedConfig getCustoms() {
+        return customs;
     }
 
     public Actions getActions() {

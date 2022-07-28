@@ -118,8 +118,4 @@ public class DTBot {
         return logger;
     }
 
-    public static DefaultShardManagerBuilder getBotApi() {
-        return BotApi;
-    }
-
 }

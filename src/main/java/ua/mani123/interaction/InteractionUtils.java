@@ -23,7 +23,7 @@ public class InteractionUtils {
                             ButtonStyle.valueOf(interaction.getOrElse("buttonStyle", "SUCCESS").toUpperCase()),
                             interaction.getOrElse("button-text", "Not found"),
                             Actions.valueOf(interaction.getOrElse("action", "CREATE_CHAT").toUpperCase()),
-                            interaction.get("category")
+                            interaction
                     ));
                     default -> DTBot.getLogger().info(interaction.get("id") + " wrong type");
                 }
