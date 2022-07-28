@@ -9,6 +9,9 @@ import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.mani123.command.CommandActions;
+import ua.mani123.command.CommandUtils;
+import ua.mani123.command.CustomCommand;
 import ua.mani123.config.BotConfig;
 import ua.mani123.config.BotFilesManager;
 import ua.mani123.interaction.Interaction;
@@ -33,6 +36,7 @@ public class DTBot {
     protected static BotConfig interaction;
     protected static Map<TicketType, List<Ticket>> tickets;
     protected static Map<InteractionType, List<Interaction>> interactions;
+    protected static Map<CommandActions, List<CustomCommand>> commands;
     protected static String TOKEN;
     protected static Logger logger = LoggerFactory.getLogger(DTBot.class);
     protected static DefaultShardManagerBuilder BotApi;
@@ -90,12 +94,25 @@ public class DTBot {
     static void loadUtils() {
         tickets = TicketUtils.ticketSorter("ticket");
         interactions = InteractionUtils.interactionSorter("interaction");
+        commands = CommandUtils.commandsSorter("commands");
+        Runtime.getRuntime().addShutdownHook(new Thread(DTBot::saveAll, "Shutdown-thread"));
+    }
+
+    static void saveAll() {
+        getLogger().warn("Dont close app with CTRL+C, use /close");
+        config.save();
+        lang.save();
+        interaction.save();
     }
 
     // Getters
 
     public static Map<InteractionType, List<Interaction>> getInteractions() {
         return interactions;
+    }
+
+    public static Map<CommandActions, List<CustomCommand>> getCommands() {
+        return commands;
     }
 
     public static Map<TicketType, List<Ticket>> getTickets() {

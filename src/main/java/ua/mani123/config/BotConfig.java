@@ -11,7 +11,8 @@ public class BotConfig {
     }
 
     public String getString(String path, String defaultValue) {
-        if (fileConfig.get(path) == null || fileConfig.get(path).equals("")) return defaultValue;
+        if (fileConfig.get(path) == null) return defaultValue;
+        if (fileConfig.get(path).equals("")) return defaultValue;
         return fileConfig.getOrElse(path, defaultValue);
     }
 

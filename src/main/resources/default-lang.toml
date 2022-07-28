@@ -1,7 +1,8 @@
-[commands]
-    ticketembed.name = "ticketembed"
-    ticketembed.description = "This command create embed for interact with ticket system"
-    ticketembed.permission = "perm1role " # Name or id of role or user
+[[commands]]
+    name = "ticketembed"
+    description = "This command create embed for interact with ticket system"
+    permission = "mani123#7703 " # Name of user or role
+    action = "CREATE_TICKET_EMBED"
 [embeds]
     error.button.title = "🔴 Error"
     error.button.description = "This button is wrong"
