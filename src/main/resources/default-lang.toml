@@ -4,7 +4,9 @@
     permission = "mani123#7703 " # Name of user or role
     action = "CREATE_TICKET_EMBED"
 [embeds]
-    error.button.title = "🔴 Error"
-    error.button.description = "This button is wrong"
-    success.cmd.title = "🟢 Success"
-    success.cmd.description = "This command was completed successfully"
+    error-title = "🔴 Error"
+    error-description = "Dear %username%, you has %action% error"
+    success-title = "🟢 Success"
+    success-description = "Dear %username%, this %action% has completed"
+    not-perms-title = "🟠 Hey"
+    not-perms-description = "Dear %username%, you dont have %action%"

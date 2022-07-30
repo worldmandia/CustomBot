@@ -1,6 +1,7 @@
 package ua.mani123.listeners;
 
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -20,7 +21,7 @@ public class GuildListeners extends ListenerAdapter {
     protected List<CommandData> commandDataList = new ArrayList<>();
 
     @Override
-    public void onGuildReady(@NotNull GuildReadyEvent event) {
+    public void onReady(@NotNull ReadyEvent event) {
         for (Map.Entry<CommandActions, List<CustomCommand>> command : DTBot.getCommands().entrySet()) {
             switch (command.getKey()){
                 case CREATE_TICKET_EMBED -> {
@@ -32,7 +33,7 @@ public class GuildListeners extends ListenerAdapter {
                 }
             }
         }
-        event.getGuild().updateCommands().addCommands(commandDataList).queue();
+        event.getJDA().updateCommands().addCommands(commandDataList).queue();
 
         // TODO custom presence
         event.getJDA().getPresence().setPresence(Activity.of(Activity.ActivityType.valueOf(DTBot.getConfig().getString("bot-custom.activity".toUpperCase(), "PLAYING")),

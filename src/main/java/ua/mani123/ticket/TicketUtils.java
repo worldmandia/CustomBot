@@ -20,7 +20,7 @@ public class TicketUtils {
             try {
                 switch (TicketType.valueOf(ticket.get("type"))) {
                     case TICKET_BUTTON -> map.get(TicketType.TICKET_BUTTON).add(new TicketButton(
-                            ticket.get("id"),
+                            ticket.getOrElse("id", "-1"),
                             ticket.getOrElse("title", "Not found"),
                             ticket.getOrElse("description", "Not found"),
                             ticket.getOrElse("embed-color", "#000000"),
