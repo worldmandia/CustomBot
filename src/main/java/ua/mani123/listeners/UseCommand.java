@@ -1,12 +1,10 @@
 package ua.mani123.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.jetbrains.annotations.NotNull;
 import ua.mani123.DTBot;
@@ -57,7 +55,8 @@ public class UseCommand extends ListenerAdapter {
 
     public String getWithPlaceholders(String s, GenericInteractionCreateEvent event, String action) {
         return s
-                .replaceAll("%username%", event.getUser().getAsMention())
+                .replaceAll("%username-mentioned%", event.getUser().getAsMention())
+                .replaceAll("%username%", event.getUser().getName())
                 .replaceAll("%data%", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
                 .replaceAll("%action%", action);
     }

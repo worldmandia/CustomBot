@@ -68,7 +68,8 @@ public class ButtonListener extends ListenerAdapter {
 
     public String getWithPlaceholders(int counter, String s, GenericInteractionCreateEvent event, String action) {
         return s
-                .replaceAll("%username%", event.getUser().getAsMention())
+                .replaceAll("%username-mentioned%", event.getUser().getAsMention())
+                .replaceAll("%username%", event.getUser().getName())
                 .replaceAll("%counter%", String.valueOf(counter))
                 .replaceAll("%data%", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
                 .replaceAll("%action%", action);

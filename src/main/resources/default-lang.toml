@@ -5,8 +5,8 @@
     action = "CREATE_TICKET_EMBED"
 [embeds]
     error-title = "🔴 Error"
-    error-description = "Dear %username%, you has %action% error"
+    error-description = "Dear %username-mentioned%, you has %action% error"
     success-title = "🟢 Success"
-    success-description = "Dear %username%, this %action% has completed"
+    success-description = "Dear %username-mentioned%, your %action% has completed"
     not-perms-title = "🟠 Hey"
-    not-perms-description = "Dear %username%, you dont have %action%"
+    not-perms-description = "Dear %username-mentioned%, you dont have %action%"
