@@ -1,7 +1,6 @@
 package ua.mani123.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -13,9 +12,7 @@ import ua.mani123.command.CustomCommand;
 import ua.mani123.ticket.TicketButton;
 import ua.mani123.ticket.TicketType;
 import ua.mani123.ticket.TicketUtils;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import ua.mani123.utils.Placeholder;
 
 public class UseCommand extends ListenerAdapter {
 
@@ -33,8 +30,8 @@ public class UseCommand extends ListenerAdapter {
                                 MessageAction action = event.getInteraction().getChannel().sendMessageEmbeds(ticketButton.getEmbed()).setActionRow(ticketButton.getButtons());
                                 action.queue(
                                         (success) -> event.replyEmbeds(new EmbedBuilder()
-                                                .setAuthor(getWithPlaceholders(DTBot.getLang().getString("embeds.success-title", "Not found **embeds.success-title**"), event, "command"))
-                                                .setDescription(getWithPlaceholders(DTBot.getLang().getString("embeds.success-description", "Not found **embeds.success-title**"), event, "command (" + event.getName() + ")"))
+                                                .setAuthor(Placeholder.use(DTBot.getLang().getString("embeds.success-title", "Not found **embeds.success-title**"), event, "command"))
+                                                .setDescription(Placeholder.use(DTBot.getLang().getString("embeds.success-description", "Not found **embeds.success-title**"), event, "command (" + event.getName() + ")"))
                                                 .build()).setEphemeral(true).queue(),
                                         (error) -> DTBot.getLogger().error(error.getMessage()));
                                 return;
@@ -45,19 +42,11 @@ public class UseCommand extends ListenerAdapter {
                     }
                 } else {
                     event.replyEmbeds(new EmbedBuilder()
-                            .setAuthor(getWithPlaceholders(DTBot.getLang().getString("embeds.not-perms-title", "Not found **embeds.not-perms-title**"), event, "perms"))
-                            .setDescription(getWithPlaceholders(DTBot.getLang().getString("embeds.not-perms-description", "Not found **embeds.not-perms-description**"), event, cmd.getPermission()))
+                            .setAuthor(Placeholder.use(DTBot.getLang().getString("embeds.not-perms-title", "Not found **embeds.not-perms-title**"), event, "perms"))
+                            .setDescription(Placeholder.use(DTBot.getLang().getString("embeds.not-perms-description", "Not found **embeds.not-perms-description**"), event, cmd.getPermission()))
                             .build()).setEphemeral(true).queue();
                 }
             }
         }
-    }
-
-    public String getWithPlaceholders(String s, GenericInteractionCreateEvent event, String action) {
-        return s
-                .replaceAll("%username-mentioned%", event.getUser().getAsMention())
-                .replaceAll("%username%", event.getUser().getName())
-                .replaceAll("%data%", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")))
-                .replaceAll("%action%", action);
     }
 }

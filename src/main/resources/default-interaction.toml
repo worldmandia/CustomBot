@@ -1,4 +1,4 @@
-
+# Configure interaction methods
 [[interaction]]
     action-name = "%username%-%counter%"
     action-description = "Username: %username% Data: %data%"
