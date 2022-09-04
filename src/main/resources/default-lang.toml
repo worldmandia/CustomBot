@@ -1,9 +1,3 @@
-# Configure text for cmds
-[[commands]]
-    name = "ticketembed"
-    description = "This command create embed for interact with ticket system"
-    permission = "mani123#7703 " # Name of user or role
-    action = "CREATE_TICKET_EMBED"
 # Configure text for embeds
 [embeds]
     error-title = "🔴 Error"
@@ -12,6 +6,3 @@
     success-description = "Dear %username-mentioned%, your %action% has completed"
     not-perms-title = "🟠 Hey"
     not-perms-description = "Dear %username-mentioned%, you don`t have %action%"
-# Configure text for actions
-[actions]
-    test-action = "test"

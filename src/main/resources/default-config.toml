@@ -1,17 +1,7 @@
 # Configuration of DoubleTickets bot
-[bot-custom]
+[bot.ticket]
     activity = "PLAYING" # Enter PLAYING, STREAMING, LISTENING, WATCHING, COMPETING
     activity-text = "tickets %tickets%" # Enter custom activity text, for get count of tickets use %tickets%
     status = "ONLINE" # Enter DO_NOT_DISTURB, ONLINE, IDLE, INVISIBLE, OFFLINE
-
-# Configure your tickets here.
-[[ticket]]
-    type = "TICKET_BUTTON"
-    id = "ticketspremium"
-    title = "Create ticket"
-    description = "Create ticket for get support"
-    embed-color = "#ed6f07"
-    button-ids = [
-        "btn2",
-        "btn1"
-    ]
+# Soon
+# [bot.other]

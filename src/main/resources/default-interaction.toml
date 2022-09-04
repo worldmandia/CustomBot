@@ -1,22 +1,33 @@
 # Configure interaction methods
 [[interaction]]
-    action-name = "%username%-%counter%"
-    action-description = "Username: %username% Data: %data%"
-    button-style = "SUCCESS"
-    button-text = "😋 Create Ticket"
-    button-id = "btn2"
-    action = "CREATE_TEXT_CHAT"
-    counter = 1
-    type = "Button"
-    category = "997558530037010593"
+    [type.Button]
+        button-style = "SUCCESS"
+        button-text = "😋 Create Ticket"
+        button-id = "btn2"
+    [actions.CREATE_TEXT_CHAT]
+        action-name = "%username%-%counter%"
+        action-description = "Username: %username% Data: %data%"
+        counter = 1
+        category = "997558530037010593"
+    [actions.CREATE_TEXT_CHAT]
+        action-name = "%username%-%counter%"
+        action-description = "Username: %username% Data: %data%"
+        counter = 1
+        category = "997558530037010593"
 
 [[interaction]]
-    action-name = "%username%-%counter%"
-    button-style = "SUCCESS"
-    button-text = "😋 Create a premuim Ticket"
-    button-id = "btn1"
-    action = "CREATE_VOICE_CHAT"
-    counter = 0
-    type = "Button"
-    category = "997558530037010593"
+    [type.Button]
+        button-style = "SUCCESS"
+        button-text = "Create Ticket"
+        button-id = "btn2"
+    [actions.CREATE_VOICE_CHAT]
+        action-name = "%username%-%counter%"
+        action-description = "Username: %username% Data: %data%"
+        counter = 1
+        category = "997558530037010593"
+    [actions.CREATE_VOICE_CHAT]
+        action-name = "%username%-%counter%"
+        action-description = "Username: %username% Data: %data%"
+        counter = 1
+        category = "997558530037010593"
 

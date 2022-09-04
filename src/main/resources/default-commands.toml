@@ -1,0 +1,10 @@
+# Configure text for cmds
+[[commands]]
+    name = "ticketembed"
+    description = "This command create embed for interact with ticket system"
+    permission = [ # Name of user or role
+        "mani123#7703"
+    ]
+    actions = [
+        "CREATE_TICKET_EMBED"
+    ]
