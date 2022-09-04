@@ -1,0 +1,14 @@
+[[action]]
+    id = "MyAction1"
+    type = "CREATE_VOICE_CHAT"
+    action-name = "%username%-%counter%"
+    action-description = "Username: %username% Data: %data%"
+    counter = 1
+    category = "997558530037010593"
+[[action]]
+    id = "MyAction2"
+    type = "CREATE_TEXT_CHAT"
+    action-name = "%username%-%counter%"
+    action-description = "Username: %username% Data: %data%"
+    counter = 1
+    category = "997558530037010593"

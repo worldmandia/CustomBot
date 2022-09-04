@@ -1,33 +1,20 @@
 # Configure interaction methods
 [[interaction]]
-    [type.Button]
-        button-style = "SUCCESS"
-        button-text = "😋 Create Ticket"
-        button-id = "btn2"
-    [actions.CREATE_TEXT_CHAT]
-        action-name = "%username%-%counter%"
-        action-description = "Username: %username% Data: %data%"
-        counter = 1
-        category = "997558530037010593"
-    [actions.CREATE_TEXT_CHAT]
-        action-name = "%username%-%counter%"
-        action-description = "Username: %username% Data: %data%"
-        counter = 1
-        category = "997558530037010593"
+    type = "Button"
+    button-style = "SUCCESS"
+    button-text = "😋 Create Ticket"
+    button-id = "btn2"
+    action-ids = [
+        "MyAction1",
+        "MyAction2"
+    ]
 
 [[interaction]]
-    [type.Button]
-        button-style = "SUCCESS"
-        button-text = "Create Ticket"
-        button-id = "btn2"
-    [actions.CREATE_VOICE_CHAT]
-        action-name = "%username%-%counter%"
-        action-description = "Username: %username% Data: %data%"
-        counter = 1
-        category = "997558530037010593"
-    [actions.CREATE_VOICE_CHAT]
-        action-name = "%username%-%counter%"
-        action-description = "Username: %username% Data: %data%"
-        counter = 1
-        category = "997558530037010593"
-
+    type = "Button"
+    button-style = "SUCCESS"
+    button-text = "Create Ticket"
+    button-id = "btn2"
+    action-ids = [
+        "MyAction1",
+        "MyAction2"
+    ]
