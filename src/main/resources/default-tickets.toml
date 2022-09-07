@@ -1,6 +1,6 @@
 # Configure your tickets here.
 [[ticket]]
-type = "TICKET_BUTTON"
+type = "BUTTON_INTERACTION"
 id = "ticketspremium"
 title = "Create ticket"
 description = "Create ticket for get support"

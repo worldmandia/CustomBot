@@ -1,4 +1,5 @@
 package ua.mani123.interaction;
 
-public class Interaction {
+public interface Interaction {
+    public String getId();
 }

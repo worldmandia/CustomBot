@@ -1,4 +1,7 @@
 package ua.mani123.action;
 
-public class Action {
+public interface Action {
+    String getId();
+    boolean isOnlyCommand();
+    boolean isOnlyTicket();
 }
