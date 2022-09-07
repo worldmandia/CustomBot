@@ -9,8 +9,10 @@ import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.mani123.action.ActionUtils;
 import ua.mani123.config.BotConfig;
 import ua.mani123.config.BotFilesManager;
+import ua.mani123.interaction.interactions.InteractionUtils;
 import ua.mani123.listeners.AutoComplete;
 import ua.mani123.listeners.ButtonListener;
 import ua.mani123.listeners.GuildListeners;
@@ -19,24 +21,27 @@ import ua.mani123.listeners.UseCommand;
 import javax.security.auth.login.LoginException;
 
 public class DTBot {
-    protected static BotConfig config;
-    protected static BotConfig lang;
-
-    protected static BotConfig interaction;
-    protected static BotConfig tickets;
-    protected static BotConfig commands;
-    protected static BotConfig actions;
-    protected static String TOKEN;
-    protected static Logger logger = LoggerFactory.getLogger(DTBot.class);
-    protected static DefaultShardManagerBuilder BotApi;
+    private static BotConfig config;
+    private static BotConfig lang;
+    private static BotConfig interaction;
+    private static BotConfig tickets;
+    private static BotConfig commands;
+    private static BotConfig actions;
+    private static String TOKEN;
+    private static final Logger logger = LoggerFactory.getLogger(DTBot.class);
+    private static DefaultShardManagerBuilder BotApi;
 
     // Main method
 
     public static void main(String[] args) {
+        getLogger().info("Loading configs...");
         createConfigs();
         loadConfigs();
+        getLogger().info("Start bot...");
         startBot();
+        getLogger().info("Load data...");
         loadUtils();
+        getLogger().info("Done!");
     }
 
     private static void createConfigs() {
@@ -74,7 +79,7 @@ public class DTBot {
             );
             BotApi.setCompression(Compression.ZLIB);
             BotApi.setActivity(Activity.of(Activity.ActivityType.LISTENING, "Loading..."));
-            BotApi.setStatus(OnlineStatus.valueOf(config.getString("bot-custom.status".toUpperCase(), "ONLINE")));
+            BotApi.setStatus(OnlineStatus.valueOf(getConfig().get("bot-custom.status").toUpperCase()));
             BotApi.setMemberCachePolicy(MemberCachePolicy.ALL);
             BotApi.setEnabledIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT);
             BotApi.setChunkingFilter(ChunkingFilter.ALL);
@@ -85,7 +90,9 @@ public class DTBot {
     }
 
     private static void loadUtils() {
-
+        // load data from cfg
+        ActionUtils.load();
+        InteractionUtils.load();
         // catch CTRL+C
         Runtime.getRuntime().addShutdownHook(new Thread(DTBot::saveAll, "Shutdown-thread"));
     }
