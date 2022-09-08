@@ -1,14 +1,19 @@
 # Configuration of DoubleTickets bot
 [bot-ticket]
-    status = "ONLINE" # Enter DO_NOT_DISTURB, ONLINE, IDLE, INVISIBLE, OFFLINE
-    [[activity]] # Enter activity.<PLAYING, STREAMING, LISTENING, WATCHING, COMPETING>
+# Enter DO_NOT_DISTURB, ONLINE, IDLE, INVISIBLE, OFFLINE
+status = "ONLINE"
+
+# Enter activity.<PLAYING, STREAMING, LISTENING, WATCHING, COMPETING>
+[[activity]]
+    activity-text = "Minecraft"
     type = "PLAYING"
-    activity-text = "Minecraft" # Enter custom activity text, for get count of tickets use %tickets%
-    [[activity]]
-    type = "STREAMING"
+
+[[activity]]
     activity-text = "Minecraft stream"
-    [[activity]]
     type = "STREAMING"
+
+[[activity]]
     activity-text = "GTA V stream"
+    type = "STREAMING"
 # Soon
 # [bot.other]
