@@ -2,6 +2,8 @@
 [bot-ticket]
 # Enter DO_NOT_DISTURB, ONLINE, IDLE, INVISIBLE, OFFLINE
 status = "ONLINE"
+# change activity every <number> in seconds
+activity-change-every = 10
 
 # Enter activity.<PLAYING, STREAMING, LISTENING, WATCHING, COMPETING>
 [[activity]]

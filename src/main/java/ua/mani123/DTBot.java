@@ -90,8 +90,11 @@ public class DTBot {
     private static void loadUtils() {
         // load data from cfg
         InteractionUtils.preLoad();
+        getLogger().info("Load Actions");
         ActionUtils.load();
+        getLogger().info("Load Interactions");
         InteractionUtils.load();
+        getLogger().info("Load Commands");
         CommandUtils.load();
         // catch CTRL+C
         Runtime.getRuntime().addShutdownHook(new Thread(DTBot::saveAll, "Shutdown-thread"));
