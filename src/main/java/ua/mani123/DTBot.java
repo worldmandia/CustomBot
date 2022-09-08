@@ -105,6 +105,8 @@ public class DTBot {
         config.save();
         lang.save();
         interaction.save();
+        commands.save();
+        actions.save();
     }
 
     // Getters
