@@ -1,8 +1,12 @@
 package ua.mani123.action.actions;
 
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 import ua.mani123.action.Action;
 import ua.mani123.interaction.Interaction;
+import ua.mani123.interaction.interactions.BUTTON_INTERACTION;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class CREATE_BUTTON_EMBED implements Action {
@@ -19,6 +23,28 @@ public class CREATE_BUTTON_EMBED implements Action {
         this.embedDescription = embedDescription;
         this.embedColor = embedColor;
         this.buttons = buttons;
+    }
+
+    public String getEmbedTitle() {
+        return embedTitle;
+    }
+
+    public String getEmbedDescription() {
+        return embedDescription;
+    }
+
+    public String getEmbedColor() {
+        return embedColor;
+    }
+
+    public ArrayList<Button> getButtons() {
+        ArrayList<Button> completeButtons = new ArrayList<>();
+        for (Interaction btn: buttons) {
+            if (btn instanceof BUTTON_INTERACTION b){
+                completeButtons.add(Button.of(ButtonStyle.valueOf(b.getButtonStyle().toUpperCase()), b.getId(), b.getButtonText()));
+            }
+        }
+        return completeButtons;
     }
 
     @Override
