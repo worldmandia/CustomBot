@@ -2,7 +2,7 @@ package ua.mani123.config;
 
 import com.electronwill.nightconfig.core.file.FileConfig;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class BotConfig {
     protected FileConfig fileConfig;
@@ -12,7 +12,7 @@ public class BotConfig {
         fileConfig.load();
     }
 
-    public String get(String path, ArrayList<String> placeholder, ArrayList<String> value){
+    public String get(String path, List<String> placeholder, List<String> value){
         String s = fileConfig.get(path);
         for (int i = 0; i < placeholder.size(); i++) {
             s = s.replaceAll(placeholder.get(i), value.get(i));

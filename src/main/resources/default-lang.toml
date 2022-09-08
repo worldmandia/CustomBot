@@ -1,8 +1,10 @@
 # Configure text for embeds
 [embeds]
     error-title = "🔴 Error"
-    error-description = "Dear %username-mentioned%, you has %action% error"
-    success-title = "🟢 Success"
-    success-description = "Dear %username-mentioned%, your %action% has completed"
+    error-description = "Dear %username-mentioned%, you has error"
+    success-cmd-title = "🟢 Success"
+    success-cmd-description = "Dear %username-mentioned%, your command has completed"
+    success-button-title = "🟢 Success"
+    success-button-description = "Dear %username-mentioned%, your interaction with button has completed"
     not-perms-title = "🟠 Hey"
-    not-perms-description = "Dear %username-mentioned%, you don`t have %action%"
+    not-perms-description = "Dear %username-mentioned%, you don`t have perms"

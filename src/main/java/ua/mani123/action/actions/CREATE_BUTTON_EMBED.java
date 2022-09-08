@@ -60,7 +60,7 @@ public class CREATE_BUTTON_EMBED implements Action {
 
     @Override
     public boolean isOnlyCommand() {
-        return true;
+        return false;
     }
 
     @Override
