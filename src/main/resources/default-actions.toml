@@ -18,6 +18,7 @@
     embed-title = "%username% lol"
     embed-description = "Username: %username% Data: %data%"
     embed-color = "#ed6f07"
+    ephemeral = false
     button-ids = [
         "btn2",
         "btn1"

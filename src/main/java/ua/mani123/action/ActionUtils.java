@@ -21,11 +21,13 @@ public class ActionUtils {
         for (Config action : allActionsConfigs) {
             if (action.get("type").toString().trim().equalsIgnoreCase("CREATE_BUTTON_EMBED")) {
                 ArrayList<String> list = action.get("button-ids");
-                allActions.put(action.get("id"), new CREATE_BUTTON_EMBED(
-                        action.get("id"),
-                        action.get("embed-title"),
-                        action.get("embed-description"),
-                        action.get("embed-color"),
+                String id = action.get("id");
+                allActions.put(id, new CREATE_BUTTON_EMBED(
+                        id,
+                        action.getOrElse("embed-title", "Not set"),
+                        action.getOrElse("embed-description", "Not set"),
+                        action.getOrElse("embed-color", "#ffffff"),
+                        action.getOrElse("ephemeral", false),
                         Utils.filterInteraction(InteractionUtils.getAllInteractions(), list).values()
                 ));
             }

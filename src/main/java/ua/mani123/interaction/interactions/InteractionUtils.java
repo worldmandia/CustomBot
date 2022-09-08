@@ -46,8 +46,8 @@ public class InteractionUtils {
                 String id = interaction.get("id");
                 allInteractions.put(id, new BUTTON_INTERACTION(
                         id,
-                        interaction.get("button-style"),
-                        interaction.get("button-text"),
+                        interaction.getOrElse("button-style", "SUCCESS"),
+                        interaction.getOrElse("button-text", "Not set"),
                         Utils.filterAction(ActionUtils.getAllActions(), list).values()
                 ));
             }

@@ -30,6 +30,7 @@ public class UseCommand extends ListenerAdapter {
                         .setTitle(create_button_embed.getEmbedTitle())
                         .setColor(Utils.decode(create_button_embed.getEmbedColor()))
                         .build())
+                        .setEphemeral(create_button_embed.isEphemeral())
                         .addActionRow(create_button_embed.getButtons());
             } else {
                 DTBot.getLogger().warn(action.getId() + " is unknown id");
