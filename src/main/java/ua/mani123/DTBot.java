@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.mani123.action.ActionUtils;
 import ua.mani123.command.CommandUtils;
-import ua.mani123.command.CustomCommand;
 import ua.mani123.config.BotConfig;
 import ua.mani123.config.BotFilesManager;
 import ua.mani123.interaction.interactions.InteractionUtils;
@@ -21,13 +20,11 @@ import ua.mani123.listeners.GuildListeners;
 import ua.mani123.listeners.UseCommand;
 
 import javax.security.auth.login.LoginException;
-import java.util.Map;
 
 public class DTBot {
     private static BotConfig config;
     private static BotConfig lang;
     private static BotConfig interaction;
-    private static BotConfig tickets;
     private static BotConfig commands;
     private static BotConfig actions;
     private static String TOKEN;
@@ -53,7 +50,6 @@ public class DTBot {
         BotFilesManager.createResourceFile("default-lang.toml", Constants.DEFAULT_LANG_NAME);
         BotFilesManager.createResourceFile("default-interaction.toml", Constants.DEFAULT_INTERACTION_NAME);
         BotFilesManager.createResourceFile("default-commands.toml", Constants.DEFAULT_COMMAND_NAME);
-        BotFilesManager.createResourceFile("default-tickets.toml", Constants.DEFAULT_TICKET_NAME);
         BotFilesManager.createResourceFile("default-actions.toml", Constants.DEFAULT_ACTION_NAME);
     }
 
@@ -63,7 +59,6 @@ public class DTBot {
             config = new BotConfig(Constants.DEFAULT_CONFIG_NAME);
             lang = new BotConfig(Constants.DEFAULT_LANG_NAME);
             interaction = new BotConfig(Constants.DEFAULT_INTERACTION_NAME);
-            tickets = new BotConfig(Constants.DEFAULT_TICKET_NAME);
             commands = new BotConfig(Constants.DEFAULT_COMMAND_NAME);
             actions = new BotConfig(Constants.DEFAULT_ACTION_NAME);
         } catch (Exception e) {
@@ -121,10 +116,6 @@ public class DTBot {
 
     public static BotConfig getInteraction() {
         return interaction;
-    }
-
-    public static BotConfig getTickets() {
-        return tickets;
     }
 
     public static BotConfig getCommands() {

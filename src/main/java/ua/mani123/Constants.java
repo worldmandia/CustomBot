@@ -6,7 +6,7 @@ public class Constants {
     public static final String DEFAULT_LANG_NAME = "lang.toml";
     public static final String DEFAULT_INTERACTION_NAME = "interaction.toml";
     public static final String DEFAULT_COMMAND_NAME = "commands.toml";
-    public static final String DEFAULT_TICKET_NAME = "tickets.toml";
+    //public static final String DEFAULT_TICKET_NAME = "tickets.toml";
     public static final String DEFAULT_ACTION_NAME = "actions.toml";
 
 }
