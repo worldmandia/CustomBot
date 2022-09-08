@@ -15,6 +15,9 @@ public class Utils {
         }
         return Color.decode(hex);
     }
+    public static String Placeholder(){
+        return null;
+    }
 
     public static Map<String, Interaction> filterInteraction(Map<String, Interaction> stringMap, ArrayList<String> list){
         Map<String, Interaction> filteredMap = new HashMap<>();
