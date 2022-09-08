@@ -27,7 +27,7 @@ public class UseCommand extends ListenerAdapter {
             if (action instanceof CREATE_BUTTON_EMBED create_button_embed) {
                 restAction = event.replyEmbeds(new EmbedBuilder()
                         .setDescription(create_button_embed.getEmbedDescription())
-                        .setAuthor(create_button_embed.getEmbedTitle())
+                        .setTitle(create_button_embed.getEmbedTitle())
                         .setColor(Utils.decode(create_button_embed.getEmbedColor()))
                         .build())
                         .addActionRow(create_button_embed.getButtons());
@@ -36,7 +36,7 @@ public class UseCommand extends ListenerAdapter {
 
             }
             if (restAction != null){
-                restAction.queue((channel) -> channel.sendMessage("Nice command").queue());
+                restAction.queue((channel) -> channel.sendMessage("Nice command").setEphemeral(true).queue());
             }
         }
     }

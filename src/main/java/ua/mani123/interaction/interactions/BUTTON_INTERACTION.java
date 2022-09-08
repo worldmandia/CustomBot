@@ -33,6 +33,6 @@ public class BUTTON_INTERACTION implements Interaction {
 
     @Override
     public String getId() {
-        return null;
+        return id;
     }
 }

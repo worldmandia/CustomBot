@@ -43,8 +43,9 @@ public class InteractionUtils {
         for (Config interaction : allInteractionsConfigs) {
             if (interaction.get("type").toString().trim().equalsIgnoreCase("BUTTON_INTERACTION")) {
                 ArrayList<String> list = interaction.get("action-ids");
-                allInteractions.put(interaction.get("id"), new BUTTON_INTERACTION(
-                        interaction.get("id"),
+                String id = interaction.get("id");
+                allInteractions.put(id, new BUTTON_INTERACTION(
+                        id,
                         interaction.get("button-style"),
                         interaction.get("button-text"),
                         Utils.filterAction(ActionUtils.getAllActions(), list).values()

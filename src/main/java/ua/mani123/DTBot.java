@@ -45,7 +45,6 @@ public class DTBot {
         getLogger().info("Start bot...");
         startBot();
         getLogger().info("Done!");
-        getLogger().info(CommandUtils.getAllCommands().values().toString());
     }
 
     private static void createConfigs() {
