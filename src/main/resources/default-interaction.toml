@@ -1,6 +1,6 @@
 # Configure interaction methods
 [[interaction]]
-    type = "Button"
+    type = "BUTTON_INTERACTION"
     button-style = "SUCCESS"
     button-text = "😋 Create Ticket"
     id = "btn2"
@@ -10,10 +10,10 @@
     ]
 
 [[interaction]]
-    type = "Button"
+    type = "BUTTON_INTERACTION"
     button-style = "SUCCESS"
     button-text = "Create Ticket"
-    id = "btn2"
+    id = "btn1"
     action-ids = [
         "MyAction1",
         "MyAction2"

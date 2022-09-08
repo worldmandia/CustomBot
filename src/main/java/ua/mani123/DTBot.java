@@ -10,6 +10,8 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.mani123.action.ActionUtils;
+import ua.mani123.command.CommandUtils;
+import ua.mani123.command.CustomCommand;
 import ua.mani123.config.BotConfig;
 import ua.mani123.config.BotFilesManager;
 import ua.mani123.interaction.interactions.InteractionUtils;
@@ -19,6 +21,7 @@ import ua.mani123.listeners.GuildListeners;
 import ua.mani123.listeners.UseCommand;
 
 import javax.security.auth.login.LoginException;
+import java.util.Map;
 
 public class DTBot {
     private static BotConfig config;
@@ -37,11 +40,12 @@ public class DTBot {
         getLogger().info("Loading configs...");
         createConfigs();
         loadConfigs();
-        getLogger().info("Start bot...");
-        startBot();
         getLogger().info("Load data...");
         loadUtils();
+        getLogger().info("Start bot...");
+        startBot();
         getLogger().info("Done!");
+        getLogger().info(CommandUtils.getAllCommands().values().toString());
     }
 
     private static void createConfigs() {
@@ -79,7 +83,7 @@ public class DTBot {
             );
             BotApi.setCompression(Compression.ZLIB);
             BotApi.setActivity(Activity.of(Activity.ActivityType.LISTENING, "Loading..."));
-            BotApi.setStatus(OnlineStatus.valueOf(getConfig().get("bot-custom.status").toUpperCase()));
+            BotApi.setStatus(OnlineStatus.valueOf(getConfig().get("bot-ticket.status").toUpperCase()));
             BotApi.setMemberCachePolicy(MemberCachePolicy.ALL);
             BotApi.setEnabledIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT);
             BotApi.setChunkingFilter(ChunkingFilter.ALL);
@@ -91,8 +95,10 @@ public class DTBot {
 
     private static void loadUtils() {
         // load data from cfg
+        InteractionUtils.preLoad();
         ActionUtils.load();
         InteractionUtils.load();
+        CommandUtils.load();
         // catch CTRL+C
         Runtime.getRuntime().addShutdownHook(new Thread(DTBot::saveAll, "Shutdown-thread"));
     }

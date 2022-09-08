@@ -6,5 +6,5 @@
         "mani123#7703"
     ]
     action-ids = [
-        "CREATE_TICKET_EMBED_BUTTON"
+        "MainAction"
     ]

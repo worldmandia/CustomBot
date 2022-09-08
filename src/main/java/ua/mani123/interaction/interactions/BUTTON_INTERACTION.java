@@ -1,17 +1,18 @@
 package ua.mani123.interaction.interactions;
 
+import ua.mani123.action.Action;
 import ua.mani123.interaction.Interaction;
 
-import java.util.ArrayList;
+import java.util.Collection;
 
 public class BUTTON_INTERACTION implements Interaction {
 
     protected String id;
     protected String buttonStyle;
     protected String buttonText;
-    protected ArrayList<String> actions;
+    protected Collection<Action> actions;
 
-    public BUTTON_INTERACTION(String id, String buttonStyle, String buttonText, ArrayList<String> actions) {
+    public BUTTON_INTERACTION(String id, String buttonStyle, String buttonText, Collection<Action> actions) {
         this.id = id;
         this.buttonStyle = buttonStyle;
         this.buttonText = buttonText;
@@ -26,7 +27,7 @@ public class BUTTON_INTERACTION implements Interaction {
         return buttonText;
     }
 
-    public ArrayList<String> getActions() {
+    public Collection<Action> getActions() {
         return actions;
     }
 

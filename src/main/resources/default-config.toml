@@ -1,5 +1,5 @@
 # Configuration of DoubleTickets bot
-[bot.ticket]
+[bot-ticket]
     status = "ONLINE" # Enter DO_NOT_DISTURB, ONLINE, IDLE, INVISIBLE, OFFLINE
     [[activity]] # Enter activity.<PLAYING, STREAMING, LISTENING, WATCHING, COMPETING>
     type = "PLAYING"

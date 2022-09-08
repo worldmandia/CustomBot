@@ -12,3 +12,13 @@
     action-description = "Username: %username% Data: %data%"
     counter = 1
     category = "997558530037010593"
+[[action]]
+    id = "MainAction"
+    type = "CREATE_BUTTON_EMBED"
+    embed-title = "%username% lol"
+    embed-description = "Username: %username% Data: %data%"
+    embed-color = "#ed6f07"
+    button-ids = [
+        "btn2",
+        "btn1"
+    ]

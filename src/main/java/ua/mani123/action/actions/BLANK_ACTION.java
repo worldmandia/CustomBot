@@ -2,22 +2,15 @@ package ua.mani123.action.actions;
 
 import ua.mani123.action.Action;
 
-public class CREATE_TICKET_EMBED_BUTTON implements Action {
-
-    String id;
-
-    public CREATE_TICKET_EMBED_BUTTON(String id) {
-        this.id = id;
-    }
-
+public class BLANK_ACTION implements Action {
     @Override
     public String getId() {
-        return id;
+        return null;
     }
 
     @Override
     public boolean isOnlyCommand() {
-        return true;
+        return false;
     }
 
     @Override
