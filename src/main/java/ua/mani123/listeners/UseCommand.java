@@ -45,13 +45,15 @@ public class UseCommand extends ListenerAdapter {
                         restAction = categories.get(0).createTextChannel(Utils.placeholder(create_text_chat.getActionName(), placeholders, values)).setTopic(Utils.placeholder(create_text_chat.getActionDescription(), placeholders, values));
                         create_text_chat.getConfig().set("counter", create_text_chat.getCounter());
                     } catch (IllegalArgumentException e){
-                        DTBot.getLogger().warn("Not found category: " + create_text_chat.getCategoryName());
+                        DTBot.getLogger().warn("Not found category" + create_text_chat.getCategoryName());
                     }
                 } else {
                     DTBot.getLogger().warn(action.getId() + " is unknown id");
                 }
-                if (restAction != null) {
+                try{
                     restAction.queue((success) -> event.replyEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("success-cmd-title")).setDescription(DTBot.getLang().get("success-cmd-description", placeholders, values)).build()).setEphemeral(true).queue());
+                } catch (NullPointerException e){
+                    event.replyEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("error-title")).setDescription(DTBot.getLang().get("error-description", placeholders, values)).build()).setEphemeral(true).queue();
                 }
             }
         }
