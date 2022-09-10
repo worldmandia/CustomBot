@@ -41,7 +41,6 @@ public class DTBot {
         loadUtils();
         getLogger().info("Start bot...");
         startBot();
-        getLogger().info("Done!");
     }
 
     private static void createConfigs() {

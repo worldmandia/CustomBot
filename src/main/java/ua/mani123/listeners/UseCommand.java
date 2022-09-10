@@ -29,6 +29,7 @@ public class UseCommand extends ListenerAdapter {
         placeholders.put("%username-mentioned%", member.getAsMention());
         placeholders.put("%username%", member.getEffectiveName());
         for (Action action : cmd.getActions()) {
+            boolean isReplied = false;
             if (action.isOnlyTicket()) {
                 DTBot.getLogger().warn(action.getId() + " this action only for tickets");
             } else {
@@ -41,22 +42,26 @@ public class UseCommand extends ListenerAdapter {
                                     .build())
                             .setEphemeral(create_button_embed.isEphemeral())
                             .addActionRow(create_button_embed.getButtons());
+                    isReplied = true;
                 } else if (action instanceof CREATE_TEXT_CHAT create_text_chat) {
                     try {
                         List<Category> categories = event.getGuild().getCategoriesByName(create_text_chat.getCategoryName(), false);
                         placeholders.put("%counter%", String.valueOf(create_text_chat.getCounter().getAndAdd(1)));
                         restAction = categories.get(0).createTextChannel(Utils.placeholder(create_text_chat.getActionName(), placeholders)).setTopic(Utils.placeholder(create_text_chat.getActionDescription(), placeholders));
                         create_text_chat.getConfig().set("counter", create_text_chat.getCounter().get());
-                    } catch (IllegalArgumentException e){
+                    } catch (IllegalArgumentException e) {
                         DTBot.getLogger().warn("Not found category" + create_text_chat.getCategoryName());
                     }
                 } else {
                     DTBot.getLogger().warn(action.getId() + " is unknown id");
                 }
                 if (restAction != null) {
-                    restAction.queue((success) -> event.replyEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("success-cmd-title", placeholders)).setDescription(DTBot.getLang().get("success-cmd-description", placeholders)).build()).setEphemeral(true).queue());
+                    restAction.queue();
+                    if (!isReplied) {
+                        event.replyEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("embeds.success-cmd-title", placeholders)).setDescription(DTBot.getLang().get("embeds.success-cmd-description", placeholders)).build()).setEphemeral(true).queue();
+                    }
                 } else {
-                    event.replyEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("error-title")).setDescription(DTBot.getLang().get("error-description", placeholders)).build()).setEphemeral(true).queue();
+                    event.getChannel().sendMessageEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("embeds.error-title")).setDescription(DTBot.getLang().get("embeds.error-description", placeholders)).build()).queue();
                 }
             }
         }
