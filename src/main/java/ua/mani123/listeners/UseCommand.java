@@ -53,9 +53,9 @@ public class UseCommand extends ListenerAdapter {
                 } else {
                     DTBot.getLogger().warn(action.getId() + " is unknown id");
                 }
-                try{
-                    restAction.queue((success) -> event.replyEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("success-cmd-title")).setDescription(DTBot.getLang().get("success-cmd-description", placeholders)).build()).setEphemeral(true).queue());
-                } catch (NullPointerException e){
+                if (restAction != null) {
+                    restAction.queue((success) -> event.replyEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("success-cmd-title", placeholders)).setDescription(DTBot.getLang().get("success-cmd-description", placeholders)).build()).setEphemeral(true).queue());
+                } else {
                     event.replyEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("error-title")).setDescription(DTBot.getLang().get("error-description", placeholders)).build()).setEphemeral(true).queue();
                 }
             }
