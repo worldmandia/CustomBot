@@ -21,6 +21,8 @@ public class Utils {
         for (int i = 0; i < placeholders.size(); i++) {
             if (values.get(i) != null){
                 string = string.replaceAll(placeholders.get(i), values.get(i));
+            } else {
+                string = string.replaceAll(placeholders.get(i), "|not found|");
             }
         }
         return string;

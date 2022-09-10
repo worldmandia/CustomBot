@@ -79,8 +79,14 @@ public class DTBot {
             BotApi.setActivity(Activity.of(Activity.ActivityType.LISTENING, "Loading..."));
             BotApi.setStatus(OnlineStatus.valueOf(getConfig().get("bot-ticket.status").toUpperCase()));
             BotApi.setMemberCachePolicy(MemberCachePolicy.ALL);
-            BotApi.setEnabledIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_PRESENCES, GatewayIntent.MESSAGE_CONTENT);
+            BotApi.setEnabledIntents(
+                    GatewayIntent.GUILD_MEMBERS,
+                    GatewayIntent.GUILD_VOICE_STATES,
+                    GatewayIntent.GUILD_EMOJIS_AND_STICKERS,
+                    GatewayIntent.GUILD_PRESENCES,
+                    GatewayIntent.MESSAGE_CONTENT);
             BotApi.setChunkingFilter(ChunkingFilter.ALL);
+            BotApi.setUseShutdownNow(true);
             BotApi.build();
         } catch (LoginException e) {
             getLogger().error("LoginException, wrong TOKEN");

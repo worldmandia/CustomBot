@@ -11,7 +11,6 @@ public class CREATE_TEXT_CHAT implements Action {
     String actionDescription;
     AtomicInteger counter;
     String categoryName;
-
     Config config;
 
     public CREATE_TEXT_CHAT(String id, String actionName, String actionDescription, int counter, String categoryName, Config config) {

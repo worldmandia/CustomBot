@@ -2,6 +2,7 @@ package ua.mani123.listeners;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Category;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.RestAction;
@@ -22,8 +23,11 @@ public class UseCommand extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         CustomCommand cmd = CommandUtils.getAllCommands().get(event.getName());
-        ArrayList<String> placeholders = new ArrayList<>(List.of("%username-mentioned%", "%username%", "%counter%"));
-        ArrayList<String> values = new ArrayList<>(List.of(event.getMember().getNickname(), event.getMember().getAsMention()));
+        Member member = event.getInteraction().getMember();
+        ArrayList<String> placeholders = new ArrayList<>(List.of("%username-mentioned%", "%username%"));
+        ArrayList<String> values = new ArrayList<>();
+        values.add(member.getAsMention());
+        values.add(member.getNickname());
         for (Action action : cmd.getActions()) {
             if (action.isOnlyTicket()) {
                 DTBot.getLogger().warn(action.getId() + " this action only for tickets");
@@ -41,9 +45,9 @@ public class UseCommand extends ListenerAdapter {
                     try {
                         List<Category> categories = event.getGuild().getCategoriesByName(create_text_chat.getCategoryName(), false);
                         placeholders.add("%counter%");
-                        values.add(String.valueOf(create_text_chat.getCounter().getAndIncrement()));
+                        values.add(String.valueOf(create_text_chat.getCounter().getAndAdd(1)));
                         restAction = categories.get(0).createTextChannel(Utils.placeholder(create_text_chat.getActionName(), placeholders, values)).setTopic(Utils.placeholder(create_text_chat.getActionDescription(), placeholders, values));
-                        create_text_chat.getConfig().set("counter", create_text_chat.getCounter());
+                        create_text_chat.getConfig().set("counter", create_text_chat.getCounter().get());
                     } catch (IllegalArgumentException e){
                         DTBot.getLogger().warn("Not found category" + create_text_chat.getCategoryName());
                     }
