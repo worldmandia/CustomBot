@@ -12,7 +12,7 @@ public class GuildListeners extends ListenerAdapter {
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
-        DTBot.getLogger().info("Update commands");
+        DTBot.getLogger().info("Update commands...");
         event.getJDA().updateCommands().addCommands(CustomCommand.settings.getCommandData(CommandUtils.getAllCommands().values())).queue();
         if (event.getGuildTotalCount() > 0){
             DTBot.getLogger().info("Your bot is in " + event.getGuildTotalCount() + " guilds");
