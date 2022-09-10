@@ -6,7 +6,6 @@ import ua.mani123.interaction.Interaction;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Utils {
@@ -17,13 +16,9 @@ public class Utils {
         return Color.decode(hex);
     }
 
-    public static String placeholder(String string, List<String> placeholders, List<String> values) {
-        for (int i = 0; i < placeholders.size(); i++) {
-            if (values.get(i) != null){
-                string = string.replaceAll(placeholders.get(i), values.get(i));
-            } else {
-                string = string.replaceAll(placeholders.get(i), "|not found|");
-            }
+    public static String placeholder(String string, Map<String, String> placeholders) {
+        for (Map.Entry<String, String> entry: placeholders.entrySet()) {
+            string = string.replaceAll(entry.getKey(), entry.getValue());
         }
         return string;
     }

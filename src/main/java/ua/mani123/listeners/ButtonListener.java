@@ -14,8 +14,6 @@ import ua.mani123.interaction.interactions.BUTTON_INTERACTION;
 import ua.mani123.interaction.interactions.InteractionUtils;
 import ua.mani123.utils.Utils;
 
-import java.util.List;
-
 public class ButtonListener extends ListenerAdapter {
 
     @Override
@@ -43,7 +41,7 @@ public class ButtonListener extends ListenerAdapter {
 
                     }
                     if (restAction != null) {
-                        restAction.queue((success) -> event.replyEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("success-button-title")).setDescription(DTBot.getLang().get("success-button-description", List.of("%username-mentioned%", "%username%"), List.of(event.getMember().getAsMention(), event.getMember().getNickname()))).build()).setEphemeral(true).queue());
+                        restAction.queue((success) -> event.replyEmbeds(new EmbedBuilder().setTitle(DTBot.getLang().get("success-button-title")).setDescription(DTBot.getLang().get("success-button-description")).build()).setEphemeral(true).queue());
                     }
                 }
             }

@@ -2,7 +2,7 @@ package ua.mani123.config;
 
 import com.electronwill.nightconfig.core.file.FileConfig;
 
-import java.util.List;
+import java.util.Map;
 
 public class BotConfig {
     protected FileConfig fileConfig;
@@ -12,10 +12,10 @@ public class BotConfig {
         fileConfig.load();
     }
 
-    public String get(String path, List<String> placeholder, List<String> value){
+    public String get(String path, Map<String, String> placeholders){
         String s = fileConfig.get(path);
-        for (int i = 0; i < placeholder.size(); i++) {
-            s = s.replaceAll(placeholder.get(i), value.get(i));
+        for (Map.Entry<String, String> entry: placeholders.entrySet()) {
+            s = s.replaceAll(entry.getKey(), entry.getValue());
         }
         return s;
     }
@@ -24,19 +24,19 @@ public class BotConfig {
         return fileConfig.get(path);
     }
 
-    public String getOrString(String path, String defaultValue) {
-        if (fileConfig.get(path) == null) return defaultValue;
-        if (fileConfig.get(path).equals("")) return defaultValue;
-        return fileConfig.getOrElse(path, defaultValue);
-    }
+    //public String getOrString(String path, String defaultValue) {
+    //    if (fileConfig.get(path) == null) return defaultValue;
+    //    if (fileConfig.get(path).equals("")) return defaultValue;
+    //    return fileConfig.getOrElse(path, defaultValue);
+    //}
 
     public FileConfig getFileConfig() {
         return fileConfig;
     }
 
-    public void reload() {
-        fileConfig.load();
-    }
+    //public void reload() {
+    //    fileConfig.load();
+    //}
 
     public void save() {
         fileConfig.save();
