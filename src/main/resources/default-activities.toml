@@ -1,0 +1,14 @@
+# Enter type.<PLAYING, STREAMING, LISTENING, WATCHING, COMPETING>
+[[activity]]
+activity-text = "Minecraft"
+activity-type = "PLAYING"
+url = "https://www.google.com/"
+
+[[activity]]
+activity-text = "Minecraft stream"
+activity-type = "STREAMING"
+url = "https://www.google.com/"
+
+[[activity]]
+activity-text = "GTA V stream"
+activity-type = "STREAMING"

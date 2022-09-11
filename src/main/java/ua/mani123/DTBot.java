@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.mani123.action.ActionUtils;
+import ua.mani123.activity.ActivityUtils;
 import ua.mani123.command.CommandUtils;
 import ua.mani123.config.BotConfig;
 import ua.mani123.config.BotFilesManager;
@@ -20,6 +21,7 @@ import ua.mani123.listeners.GuildListeners;
 import ua.mani123.listeners.UseCommand;
 
 import javax.security.auth.login.LoginException;
+import java.util.concurrent.TimeUnit;
 
 public class DTBot {
     private static BotConfig config;
@@ -27,9 +29,11 @@ public class DTBot {
     private static BotConfig interaction;
     private static BotConfig commands;
     private static BotConfig actions;
+    private static BotConfig activities;
     private static String TOKEN;
     private static final Logger logger = LoggerFactory.getLogger(DTBot.class);
     private static DefaultShardManagerBuilder BotApi;
+    private static boolean botEnabled = true;
 
     // Main method
 
@@ -50,6 +54,7 @@ public class DTBot {
         BotFilesManager.createResourceFile("default-interaction.toml", Constants.DEFAULT_INTERACTION_NAME);
         BotFilesManager.createResourceFile("default-commands.toml", Constants.DEFAULT_COMMAND_NAME);
         BotFilesManager.createResourceFile("default-actions.toml", Constants.DEFAULT_ACTION_NAME);
+        BotFilesManager.createResourceFile("default-activities.toml", Constants.DEFAULT_ACTIVITIES_NAME);
     }
 
     private static void loadConfigs() {
@@ -60,6 +65,7 @@ public class DTBot {
             interaction = new BotConfig(Constants.DEFAULT_INTERACTION_NAME);
             commands = new BotConfig(Constants.DEFAULT_COMMAND_NAME);
             actions = new BotConfig(Constants.DEFAULT_ACTION_NAME);
+            activities = new BotConfig(Constants.DEFAULT_ACTIVITIES_NAME);
         } catch (Exception e) {
             getLogger().error(e.getMessage() + ", check or reset cfg files");
         }
@@ -101,12 +107,15 @@ public class DTBot {
         InteractionUtils.load();
         getLogger().info("Load Commands");
         CommandUtils.load();
+        getLogger().info("Load activities");
+        ActivityUtils.load();
         // catch CTRL+C
         Runtime.getRuntime().addShutdownHook(new Thread(DTBot::saveAll, "Shutdown-thread"));
     }
 
     private static void saveAll() {
         getLogger().warn("Dont close app with CTRL+C, use /close");
+        botEnabled = false;
         config.save();
         lang.save();
         interaction.save();
@@ -115,6 +124,15 @@ public class DTBot {
     }
 
     // Getters
+
+
+    public static BotConfig getActivities() {
+        return activities;
+    }
+
+    public static boolean isBotEnabled() {
+        return botEnabled;
+    }
 
     public static BotConfig getConfig() {
         return config;

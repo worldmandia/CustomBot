@@ -4,18 +4,5 @@
 status = "ONLINE"
 # change activity every <number> in seconds
 activity-change-every = 10
-
-# Enter activity.<PLAYING, STREAMING, LISTENING, WATCHING, COMPETING>
-[[activity]]
-    activity-text = "Minecraft"
-    type = "PLAYING"
-
-[[activity]]
-    activity-text = "Minecraft stream"
-    type = "STREAMING"
-
-[[activity]]
-    activity-text = "GTA V stream"
-    type = "STREAMING"
 # Soon
 # [bot.other]
