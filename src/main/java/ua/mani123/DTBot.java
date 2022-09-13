@@ -2,6 +2,7 @@ package ua.mani123;
 
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.exceptions.InvalidTokenException;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -17,10 +18,8 @@ import ua.mani123.config.BotFilesManager;
 import ua.mani123.interaction.interactions.InteractionUtils;
 import ua.mani123.listeners.AutoComplete;
 import ua.mani123.listeners.ButtonListener;
-import ua.mani123.listeners.onReadyListener;
 import ua.mani123.listeners.UseCommand;
-
-import javax.security.auth.login.LoginException;
+import ua.mani123.listeners.onReadyListener;
 
 public class DTBot {
     private static BotConfig config;
@@ -95,8 +94,8 @@ public class DTBot {
             BotApi.setChunkingFilter(ChunkingFilter.ALL);
             BotApi.setUseShutdownNow(true);
             BotApi.build();
-        } catch (LoginException e) {
-            getLogger().error("LoginException, wrong TOKEN");
+        } catch (InvalidTokenException e) {
+            getLogger().error("InvalidTokenException, wrong TOKEN");
         }
     }
 
