@@ -4,6 +4,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.requests.RestAction;
 import ua.mani123.DTBot;
 import ua.mani123.action.Action;
@@ -16,16 +18,15 @@ import java.util.List;
 import java.util.Map;
 
 public class UniversalActionExecutor {
-    public static void use(GenericInteractionCreateEvent event, Action action){
-
-        //if (event instanceof SlashCommandInteractionEvent eventUpd){}
-        //if (event instanceof ButtonInteractionEvent eventUpd){}
+    public static void use(GenericInteractionCreateEvent event, Action action) {
 
         RestAction<?> restAction = null;
         Member member = event.getInteraction().getMember();
         Map<String, String> placeholders = new HashMap<>();
+
         placeholders.put("%username-mentioned%", member.getAsMention());
         placeholders.put("%username%", member.getEffectiveName());
+
         if (action instanceof CREATE_BUTTON_EMBED create_button_embed) {
             restAction = event.getMessageChannel().sendMessageEmbeds(new EmbedBuilder()
                     .setDescription(Utils.placeholder(create_button_embed.getEmbedDescription(), placeholders))
@@ -46,6 +47,19 @@ public class UniversalActionExecutor {
             return;
         }
 
-        restAction.queue();
+        if (restAction == null) return;
+
+        if (event instanceof SlashCommandInteractionEvent commandEvent){
+            restAction.submit().whenComplete((v, error) -> {
+                if (error != null) {DTBot.getLogger().error(error.getMessage());}
+                else commandEvent.replyEmbeds(new EmbedBuilder().setTitle("Success").setDescription("Success commandEvent").build()).setEphemeral(true).queue();
+            });
+        } else  if (event instanceof ButtonInteractionEvent buttonEvent){
+            restAction.submit().whenComplete((v, error) -> {
+                if (error != null) {DTBot.getLogger().error(error.getMessage());}
+                else buttonEvent.replyEmbeds(new EmbedBuilder().setTitle("Success").setDescription("Success buttonEvent").build()).setEphemeral(true).queue();
+            });
+        }
+
     }
 }
