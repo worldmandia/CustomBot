@@ -1,8 +1,9 @@
 package ua.mani123.listeners;
 
+import com.electronwill.nightconfig.core.Config;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import ua.mani123.DTBot;
@@ -14,23 +15,35 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class GuildListeners extends ListenerAdapter {
+public class onReadyListener extends ListenerAdapter {
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         DTBot.getLogger().info("Update commands...");
         event.getJDA().updateCommands().addCommands(CustomCommand.settings.getCommandData(CommandUtils.getAllCommands().values())).queue();
         if (event.getGuildTotalCount() > 0) {
-            DTBot.getLogger().info("Your bot is in " + event.getGuildTotalCount() + " guilds");
+            DTBot.getLogger().info("Your bot is in " + event.getGuildTotalCount() + " guilds!");
         }
+        DTBot.getLogger().info("Write all guilds to the database...");
+        for (Guild guild : event.getJDA().getGuilds()) {
+            Config config = DTBot.getDatabase().getFileConfig().createSubConfig();
+            DTBot.getDatabase().getFileConfig().set(guild.getId(), config);
+            DTBot.getDatabase().getFileConfig().set(guild.getId() + ".guild-name", guild.getName());
+        }
+        DTBot.getDatabase().getFileConfig().save();
 
+        this.startActivityThread(event);
+
+        DTBot.getLogger().info("Done!");
+    }
+
+    private void startActivityThread(@NotNull ReadyEvent event) {
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         int time = DTBot.getConfig().getFileConfig().getIntOrElse("bot-ticket.activity-change-every", 10);
         exec.scheduleAtFixedRate(() -> {
             for (ua.mani123.activity.activity activity : ActivityUtils.getAllActivities()) {
                 if (!DTBot.isBotEnabled()) return;
-                DTBot.getLogger().info(activity.getType().toString());
-                if (activity.getType() != Activity.ActivityType.STREAMING) {
+                if (activity.getUrl().equals("null")) {
                     event.getJDA().getPresence().setActivity(Activity.of(activity.getType(), activity.getActivityText()));
                 } else {
                     event.getJDA().getPresence().setActivity(Activity.of(Activity.ActivityType.STREAMING, activity.getActivityText(), activity.getUrl()));
@@ -42,12 +55,5 @@ public class GuildListeners extends ListenerAdapter {
                 }
             }
         }, 0, (long) time * ActivityUtils.getAllActivities().size(), TimeUnit.SECONDS);
-
-        DTBot.getLogger().info("Done!");
-    }
-
-    @Override
-    public void onGuildJoin(@NotNull GuildJoinEvent event) {
-        //event.getGuild().updateCommands().addCommands(commandDataList).queue();
     }
 }

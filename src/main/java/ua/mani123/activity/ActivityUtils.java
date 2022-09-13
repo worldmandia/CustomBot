@@ -16,10 +16,8 @@ public class ActivityUtils {
         for (Config activity : allActivityConfigs) {
             String type = activity.get("activity-type");
             String url = activity.getOrElse("url", "null");
-            DTBot.getLogger().info(type);
-            DTBot.getLogger().info(url);
             allActivities.add(new activity(
-                    Activity.ActivityType.valueOf(type),
+                    Activity.ActivityType.valueOf(type.trim().toUpperCase()),
                     activity.getOrElse("activity-text", "Not set"),
                     url
             ));

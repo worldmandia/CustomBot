@@ -1,0 +1,6 @@
+# database feature
+# [guild-id]
+#     guild-name = "My best guild"
+#     [username1]
+#         personal-counter = "5"
+#         other-data = "My bro"

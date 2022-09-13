@@ -17,11 +17,10 @@ import ua.mani123.config.BotFilesManager;
 import ua.mani123.interaction.interactions.InteractionUtils;
 import ua.mani123.listeners.AutoComplete;
 import ua.mani123.listeners.ButtonListener;
-import ua.mani123.listeners.GuildListeners;
+import ua.mani123.listeners.onReadyListener;
 import ua.mani123.listeners.UseCommand;
 
 import javax.security.auth.login.LoginException;
-import java.util.concurrent.TimeUnit;
 
 public class DTBot {
     private static BotConfig config;
@@ -30,6 +29,7 @@ public class DTBot {
     private static BotConfig commands;
     private static BotConfig actions;
     private static BotConfig activities;
+    private static BotConfig database;
     private static String TOKEN;
     private static final Logger logger = LoggerFactory.getLogger(DTBot.class);
     private static DefaultShardManagerBuilder BotApi;
@@ -55,6 +55,7 @@ public class DTBot {
         BotFilesManager.createResourceFile("default-commands.toml", Constants.DEFAULT_COMMAND_NAME);
         BotFilesManager.createResourceFile("default-actions.toml", Constants.DEFAULT_ACTION_NAME);
         BotFilesManager.createResourceFile("default-activities.toml", Constants.DEFAULT_ACTIVITIES_NAME);
+        BotFilesManager.createResourceFile("default-database.toml", Constants.DEFAULT_DATABASE_NAME);
     }
 
     private static void loadConfigs() {
@@ -66,6 +67,7 @@ public class DTBot {
             commands = new BotConfig(Constants.DEFAULT_COMMAND_NAME);
             actions = new BotConfig(Constants.DEFAULT_ACTION_NAME);
             activities = new BotConfig(Constants.DEFAULT_ACTIVITIES_NAME);
+            database = new BotConfig(Constants.DEFAULT_DATABASE_NAME);
         } catch (Exception e) {
             getLogger().error(e.getMessage() + ", check or reset cfg files");
         }
@@ -77,7 +79,7 @@ public class DTBot {
             BotApi.addEventListeners(
                     new AutoComplete(),
                     new ButtonListener(),
-                    new GuildListeners(),
+                    new onReadyListener(),
                     new UseCommand()
             );
             BotApi.setCompression(Compression.ZLIB);
@@ -121,10 +123,16 @@ public class DTBot {
         interaction.save();
         commands.save();
         actions.save();
+        activities.save();
+        database.save();
     }
 
     // Getters
 
+
+    public static BotConfig getDatabase() {
+        return database;
+    }
 
     public static BotConfig getActivities() {
         return activities;

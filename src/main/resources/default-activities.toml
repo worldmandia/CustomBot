@@ -1,14 +1,15 @@
 # Enter type.<PLAYING, STREAMING, LISTENING, WATCHING, COMPETING>
+# url - working only with STREAMING and stram sites, like YouTube and Twitch
 [[activity]]
-activity-text = "Minecraft"
-activity-type = "PLAYING"
-url = "https://www.google.com/"
+    activity-text = "Twitch stream"
+    activity-type = "STREAMING"
+    url = "https://www.google.com/"
 
 [[activity]]
-activity-text = "Minecraft stream"
-activity-type = "STREAMING"
-url = "https://www.google.com/"
+    activity-text = "YouTube stream"
+    activity-type = "STREAMING"
+    url = "https://www.google.com/"
 
 [[activity]]
-activity-text = "GTA V stream"
-activity-type = "STREAMING"
+    activity-text = "GTA V"
+    activity-type = "PLAYING"
