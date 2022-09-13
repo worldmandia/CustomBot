@@ -4,6 +4,7 @@ import com.electronwill.nightconfig.core.Config;
 import ua.mani123.DTBot;
 import ua.mani123.action.actions.CREATE_BUTTON_EMBED;
 import ua.mani123.action.actions.CREATE_TEXT_CHAT;
+import ua.mani123.action.actions.CREATE_VOICE_CHAT;
 import ua.mani123.interaction.interactions.InteractionUtils;
 import ua.mani123.utils.Utils;
 
@@ -32,8 +33,16 @@ public class ActionUtils {
                         action.getOrElse("ephemeral", false),
                         Utils.filterInteraction(InteractionUtils.getAllInteractions(), list).values()
                 ));
-            } else if (type.equalsIgnoreCase("CREATE_TEXT_CHAT")){
+            } else if (type.equalsIgnoreCase("CREATE_TEXT_CHAT")) {
                 allActions.put(id, new CREATE_TEXT_CHAT(id,
+                        action.getOrElse("action-name", "Not set"),
+                        action.getOrElse("action-description", "Not set"),
+                        action.getIntOrElse("counter", 0),
+                        action.getOrElse("category-name", "Not set"),
+                        action
+                ));
+            } else if (type.equalsIgnoreCase("CREATE_VOICE_CHAT")) {
+                allActions.put(id, new CREATE_VOICE_CHAT(id,
                         action.getOrElse("action-name", "Not set"),
                         action.getOrElse("action-description", "Not set"),
                         action.getIntOrElse("counter", 0),

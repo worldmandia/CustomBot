@@ -11,6 +11,7 @@ import ua.mani123.DTBot;
 import ua.mani123.action.Action;
 import ua.mani123.action.actions.CREATE_BUTTON_EMBED;
 import ua.mani123.action.actions.CREATE_TEXT_CHAT;
+import ua.mani123.action.actions.CREATE_VOICE_CHAT;
 import ua.mani123.utils.Utils;
 
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class UniversalActionExecutor {
 
         placeholders.put("%username-mentioned%", member.getAsMention());
         placeholders.put("%username%", member.getEffectiveName());
+        placeholders.put("%counter%", String.valueOf(0));
 
         if (action instanceof CREATE_BUTTON_EMBED create_button_embed) {
             restAction = event.getMessageChannel().sendMessageEmbeds(new EmbedBuilder()
@@ -42,6 +44,11 @@ public class UniversalActionExecutor {
             } catch (IllegalArgumentException e) {
                 DTBot.getLogger().warn("Not found category" + create_text_chat.getCategoryName());
             }
+        } else if (action instanceof CREATE_VOICE_CHAT create_voice_chat) {
+            List<Category> categories = event.getGuild().getCategoriesByName(create_voice_chat.getCategoryName(), false);
+            placeholders.put("%counter%", String.valueOf(create_voice_chat.getCounter().getAndAdd(1)));
+            restAction = categories.get(0).createVoiceChannel(Utils.placeholder(create_voice_chat.getActionName(), placeholders)).setTopic(Utils.placeholder(create_voice_chat.getActionDescription(), placeholders));
+            create_voice_chat.getConfig().set("counter", create_voice_chat.getCounter().get());
         } else {
             DTBot.getLogger().warn(action.getId() + " is unknown id");
             return;
@@ -49,15 +56,19 @@ public class UniversalActionExecutor {
 
         if (restAction == null) return;
 
-        if (event instanceof SlashCommandInteractionEvent commandEvent){
+        if (event instanceof SlashCommandInteractionEvent commandEvent) {
             restAction.submit().whenComplete((v, error) -> {
-                if (error != null) {DTBot.getLogger().error(error.getMessage());}
-                else commandEvent.replyEmbeds(new EmbedBuilder().setTitle("Success").setDescription("Success commandEvent").build()).setEphemeral(true).queue();
+                if (error != null) {
+                    DTBot.getLogger().error(error.getMessage());
+                } else
+                    commandEvent.replyEmbeds(new EmbedBuilder().setTitle("Success").setDescription("Success commandEvent").build()).setEphemeral(true).queue();
             });
-        } else  if (event instanceof ButtonInteractionEvent buttonEvent){
+        } else if (event instanceof ButtonInteractionEvent buttonEvent) {
             restAction.submit().whenComplete((v, error) -> {
-                if (error != null) {DTBot.getLogger().error(error.getMessage());}
-                else buttonEvent.replyEmbeds(new EmbedBuilder().setTitle("Success").setDescription("Success buttonEvent").build()).setEphemeral(true).queue();
+                if (error != null) {
+                    DTBot.getLogger().error(error.getMessage());
+                } else
+                    buttonEvent.replyEmbeds(new EmbedBuilder().setTitle("Success").setDescription("Success buttonEvent").build()).setEphemeral(true).queue();
             });
         }
 
