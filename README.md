@@ -3,7 +3,7 @@ Discord bot aimed at full customization
 
 ## Dependencies
 
-- Java 17+
+- [Java 17+](https://adoptium.net/temurin/releases/)
 - [**Discord bot token** with slash commands support](https://discord.com/developers/applications)
 
 ## Supported Versions
