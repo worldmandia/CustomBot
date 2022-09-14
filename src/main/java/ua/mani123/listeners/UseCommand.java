@@ -27,13 +27,9 @@ public class UseCommand extends ListenerAdapter {
         placeholders.put("%username%", member.getEffectiveName());
         placeholders.put("%counter%", String.valueOf(0));
         for (Action action : cmd.getActions()) {
-            if (action.isOnlyTicket()) {
-                DTBot.getLogger().warn(action.getId() + " this action only for tickets");
-            } else {
-                RestAction<?> restAction = UniversalActionExecutor.use(event, action, placeholders);
-                restAction.queue((success) -> event.replyEmbeds(new EmbedBuilder().setTitle(Utils.placeholder(DTBot.getLang().get("command.success-title"), placeholders)).setDescription("Success buttonEvent").build()).setEphemeral(DTBot.getLang().getOrElse("command.ephemeral", true)).queue(),
-                        (error) -> DTBot.getLogger().error(error.getMessage()));
-            }
+            RestAction<?> restAction = UniversalActionExecutor.use(event, action, placeholders);
+            restAction.queue((success) -> event.replyEmbeds(new EmbedBuilder().setTitle(Utils.placeholder(DTBot.getLang().get("command.success-title"), placeholders)).setDescription("Success buttonEvent").build()).setEphemeral(DTBot.getLang().getOrElse("command.ephemeral", true)).queue(),
+                    (error) -> DTBot.getLogger().error(error.getMessage()));
         }
     }
 }

@@ -56,9 +56,4 @@ public class CREATE_BUTTON_EMBED implements Action {
     public boolean isOnlyCommand() {
         return false;
     }
-
-    @Override
-    public boolean isOnlyTicket() {
-        return false;
-    }
 }

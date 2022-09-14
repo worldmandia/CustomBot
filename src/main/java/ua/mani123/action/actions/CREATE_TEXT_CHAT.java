@@ -51,9 +51,4 @@ public class CREATE_TEXT_CHAT implements Action {
     public boolean isOnlyCommand() {
         return false;
     }
-
-    @Override
-    public boolean isOnlyTicket() {
-        return false;
-    }
 }

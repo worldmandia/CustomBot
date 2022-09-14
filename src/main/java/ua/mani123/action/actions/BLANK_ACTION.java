@@ -12,9 +12,4 @@ public class BLANK_ACTION implements Action {
     public boolean isOnlyCommand() {
         return false;
     }
-
-    @Override
-    public boolean isOnlyTicket() {
-        return false;
-    }
 }

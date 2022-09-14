@@ -45,9 +45,4 @@ public class CREATE_VOICE_CHAT implements Action {
     public boolean isOnlyCommand() {
         return false;
     }
-
-    @Override
-    public boolean isOnlyTicket() {
-        return false;
-    }
 }
