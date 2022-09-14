@@ -17,6 +17,12 @@ import ua.mani123.command.CommandUtils;
 import ua.mani123.interaction.interactions.InteractionUtils;
 import ua.mani123.listeners.*;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+
 public class DTBot {
     private static CommentedFileConfig config;
     private static CommentedFileConfig lang;
@@ -31,51 +37,44 @@ public class DTBot {
     // Main method
 
     public static void main(String[] args) {
-        getLogger().info("Loading configs...");
-        createConfigs();
-        loadConfigs();
-        getLogger().info("Load data...");
-        loadUtils();
-        getLogger().info("Start bot...");
-        startBot();
+        try {
+            getLogger().info("Loading configs...");
+            createConfigs();
+            loadConfigs();
+            getLogger().info("Load data...");
+            loadUtils();
+            getLogger().info("Start bot...");
+            startBot();
+        } catch (Exception e) {
+            DTBot.getLogger().error(e.getMessage());
+        }
     }
 
     private static void createConfigs() {
+        createResourceFile(Constants.DEFAULT_CONFIG_NAME, "default-config.toml");
         config = CommentedFileConfig.builder(Constants.DEFAULT_CONFIG_NAME).defaultResource("default-config.toml").autosave().build();
+        createResourceFile(Constants.DEFAULT_LANG_NAME, "default-lang.toml");
         lang = CommentedFileConfig.builder(Constants.DEFAULT_LANG_NAME).defaultResource("default-lang.toml").autosave().build();
+        createResourceFile(Constants.DEFAULT_INTERACTION_NAME, "default-interaction.toml");
         interaction = CommentedFileConfig.builder(Constants.DEFAULT_INTERACTION_NAME).defaultResource("default-interaction.toml").autosave().build();
+        createResourceFile(Constants.DEFAULT_COMMAND_NAME, "default-commands.toml");
         commands = CommentedFileConfig.builder(Constants.DEFAULT_COMMAND_NAME).defaultResource("default-commands.toml").autosave().build();
+        createResourceFile(Constants.DEFAULT_ACTION_NAME, "default-actions.toml");
         actions = CommentedFileConfig.builder(Constants.DEFAULT_ACTION_NAME).defaultResource("default-actions.toml").autosave().build();
+        createResourceFile(Constants.DEFAULT_ACTIVITIES_NAME, "default-activities.toml");
         activities = CommentedFileConfig.builder(Constants.DEFAULT_ACTIVITIES_NAME).defaultResource("default-activities.toml").autosave().build();
+        createResourceFile(Constants.DEFAULT_DATABASE_NAME, "default-database.toml");
         database = CommentedFileConfig.builder(Constants.DEFAULT_DATABASE_NAME).defaultResource("default-database.toml").autosave().build();
-        //BotFilesManager.createResourceFile("default-config.toml", Constants.DEFAULT_CONFIG_NAME);
-        //BotFilesManager.createResourceFile("default-lang.toml", Constants.DEFAULT_LANG_NAME);
-        //BotFilesManager.createResourceFile("default-interaction.toml", Constants.DEFAULT_INTERACTION_NAME);
-        //BotFilesManager.createResourceFile("default-commands.toml", Constants.DEFAULT_COMMAND_NAME);
-        //BotFilesManager.createResourceFile("default-actions.toml", Constants.DEFAULT_ACTION_NAME);
-        //BotFilesManager.createResourceFile("default-activities.toml", Constants.DEFAULT_ACTIVITIES_NAME);
-        //BotFilesManager.createResourceFile("default-database.toml", Constants.DEFAULT_DATABASE_NAME);
     }
 
     private static void loadConfigs() {
-        try {
-            config.load();
-            lang.load();
-            interaction.load();
-            commands.load();
-            actions.load();
-            activities.load();
-            database.load();
-            //config = new BotConfig(Constants.DEFAULT_CONFIG_NAME);
-            //lang = new BotConfig(Constants.DEFAULT_LANG_NAME);
-            //interaction = new BotConfig(Constants.DEFAULT_INTERACTION_NAME);
-            //commands = new BotConfig(Constants.DEFAULT_COMMAND_NAME);
-            //actions = new BotConfig(Constants.DEFAULT_ACTION_NAME);
-            //activities = new BotConfig(Constants.DEFAULT_ACTIVITIES_NAME);
-            //database = new BotConfig(Constants.DEFAULT_DATABASE_NAME);
-        } catch (Exception e) {
-            getLogger().error(e.getMessage() + ", check or reset cfg files");
-        }
+        config.load();
+        lang.load();
+        interaction.load();
+        commands.load();
+        actions.load();
+        activities.load();
+        database.load();
     }
 
     private static void startBot() {
@@ -86,6 +85,7 @@ public class DTBot {
                     new ButtonListener(),
                     new onReadyListener(),
                     new UseCommand(),
+                    new GuildListener(),
                     new MemberListener()
             );
             BotApi.setCompression(Compression.ZLIB);
@@ -133,8 +133,24 @@ public class DTBot {
         database.save();
     }
 
-    // Getters
+    public static void createResourceFile(String newName, String resourceName) {
+        try {
+            InputStream inputStream = DTBot.class.getClassLoader().getResourceAsStream(resourceName);
+            Path of = Path.of(newName);
+            if (inputStream == null) {
+                DTBot.getLogger().error("Not found file in resources: " + resourceName);
+            } else if (Files.notExists(of, LinkOption.NOFOLLOW_LINKS)) {
+                DTBot.getLogger().info("File created: " + newName);
+                Files.copy(inputStream, of);
+            } else {
+                DTBot.getLogger().info(newName + " found");
+            }
+        } catch (IOException e) {
+            DTBot.getLogger().info(e.getMessage() + " found");
+        }
+    }
 
+    // Getters
 
     public static CommentedFileConfig getDatabase() {
         return database;
