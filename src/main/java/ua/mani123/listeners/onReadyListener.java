@@ -28,15 +28,14 @@ public class onReadyListener extends ListenerAdapter {
         DTBot.getLogger().info("Write all guilds to the database...");
         for (Guild guild : event.getJDA().getGuilds()) {
             Config guildConfig = DTBot.getDatabase().createSubConfig();
-            DTBot.getDatabase().set(guild.getId(), guildConfig);
-            DTBot.getDatabase().set(guild.getId() + ".guild-name", guild.getName());
+            DTBot.getDatabase().update(guild.getId(), guildConfig);
+            DTBot.getDatabase().update(guild.getId() + ".guild-name", guild.getName());
             if (DTBot.getConfig().getOrElse("bot.put-all-members-to-database", true)) {
                 DTBot.getLogger().info("Write all members from guild '" + guild.getName() + "' to the database...");
                 for (Member member : guild.getMembers()) {
                     Config memberConfig = DTBot.getDatabase().createSubConfig();
-                    DTBot.getDatabase().set(guild.getId() + "." + member.getId(), memberConfig);
-                    DTBot.getDatabase().set(guild.getId() + "." + member.getId() + ".username", member.getEffectiveName());
-                    DTBot.getDatabase().set(guild.getId() + "." + member.getId() + ".personal-counter", 0);
+                    DTBot.getDatabase().update(guild.getId() + "." + member.getId(), memberConfig);
+                    DTBot.getDatabase().update(guild.getId() + "." + member.getId() + ".username", member.getEffectiveName());
                 }
             }
 

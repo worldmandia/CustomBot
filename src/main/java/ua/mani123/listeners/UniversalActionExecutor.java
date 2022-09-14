@@ -3,9 +3,12 @@ package ua.mani123.listeners;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import net.dv8tion.jda.api.requests.RestAction;
 import ua.mani123.DTBot;
 import ua.mani123.action.Action;
+import ua.mani123.action.actions.CHECK_MIN_MAX_FROM_DATABASE;
 import ua.mani123.action.actions.CREATE_BUTTON_EMBED;
 import ua.mani123.action.actions.CREATE_TEXT_CHAT;
 import ua.mani123.action.actions.CREATE_VOICE_CHAT;
@@ -16,10 +19,17 @@ import java.util.Map;
 
 public class UniversalActionExecutor {
 
-    // Integer.parseInt(s.replaceAll("[\\D]", ""))
-    // IReplyCallback
+    // for soon feature Integer.parseInt(s.replaceAll("[\\D]", ""))
+
     public static RestAction<?> use(GenericInteractionCreateEvent event, Action action, Map<String, String> placeholders) {
         RestAction<?> restAction = null;
+
+        if (action instanceof CHECK_MIN_MAX_FROM_DATABASE check_min_max_from_database) {
+            int value = DTBot.getDatabase().getInt(event.getGuild() + "." + event.getMember().getId() + "." + check_min_max_from_database.getSection());
+            if (!(check_min_max_from_database.getMin() >= value && value >= check_min_max_from_database.getMax())) {
+                return null; // need new IReplyCallback().deferReply(true).setEmbeds(new EmbedBuilder().build());
+            }
+        }
 
         if (action instanceof CREATE_BUTTON_EMBED create_button_embed) {
             restAction = event.getMessageChannel().sendMessageEmbeds(new EmbedBuilder()

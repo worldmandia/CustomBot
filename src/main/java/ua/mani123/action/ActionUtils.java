@@ -2,6 +2,7 @@ package ua.mani123.action;
 
 import com.electronwill.nightconfig.core.Config;
 import ua.mani123.DTBot;
+import ua.mani123.action.actions.CHECK_MIN_MAX_FROM_DATABASE;
 import ua.mani123.action.actions.CREATE_BUTTON_EMBED;
 import ua.mani123.action.actions.CREATE_TEXT_CHAT;
 import ua.mani123.action.actions.CREATE_VOICE_CHAT;
@@ -47,7 +48,14 @@ public class ActionUtils {
                         action.getOrElse("category-name", "Not set"),
                         action
                 ));
-            } else {
+            } else if (type.equalsIgnoreCase("CHECK_MIN_MAX_FROM_DATABASE")){
+                allActions.put(id, new CHECK_MIN_MAX_FROM_DATABASE(id,
+                        action.getIntOrElse("min", 0),
+                        action.getIntOrElse("max", 0),
+                        action.get("section")
+                ));
+            }
+            else {
                 DTBot.getLogger().warn(type + " not found");
             }
         }
