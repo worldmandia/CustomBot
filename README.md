@@ -4,7 +4,7 @@ Discord bot aimed at full customization
 ## Dependencies
 
 - Java 17+
-- **Discord bot token** with slash commands support _(https://discord.com/developers/applications)_
+- [**Discord bot token** with slash commands support](https://discord.com/developers/applications)
 
 ## Supported Versions
 
