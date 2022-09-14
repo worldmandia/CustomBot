@@ -1,5 +1,7 @@
 # Configuration of DoubleTickets bot
-[bot-ticket]
+[bot]
+# Enter bot token
+bot-token = ""
 # Enter DO_NOT_DISTURB, ONLINE, IDLE, INVISIBLE, OFFLINE
 status = "ONLINE"
 # Change activity every <number> in seconds

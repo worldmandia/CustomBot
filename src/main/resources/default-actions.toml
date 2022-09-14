@@ -2,7 +2,6 @@
     id = "MyAction1"
     type = "CREATE_VOICE_CHAT"
     action-name = "%username%-%counter%"
-    action-description = "Username: %username% Data: %data%"
     counter = 1
     category-name = "test"
 [[action]]
@@ -18,7 +17,6 @@
     embed-title = "%username% lol"
     embed-description = "Username: %username% Data: %data%"
     embed-color = "#ed6f07"
-    ephemeral = false
     button-ids = [
         "btn2",
         "btn1"

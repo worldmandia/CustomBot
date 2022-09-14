@@ -12,7 +12,7 @@ public class ActivityUtils {
     protected static ArrayList<activity> allActivities = new ArrayList<>();
 
     public static void load() {
-        List<Config> allActivityConfigs = DTBot.getActivities().getFileConfig().get("activity");
+        List<Config> allActivityConfigs = DTBot.getActivities().get("activity");
         for (Config activity : allActivityConfigs) {
             String type = activity.get("activity-type");
             String url = activity.getOrElse("url", "null");

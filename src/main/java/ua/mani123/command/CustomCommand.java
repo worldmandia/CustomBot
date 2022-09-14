@@ -1,12 +1,8 @@
 package ua.mani123.command;
 
-import com.electronwill.nightconfig.core.Config;
-import com.electronwill.nightconfig.core.file.FileConfig;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import ua.mani123.action.Action;
-import ua.mani123.action.ActionUtils;
-import ua.mani123.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;

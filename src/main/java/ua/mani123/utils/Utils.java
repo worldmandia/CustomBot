@@ -18,7 +18,11 @@ public class Utils {
 
     public static String placeholder(String string, Map<String, String> placeholders) {
         for (Map.Entry<String, String> entry: placeholders.entrySet()) {
-            string = string.replaceAll(entry.getKey(), entry.getValue());
+            if (string != null) {
+                string = string.replaceAll(entry.getKey(), entry.getValue());
+            } else {
+                string = "Not found string in file";
+            }
         }
         return string;
     }

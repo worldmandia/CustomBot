@@ -15,7 +15,7 @@ public class CommandUtils {
 
     public static void load() {
         allCommands.clear();
-        List<Config> allCommandsConfigs = DTBot.getCommands().getFileConfig().get("commands");
+        List<Config> allCommandsConfigs = DTBot.getCommands().get("commands");
         for (Config cmd : allCommandsConfigs) {
             ArrayList<String> list = cmd.get("action-ids");
             allCommands.put(cmd.get("name"), new CustomCommand(

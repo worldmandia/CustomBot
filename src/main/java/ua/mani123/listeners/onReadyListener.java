@@ -26,11 +26,11 @@ public class onReadyListener extends ListenerAdapter {
         }
         DTBot.getLogger().info("Write all guilds to the database...");
         for (Guild guild : event.getJDA().getGuilds()) {
-            Config config = DTBot.getDatabase().getFileConfig().createSubConfig();
-            DTBot.getDatabase().getFileConfig().set(guild.getId(), config);
-            DTBot.getDatabase().getFileConfig().set(guild.getId() + ".guild-name", guild.getName());
+            Config config = DTBot.getDatabase().createSubConfig();
+            DTBot.getDatabase().set(guild.getId(), config);
+            DTBot.getDatabase().set(guild.getId() + ".guild-name", guild.getName());
         }
-        DTBot.getDatabase().getFileConfig().save();
+        //DTBot.getDatabase().save();
 
         this.startActivityThread(event);
 
@@ -39,10 +39,9 @@ public class onReadyListener extends ListenerAdapter {
 
     private void startActivityThread(@NotNull ReadyEvent event) {
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
-        int time = DTBot.getConfig().getFileConfig().getIntOrElse("bot-ticket.activity-change-every", 10);
+        int time = DTBot.getConfig().getIntOrElse("bot.activity-change-every", 10);
         exec.scheduleAtFixedRate(() -> {
             for (ua.mani123.activity.activity activity : ActivityUtils.getAllActivities()) {
-                if (!DTBot.isBotEnabled()) return;
                 if (activity.getUrl().equals("null")) {
                     event.getJDA().getPresence().setActivity(Activity.of(activity.getType(), activity.getActivityText()));
                 } else {

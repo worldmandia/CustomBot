@@ -15,15 +15,13 @@ public class CREATE_BUTTON_EMBED implements Action {
     protected String embedTitle;
     protected String embedDescription;
     protected String embedColor;
-    protected boolean ephemeral;
     protected Collection<Interaction> buttons;
 
-    public CREATE_BUTTON_EMBED(String id, String embedTitle, String embedDescription, String embedColor, boolean ephemeral, Collection<Interaction> buttons) {
+    public CREATE_BUTTON_EMBED(String id, String embedTitle, String embedDescription, String embedColor, Collection<Interaction> buttons) {
         this.id = id;
         this.embedTitle = embedTitle;
         this.embedDescription = embedDescription;
         this.embedColor = embedColor;
-        this.ephemeral = ephemeral;
         this.buttons = buttons;
     }
 
@@ -52,10 +50,6 @@ public class CREATE_BUTTON_EMBED implements Action {
     @Override
     public String getId() {
         return id;
-    }
-
-    public boolean isEphemeral() {
-        return ephemeral;
     }
 
     @Override

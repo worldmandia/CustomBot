@@ -20,7 +20,7 @@ public class InteractionUtils {
     public static void preLoad() {
         allInteractions.clear();
         Map<String, Action> preAllAction = new HashMap<>();
-        List<Config> allInteractionsConfigs = DTBot.getInteraction().getFileConfig().get("interaction");
+        List<Config> allInteractionsConfigs = DTBot.getInteraction().get("interaction");
         for (Config interaction : allInteractionsConfigs) {
             preAllAction.put(interaction.get("id"), new BLANK_ACTION());
         }
@@ -39,7 +39,7 @@ public class InteractionUtils {
 
     public static void load() {
         allInteractions.clear();
-        List<Config> allInteractionsConfigs = DTBot.getInteraction().getFileConfig().get("interaction");
+        List<Config> allInteractionsConfigs = DTBot.getInteraction().get("interaction");
         for (Config interaction : allInteractionsConfigs) {
             if (interaction.get("type").toString().trim().equalsIgnoreCase("BUTTON_INTERACTION")) {
                 ArrayList<String> list = interaction.get("action-ids");

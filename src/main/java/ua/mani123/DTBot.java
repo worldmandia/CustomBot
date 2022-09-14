@@ -1,5 +1,6 @@
 package ua.mani123;
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.InvalidTokenException;
@@ -13,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import ua.mani123.action.ActionUtils;
 import ua.mani123.activity.ActivityUtils;
 import ua.mani123.command.CommandUtils;
-import ua.mani123.config.BotConfig;
-import ua.mani123.config.BotFilesManager;
 import ua.mani123.interaction.interactions.InteractionUtils;
 import ua.mani123.listeners.AutoComplete;
 import ua.mani123.listeners.ButtonListener;
@@ -22,17 +21,15 @@ import ua.mani123.listeners.UseCommand;
 import ua.mani123.listeners.onReadyListener;
 
 public class DTBot {
-    private static BotConfig config;
-    private static BotConfig lang;
-    private static BotConfig interaction;
-    private static BotConfig commands;
-    private static BotConfig actions;
-    private static BotConfig activities;
-    private static BotConfig database;
-    private static String TOKEN;
+    private static CommentedFileConfig config;
+    private static CommentedFileConfig lang;
+    private static CommentedFileConfig interaction;
+    private static CommentedFileConfig commands;
+    private static CommentedFileConfig actions;
+    private static CommentedFileConfig activities;
+    private static CommentedFileConfig database;
     private static final Logger logger = LoggerFactory.getLogger(DTBot.class);
     private static DefaultShardManagerBuilder BotApi;
-    private static boolean botEnabled = true;
 
     // Main method
 
@@ -47,26 +44,38 @@ public class DTBot {
     }
 
     private static void createConfigs() {
-        BotFilesManager.createFile(Constants.DEFAULT_TOKEN_CONFIG_NAME);
-        BotFilesManager.createResourceFile("default-config.toml", Constants.DEFAULT_CONFIG_NAME);
-        BotFilesManager.createResourceFile("default-lang.toml", Constants.DEFAULT_LANG_NAME);
-        BotFilesManager.createResourceFile("default-interaction.toml", Constants.DEFAULT_INTERACTION_NAME);
-        BotFilesManager.createResourceFile("default-commands.toml", Constants.DEFAULT_COMMAND_NAME);
-        BotFilesManager.createResourceFile("default-actions.toml", Constants.DEFAULT_ACTION_NAME);
-        BotFilesManager.createResourceFile("default-activities.toml", Constants.DEFAULT_ACTIVITIES_NAME);
-        BotFilesManager.createResourceFile("default-database.toml", Constants.DEFAULT_DATABASE_NAME);
+        config = CommentedFileConfig.builder(Constants.DEFAULT_CONFIG_NAME).defaultResource("default-config.toml").autosave().build();
+        lang = CommentedFileConfig.builder(Constants.DEFAULT_LANG_NAME).defaultResource("default-lang.toml").autosave().build();
+        interaction = CommentedFileConfig.builder(Constants.DEFAULT_INTERACTION_NAME).defaultResource("default-interaction.toml").autosave().build();
+        commands = CommentedFileConfig.builder(Constants.DEFAULT_COMMAND_NAME).defaultResource("default-commands.toml").autosave().build();
+        actions = CommentedFileConfig.builder(Constants.DEFAULT_ACTION_NAME).defaultResource("default-actions.toml").autosave().build();
+        activities = CommentedFileConfig.builder(Constants.DEFAULT_ACTIVITIES_NAME).defaultResource("default-activities.toml").autosave().build();
+        database = CommentedFileConfig.builder(Constants.DEFAULT_DATABASE_NAME).defaultResource("default-database.toml").autosave().build();
+        //BotFilesManager.createResourceFile("default-config.toml", Constants.DEFAULT_CONFIG_NAME);
+        //BotFilesManager.createResourceFile("default-lang.toml", Constants.DEFAULT_LANG_NAME);
+        //BotFilesManager.createResourceFile("default-interaction.toml", Constants.DEFAULT_INTERACTION_NAME);
+        //BotFilesManager.createResourceFile("default-commands.toml", Constants.DEFAULT_COMMAND_NAME);
+        //BotFilesManager.createResourceFile("default-actions.toml", Constants.DEFAULT_ACTION_NAME);
+        //BotFilesManager.createResourceFile("default-activities.toml", Constants.DEFAULT_ACTIVITIES_NAME);
+        //BotFilesManager.createResourceFile("default-database.toml", Constants.DEFAULT_DATABASE_NAME);
     }
 
     private static void loadConfigs() {
         try {
-            TOKEN = BotFilesManager.readFile(Constants.DEFAULT_TOKEN_CONFIG_NAME).readLine();
-            config = new BotConfig(Constants.DEFAULT_CONFIG_NAME);
-            lang = new BotConfig(Constants.DEFAULT_LANG_NAME);
-            interaction = new BotConfig(Constants.DEFAULT_INTERACTION_NAME);
-            commands = new BotConfig(Constants.DEFAULT_COMMAND_NAME);
-            actions = new BotConfig(Constants.DEFAULT_ACTION_NAME);
-            activities = new BotConfig(Constants.DEFAULT_ACTIVITIES_NAME);
-            database = new BotConfig(Constants.DEFAULT_DATABASE_NAME);
+            config.load();
+            lang.load();
+            interaction.load();
+            commands.load();
+            actions.load();
+            activities.load();
+            database.load();
+            //config = new BotConfig(Constants.DEFAULT_CONFIG_NAME);
+            //lang = new BotConfig(Constants.DEFAULT_LANG_NAME);
+            //interaction = new BotConfig(Constants.DEFAULT_INTERACTION_NAME);
+            //commands = new BotConfig(Constants.DEFAULT_COMMAND_NAME);
+            //actions = new BotConfig(Constants.DEFAULT_ACTION_NAME);
+            //activities = new BotConfig(Constants.DEFAULT_ACTIVITIES_NAME);
+            //database = new BotConfig(Constants.DEFAULT_DATABASE_NAME);
         } catch (Exception e) {
             getLogger().error(e.getMessage() + ", check or reset cfg files");
         }
@@ -74,7 +83,7 @@ public class DTBot {
 
     private static void startBot() {
         try {
-            BotApi = DefaultShardManagerBuilder.createDefault(TOKEN);
+            BotApi = DefaultShardManagerBuilder.createDefault(config.get("bot.bot-token"));
             BotApi.addEventListeners(
                     new AutoComplete(),
                     new ButtonListener(),
@@ -83,7 +92,7 @@ public class DTBot {
             );
             BotApi.setCompression(Compression.ZLIB);
             BotApi.setActivity(Activity.of(Activity.ActivityType.LISTENING, "Loading..."));
-            BotApi.setStatus(OnlineStatus.valueOf(getConfig().get("bot-ticket.status").toUpperCase()));
+            BotApi.setStatus(OnlineStatus.valueOf(config.get("bot.status").toString().toUpperCase()));
             BotApi.setMemberCachePolicy(MemberCachePolicy.ALL);
             BotApi.setEnabledIntents(
                     GatewayIntent.GUILD_MEMBERS,
@@ -96,6 +105,7 @@ public class DTBot {
             BotApi.build();
         } catch (InvalidTokenException e) {
             getLogger().error("InvalidTokenException, wrong TOKEN");
+            System.exit(0);
         }
     }
 
@@ -116,7 +126,6 @@ public class DTBot {
 
     private static void saveAll() {
         getLogger().warn("Dont close app with CTRL+C, use /close");
-        botEnabled = false;
         config.save();
         lang.save();
         interaction.save();
@@ -129,35 +138,31 @@ public class DTBot {
     // Getters
 
 
-    public static BotConfig getDatabase() {
+    public static CommentedFileConfig getDatabase() {
         return database;
     }
 
-    public static BotConfig getActivities() {
+    public static CommentedFileConfig getActivities() {
         return activities;
     }
 
-    public static boolean isBotEnabled() {
-        return botEnabled;
-    }
-
-    public static BotConfig getConfig() {
+    public static CommentedFileConfig getConfig() {
         return config;
     }
 
-    public static BotConfig getLang() {
+    public static CommentedFileConfig getLang() {
         return lang;
     }
 
-    public static BotConfig getInteraction() {
+    public static CommentedFileConfig getInteraction() {
         return interaction;
     }
 
-    public static BotConfig getCommands() {
+    public static CommentedFileConfig getCommands() {
         return commands;
     }
 
-    public static BotConfig getActions() {
+    public static CommentedFileConfig getActions() {
         return actions;
     }
 

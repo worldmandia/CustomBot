@@ -19,7 +19,7 @@ public class ActionUtils {
 
     public static void load() {
         allActions.clear();
-        List<Config> allActionsConfigs = DTBot.getActions().getFileConfig().get("action");
+        List<Config> allActionsConfigs = DTBot.getActions().get("action");
         for (Config action : allActionsConfigs) {
             String type = action.get("type").toString().trim();
             String id = action.get("id");
@@ -30,7 +30,6 @@ public class ActionUtils {
                         action.getOrElse("embed-title", "Not set"),
                         action.getOrElse("embed-description", "Not set"),
                         action.getOrElse("embed-color", "#ffffff"),
-                        action.getOrElse("ephemeral", false),
                         Utils.filterInteraction(InteractionUtils.getAllInteractions(), list).values()
                 ));
             } else if (type.equalsIgnoreCase("CREATE_TEXT_CHAT")) {
@@ -44,7 +43,6 @@ public class ActionUtils {
             } else if (type.equalsIgnoreCase("CREATE_VOICE_CHAT")) {
                 allActions.put(id, new CREATE_VOICE_CHAT(id,
                         action.getOrElse("action-name", "Not set"),
-                        action.getOrElse("action-description", "Not set"),
                         action.getIntOrElse("counter", 0),
                         action.getOrElse("category-name", "Not set"),
                         action
