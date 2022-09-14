@@ -5,7 +5,7 @@
 Versions with :white_check_mark: are supported
 
 | Version | Supported          |
-| ------- | ------------------ |
+|---------|--------------------|
 | latest  | :white_check_mark: |
 | < 0.1.5 | :x:                |
 
