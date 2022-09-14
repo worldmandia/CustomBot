@@ -3,6 +3,7 @@ package ua.mani123.listeners;
 import com.electronwill.nightconfig.core.Config;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +30,13 @@ public class onReadyListener extends ListenerAdapter {
             Config config = DTBot.getDatabase().createSubConfig();
             DTBot.getDatabase().set(guild.getId(), config);
             DTBot.getDatabase().set(guild.getId() + ".guild-name", guild.getName());
+            if (DTBot.getConfig().getOrElse("bot.put-all-members-to-database", true)){
+                for (Member member : guild.getMembers()) {
+                    DTBot.getDatabase().set(guild.getId() + ".guild-name" + member.getId(), config);
+                    DTBot.getDatabase().set(guild.getId() + ".guild-name" + member.getId(), member.getEffectiveName());
+                }
+            }
+
         }
         //DTBot.getDatabase().save();
 

@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 public class UniversalActionExecutor {
+
+    // Integer.parseInt(s.replaceAll("[\\D]", ""))
     public static RestAction<?> use(GenericInteractionCreateEvent event, Action action, Map<String, String> placeholders) {
         RestAction<?> restAction = null;
 
@@ -40,7 +42,7 @@ public class UniversalActionExecutor {
             create_voice_chat.getConfig().set("counter", create_voice_chat.getCounter().get());
         } else {
             DTBot.getLogger().warn(action.getId() + " is unknown id");
-            return restAction;
+            return null;
         }
         return restAction;
     }

@@ -15,10 +15,7 @@ import ua.mani123.action.ActionUtils;
 import ua.mani123.activity.ActivityUtils;
 import ua.mani123.command.CommandUtils;
 import ua.mani123.interaction.interactions.InteractionUtils;
-import ua.mani123.listeners.AutoComplete;
-import ua.mani123.listeners.ButtonListener;
-import ua.mani123.listeners.UseCommand;
-import ua.mani123.listeners.onReadyListener;
+import ua.mani123.listeners.*;
 
 public class DTBot {
     private static CommentedFileConfig config;
@@ -88,7 +85,8 @@ public class DTBot {
                     new AutoComplete(),
                     new ButtonListener(),
                     new onReadyListener(),
-                    new UseCommand()
+                    new UseCommand(),
+                    new MemberListener()
             );
             BotApi.setCompression(Compression.ZLIB);
             BotApi.setActivity(Activity.of(Activity.ActivityType.LISTENING, "Loading..."));

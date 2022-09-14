@@ -6,6 +6,8 @@ bot-token = ""
 status = "ONLINE"
 # Change activity every <number> in seconds
 activity-change-every = 60
+# Put all members in guilds in database?
+put-all-members-to-database = true
 
 # Multiples bots feature
 # [bot.other]
