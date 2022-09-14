@@ -1,6 +1,7 @@
 package ua.mani123;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.file.FileNotFoundAction;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.exceptions.InvalidTokenException;
@@ -16,12 +17,6 @@ import ua.mani123.activity.ActivityUtils;
 import ua.mani123.command.CommandUtils;
 import ua.mani123.interaction.interactions.InteractionUtils;
 import ua.mani123.listeners.*;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
 
 public class DTBot {
     private static CommentedFileConfig config;
@@ -51,20 +46,20 @@ public class DTBot {
     }
 
     private static void createConfigs() {
-        createResourceFile(Constants.DEFAULT_CONFIG_NAME, "default-config.toml");
-        config = CommentedFileConfig.builder(Constants.DEFAULT_CONFIG_NAME).defaultResource("default-config.toml").autosave().build();
-        createResourceFile(Constants.DEFAULT_LANG_NAME, "default-lang.toml");
-        lang = CommentedFileConfig.builder(Constants.DEFAULT_LANG_NAME).defaultResource("default-lang.toml").autosave().build();
-        createResourceFile(Constants.DEFAULT_INTERACTION_NAME, "default-interaction.toml");
-        interaction = CommentedFileConfig.builder(Constants.DEFAULT_INTERACTION_NAME).defaultResource("default-interaction.toml").autosave().build();
-        createResourceFile(Constants.DEFAULT_COMMAND_NAME, "default-commands.toml");
-        commands = CommentedFileConfig.builder(Constants.DEFAULT_COMMAND_NAME).defaultResource("default-commands.toml").autosave().build();
-        createResourceFile(Constants.DEFAULT_ACTION_NAME, "default-actions.toml");
-        actions = CommentedFileConfig.builder(Constants.DEFAULT_ACTION_NAME).defaultResource("default-actions.toml").autosave().build();
-        createResourceFile(Constants.DEFAULT_ACTIVITIES_NAME, "default-activities.toml");
-        activities = CommentedFileConfig.builder(Constants.DEFAULT_ACTIVITIES_NAME).defaultResource("default-activities.toml").autosave().build();
-        createResourceFile(Constants.DEFAULT_DATABASE_NAME, "default-database.toml");
-        database = CommentedFileConfig.builder(Constants.DEFAULT_DATABASE_NAME).defaultResource("default-database.toml").autosave().build();
+        config = CommentedFileConfig.builder(Constants.DEFAULT_CONFIG_NAME).defaultResource("default-config.toml").autosave()
+                .onFileNotFound(FileNotFoundAction.copyData(DTBot.class.getClassLoader().getResourceAsStream("default-config.toml"))).build();
+        lang = CommentedFileConfig.builder(Constants.DEFAULT_LANG_NAME).defaultResource("default-lang.toml").autosave()
+                .onFileNotFound(FileNotFoundAction.copyData(DTBot.class.getClassLoader().getResourceAsStream("default-lang.toml"))).build();
+        interaction = CommentedFileConfig.builder(Constants.DEFAULT_INTERACTION_NAME).defaultResource("default-interaction.toml").autosave()
+                .onFileNotFound(FileNotFoundAction.copyData(DTBot.class.getClassLoader().getResourceAsStream("default-interaction.toml"))).build();
+        commands = CommentedFileConfig.builder(Constants.DEFAULT_COMMAND_NAME).defaultResource("default-commands.toml").autosave()
+                .onFileNotFound(FileNotFoundAction.copyData(DTBot.class.getClassLoader().getResourceAsStream("default-commands.toml"))).build();
+        actions = CommentedFileConfig.builder(Constants.DEFAULT_ACTION_NAME).defaultResource("default-actions.toml").autosave()
+                .onFileNotFound(FileNotFoundAction.copyData(DTBot.class.getClassLoader().getResourceAsStream("default-actions.toml"))).build();
+        activities = CommentedFileConfig.builder(Constants.DEFAULT_ACTIVITIES_NAME).defaultResource("default-activities.toml")
+                .onFileNotFound(FileNotFoundAction.copyData(DTBot.class.getClassLoader().getResourceAsStream("default-activities.toml"))).autosave().build();
+        database = CommentedFileConfig.builder(Constants.DEFAULT_DATABASE_NAME).defaultResource("default-database.toml").autosave()
+                .onFileNotFound(FileNotFoundAction.copyData(DTBot.class.getClassLoader().getResourceAsStream("default-database.toml"))).build();
     }
 
     private static void loadConfigs() {
@@ -123,7 +118,7 @@ public class DTBot {
     }
 
     private static void saveAll() {
-        getLogger().warn("Dont close app with CTRL+C, use /close");
+        getLogger().info("Shutting down the bot, saving configs");
         config.save();
         lang.save();
         interaction.save();
@@ -131,23 +126,6 @@ public class DTBot {
         actions.save();
         activities.save();
         database.save();
-    }
-
-    public static void createResourceFile(String newName, String resourceName) {
-        try {
-            InputStream inputStream = DTBot.class.getClassLoader().getResourceAsStream(resourceName);
-            Path of = Path.of(newName);
-            if (inputStream == null) {
-                DTBot.getLogger().error("Not found file in resources: " + resourceName);
-            } else if (Files.notExists(of, LinkOption.NOFOLLOW_LINKS)) {
-                DTBot.getLogger().info("File created: " + newName);
-                Files.copy(inputStream, of);
-            } else {
-                DTBot.getLogger().info(newName + " found");
-            }
-        } catch (IOException e) {
-            DTBot.getLogger().info(e.getMessage() + " found");
-        }
     }
 
     // Getters
