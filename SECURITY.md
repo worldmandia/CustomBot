@@ -2,6 +2,8 @@
 
 ## Supported Versions
 
+Versions with :white_check_mark: are supported
+
 | Version | Supported          |
 | ------- | ------------------ |
 | latest  | :white_check_mark: |
