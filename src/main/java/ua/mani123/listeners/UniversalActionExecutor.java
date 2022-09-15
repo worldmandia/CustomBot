@@ -18,8 +18,12 @@ import java.util.Map;
 
 public class UniversalActionExecutor {
 
-    // for soon feature Integer.parseInt(s.replaceAll("[\\D]", ""))
-
+    /*
+     TODO for soon feature Integer.parseInt(s.replaceAll("[\\D]", ""))
+   */
+    /*
+     TODO Custom replyReason system
+   */
     public static ReplyReason use(GenericInteractionCreateEvent event, Action action, Map<String, String> placeholders) {
         RestAction<?> restAction = null;
         ReplyReason replyReason = new ReplyReason("Reply", "Reason", true);
