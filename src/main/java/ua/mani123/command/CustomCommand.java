@@ -41,7 +41,7 @@ public class CustomCommand {
         public static List<SlashCommandData> getCommandData(Collection<CustomCommand> customCommandList) {
             ArrayList<SlashCommandData> commandDataArrayList = new ArrayList<>();
             for (CustomCommand cmd : customCommandList) {
-                commandDataArrayList.add(Commands.slash(cmd.getName(), cmd.getDescription()));
+                commandDataArrayList.add(Commands.slash(cmd.getName().toLowerCase(), cmd.getDescription()));
             }
             return commandDataArrayList;
         }

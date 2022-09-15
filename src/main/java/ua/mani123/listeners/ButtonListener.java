@@ -13,6 +13,7 @@ import ua.mani123.interaction.interactions.InteractionUtils;
 import ua.mani123.utils.ReplyReason;
 import ua.mani123.utils.Utils;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,12 @@ public class ButtonListener extends ListenerAdapter {
 
         placeholders.put("%username-mentioned%", member.getAsMention());
         placeholders.put("%username%", member.getEffectiveName());
+        placeholders.put("%username-with-tag%", member.getUser().getAsTag());
+        placeholders.put("%data-month%", String.valueOf(LocalDateTime.now().getMonthValue()));
+        placeholders.put("%data-day%", String.valueOf(LocalDateTime.now().getDayOfMonth()));
+        placeholders.put("%data-hour%", String.valueOf(LocalDateTime.now().getHour()));
+        placeholders.put("%data-year%", String.valueOf(LocalDateTime.now().getYear()));
+        placeholders.put("%data-minute%", String.valueOf(LocalDateTime.now().getMinute()));
         placeholders.put("%counter%", String.valueOf(0));
         ReplyReason replyReason = null;
 

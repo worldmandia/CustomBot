@@ -7,8 +7,8 @@
 [[action]]
     id = "MyAction2"
     type = "CREATE_TEXT_CHAT"
-    action-name = "%username%-%counter%"
-    action-description = "Username: %username% Data: %data%"
+    action-name = "%username%-%counter%-%database-personal-counter%"
+    action-description = "Username: %username% Data: %data-month%/%data-day% %data-hour%:%data-minute%"
     counter = 1
     category-name = "test"
 [[action]]

@@ -1,5 +1,6 @@
 package ua.mani123.utils;
 
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.requests.RestAction;
 
 import java.util.Map;
@@ -21,11 +22,9 @@ public class ReplyReason {
         return this;
     }
 
-    public void enablePlaceholder(Map<String, String> placeholders) {
-        for (Map.Entry<String, String> entry: placeholders.entrySet()) {
-            this.title = title.replaceAll(entry.getKey(), entry.getValue());
-            this.description = description.replaceAll(entry.getKey(), entry.getValue());
-        }
+    public void enablePlaceholder(Map<String, String> placeholders, Member member) {
+            this.title = Utils.placeholder(title, placeholders, member);
+            this.description = Utils.placeholder(description, placeholders, member);
     }
 
     public RestAction<?> getRestAction() {return restAction;}

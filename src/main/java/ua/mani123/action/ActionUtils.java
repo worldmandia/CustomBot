@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ActionUtils {
-
+    //                                action.getOrElse("reply-title", DTBot.getLang().get("action-success.reply-title")),
+    //                                action.getOrElse("reply-description", DTBot.getLang().get("action-success.reply-description")),
+    //                                action.getOrElse("reply-isEphemeral", DTBot.getLang().get("action-success.reply-isEphemeral"))
     protected static Map<String, Action> allActions = new HashMap<>();
 
     public static void load() {
@@ -34,9 +36,9 @@ public class ActionUtils {
                         action.getOrElse("embed-color", "#ffffff"),
                         Utils.filterInteraction(InteractionUtils.getAllInteractions(), list).values(),
                         new ReplyReason(
-                                action.getOrElse("reply-title", DTBot.getLang().get("action-success.reply-title")),
-                                action.getOrElse("reply-description", DTBot.getLang().get("action-success.reply-description")),
-                                action.getOrElse("reply-isEphemeral", DTBot.getLang().get("action-success.reply-isEphemeral"))
+                                action.getOrElse("reply-title", "Not set"),
+                                action.getOrElse("reply-description", "Not set"),
+                                action.getOrElse("reply-isEphemeral", true)
                         )
                 ));
             } else if (type.equalsIgnoreCase("CREATE_TEXT_CHAT")) {
@@ -47,9 +49,9 @@ public class ActionUtils {
                         action.getOrElse("category-name", "Not set"),
                         action,
                         new ReplyReason(
-                                action.getOrElse("reply-title", DTBot.getLang().get("action-success.reply-title")),
-                                action.getOrElse("reply-description", DTBot.getLang().get("action-success.reply-description")),
-                                action.getOrElse("reply-isEphemeral", DTBot.getLang().get("action-success.reply-isEphemeral"))
+                                action.getOrElse("reply-title", "Not set"),
+                                action.getOrElse("reply-description", "Not set"),
+                                action.getOrElse("reply-isEphemeral", true)
                         )
                 ));
             } else if (type.equalsIgnoreCase("CREATE_VOICE_CHAT")) {
@@ -59,24 +61,23 @@ public class ActionUtils {
                         action.getOrElse("category-name", "Not set"),
                         action,
                         new ReplyReason(
-                                action.getOrElse("reply-title", DTBot.getLang().get("action-success.reply-title")),
-                                action.getOrElse("reply-description", DTBot.getLang().get("action-success.reply-description")),
-                                action.getOrElse("reply-isEphemeral", DTBot.getLang().get("action-success.reply-isEphemeral"))
+                                action.get("reply-title"),
+                                action.get("reply-description"),
+                                action.get("reply-isEphemeral")
                         )
                 ));
-            } else if (type.equalsIgnoreCase("CHECK_MIN_MAX_FROM_DATABASE")){
+            } else if (type.equalsIgnoreCase("CHECK_MIN_MAX_FROM_DATABASE")) {
                 allActions.put(id, new CHECK_MIN_MAX_FROM_DATABASE(id,
                         action.getIntOrElse("min", 0),
                         action.getIntOrElse("max", 0),
                         action.get("section"),
                         new ReplyReason(
-                                action.getOrElse("reply-title", DTBot.getLang().get("action-filed.reply-title")),
-                                action.getOrElse("reply-description", DTBot.getLang().get("action-filed.reply-description")),
-                                action.getOrElse("reply-isEphemeral", DTBot.getLang().get("action-filed.reply-isEphemeral"))
+                                action.getOrElse("reply-title", "Not set"),
+                                action.getOrElse("reply-description", "Not set"),
+                                action.getOrElse("reply-isEphemeral", true)
                         )
                 ));
-            }
-            else {
+            } else {
                 DTBot.getLogger().warn(type + " not found");
             }
         }

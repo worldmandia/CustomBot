@@ -1,5 +1,7 @@
 package ua.mani123.utils;
 
+import net.dv8tion.jda.api.entities.Member;
+import ua.mani123.DTBot;
 import ua.mani123.action.Action;
 import ua.mani123.interaction.Interaction;
 
@@ -7,6 +9,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
     public static Color decode(String hex) {
@@ -17,12 +21,28 @@ public class Utils {
     }
 
     public static String placeholder(String string, Map<String, String> placeholders) {
-        for (Map.Entry<String, String> entry: placeholders.entrySet()) {
+        for (Map.Entry<String, String> entry : placeholders.entrySet()) {
             if (string != null) {
                 string = string.replaceAll(entry.getKey(), entry.getValue());
             } else {
                 string = "Not found string in file";
             }
+        }
+        return string;
+    }
+
+    public static String placeholder(String string, Map<String, String> placeholders, Member member) {
+        for (Map.Entry<String, String> entry : placeholders.entrySet()) {
+            if (string != null) {
+                string = string.replaceAll(entry.getKey(), entry.getValue());
+            } else {
+                string = "Not found string in file";
+            }
+        }
+        Pattern pattern = Pattern.compile("%database-[a-zA-Z]+%");
+        Matcher matcher = pattern.matcher(string);
+        for (int i = 0; i < matcher.groupCount(); i++) {
+            string = string.replaceAll(matcher.group(i), DTBot.getDatabase().getOrElse(member.getGuild().getId() + "." + member.getUser().getId() + "." + matcher.group(i).replace("database-", "").replaceAll("%", ""), "Not found"));
         }
         return string;
     }
