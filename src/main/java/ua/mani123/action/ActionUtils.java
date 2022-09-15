@@ -7,6 +7,7 @@ import ua.mani123.action.actions.CREATE_BUTTON_EMBED;
 import ua.mani123.action.actions.CREATE_TEXT_CHAT;
 import ua.mani123.action.actions.CREATE_VOICE_CHAT;
 import ua.mani123.interaction.interactions.InteractionUtils;
+import ua.mani123.utils.ReplyReason;
 import ua.mani123.utils.Utils;
 
 import java.util.ArrayList;
@@ -31,7 +32,12 @@ public class ActionUtils {
                         action.getOrElse("embed-title", "Not set"),
                         action.getOrElse("embed-description", "Not set"),
                         action.getOrElse("embed-color", "#ffffff"),
-                        Utils.filterInteraction(InteractionUtils.getAllInteractions(), list).values()
+                        Utils.filterInteraction(InteractionUtils.getAllInteractions(), list).values(),
+                        new ReplyReason(
+                                action.getOrElse("reply-title", DTBot.getLang().get("action-success.reply-title")),
+                                action.getOrElse("reply-description", DTBot.getLang().get("action-success.reply-description")),
+                                action.getOrElse("reply-isEphemeral", DTBot.getLang().get("action-success.reply-isEphemeral"))
+                        )
                 ));
             } else if (type.equalsIgnoreCase("CREATE_TEXT_CHAT")) {
                 allActions.put(id, new CREATE_TEXT_CHAT(id,
@@ -39,20 +45,35 @@ public class ActionUtils {
                         action.getOrElse("action-description", "Not set"),
                         action.getIntOrElse("counter", 0),
                         action.getOrElse("category-name", "Not set"),
-                        action
+                        action,
+                        new ReplyReason(
+                                action.getOrElse("reply-title", DTBot.getLang().get("action-success.reply-title")),
+                                action.getOrElse("reply-description", DTBot.getLang().get("action-success.reply-description")),
+                                action.getOrElse("reply-isEphemeral", DTBot.getLang().get("action-success.reply-isEphemeral"))
+                        )
                 ));
             } else if (type.equalsIgnoreCase("CREATE_VOICE_CHAT")) {
                 allActions.put(id, new CREATE_VOICE_CHAT(id,
                         action.getOrElse("action-name", "Not set"),
                         action.getIntOrElse("counter", 0),
                         action.getOrElse("category-name", "Not set"),
-                        action
+                        action,
+                        new ReplyReason(
+                                action.getOrElse("reply-title", DTBot.getLang().get("action-success.reply-title")),
+                                action.getOrElse("reply-description", DTBot.getLang().get("action-success.reply-description")),
+                                action.getOrElse("reply-isEphemeral", DTBot.getLang().get("action-success.reply-isEphemeral"))
+                        )
                 ));
             } else if (type.equalsIgnoreCase("CHECK_MIN_MAX_FROM_DATABASE")){
                 allActions.put(id, new CHECK_MIN_MAX_FROM_DATABASE(id,
                         action.getIntOrElse("min", 0),
                         action.getIntOrElse("max", 0),
-                        action.get("section")
+                        action.get("section"),
+                        new ReplyReason(
+                                action.getOrElse("reply-title", DTBot.getLang().get("action-filed.reply-title")),
+                                action.getOrElse("reply-description", DTBot.getLang().get("action-filed.reply-description")),
+                                action.getOrElse("reply-isEphemeral", DTBot.getLang().get("action-filed.reply-isEphemeral"))
+                        )
                 ));
             }
             else {

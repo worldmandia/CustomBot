@@ -1,14 +1,12 @@
-# Configure text for embeds
-[command]
-    success-title = "🟢 Success"
-    success-description = "Dear %username-mentioned%, your command has completed"
-    ephemeral = true
-[button]
-    success-title = "🟢 Success"
-    success-description = "Dear %username-mentioned%, your interaction with button has completed"
-    ephemeral = true
+# Configure default text for embeds
+[action-filed]
+    reply-title = "🔴 Error"
+    reply-description = "Dear %username-mentioned%, your action is filed"
+    reply-isEphemeral = true
+[action-success]
+    reply-title = "🟢 Success"
+    reply-description = "Dear %username-mentioned%, your action is success"
+    reply-isEphemeral = true
 [other]
-    error-title = "🔴 Error"
-    error-description = "Dear %username-mentioned%, you has error"
     not-perms-title = "🟠 Hey"
     not-perms-description = "Dear %username-mentioned%, you don`t have perms"
