@@ -1,4 +1,4 @@
-# DoubleTickets
+# CustomBot
 Discord bot aimed at full customization
 
 ## Dependencies
