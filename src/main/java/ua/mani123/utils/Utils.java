@@ -2,10 +2,11 @@ package ua.mani123.utils;
 
 import net.dv8tion.jda.api.entities.Member;
 import ua.mani123.DTBot;
-import ua.mani123.action.Action;
-import ua.mani123.interaction.Interaction;
+import ua.mani123.action.botAction;
+import ua.mani123.interaction.botInteraction;
 
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,7 @@ public class Utils {
     }
 
     public static String placeholder(String string, Map<String, String> placeholders) {
+        updateGlobalPlaceholders(placeholders);
         for (Map.Entry<String, String> entry : placeholders.entrySet()) {
             if (string != null) {
                 string = string.replaceAll(entry.getKey(), entry.getValue());
@@ -32,6 +34,7 @@ public class Utils {
     }
 
     public static String placeholder(String string, Map<String, String> placeholders, Member member) {
+        updateGlobalPlaceholders(placeholders);
         for (Map.Entry<String, String> entry : placeholders.entrySet()) {
             if (string != null) {
                 string = string.replaceAll(entry.getKey(), entry.getValue());
@@ -47,8 +50,16 @@ public class Utils {
         return string;
     }
 
-    public static Map<String, Interaction> filterInteraction(Map<String, Interaction> stringMap, ArrayList<String> list) {
-        Map<String, Interaction> filteredMap = new HashMap<>();
+    static void updateGlobalPlaceholders(Map<String, String> placeholders){
+        placeholders.put("%data-month%", String.valueOf(LocalDateTime.now().getMonthValue()));
+        placeholders.put("%data-day%", String.valueOf(LocalDateTime.now().getDayOfMonth()));
+        placeholders.put("%data-hour%", String.valueOf(LocalDateTime.now().getHour()));
+        placeholders.put("%data-year%", String.valueOf(LocalDateTime.now().getYear()));
+        placeholders.put("%data-minute%", String.valueOf(LocalDateTime.now().getMinute()));
+    }
+
+    public static Map<String, botInteraction> filterInteraction(Map<String, botInteraction> stringMap, ArrayList<String> list) {
+        Map<String, botInteraction> filteredMap = new HashMap<>();
         list.forEach(s -> {
             if (stringMap.containsKey(s)) {
                 filteredMap.put(s, stringMap.get(s));
@@ -57,8 +68,8 @@ public class Utils {
         return filteredMap;
     }
 
-    public static Map<String, Action> filterAction(Map<String, Action> stringMap, ArrayList<String> list) {
-        Map<String, Action> filteredMap = new HashMap<>();
+    public static Map<String, botAction> filterAction(Map<String, botAction> stringMap, ArrayList<String> list) {
+        Map<String, botAction> filteredMap = new HashMap<>();
         list.forEach(s -> {
             if (stringMap.containsKey(s)) {
                 filteredMap.put(s, stringMap.get(s));

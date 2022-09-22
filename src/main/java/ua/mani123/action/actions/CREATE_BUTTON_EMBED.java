@@ -2,25 +2,25 @@ package ua.mani123.action.actions;
 
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
-import ua.mani123.action.Action;
-import ua.mani123.interaction.Interaction;
+import ua.mani123.action.botAction;
+import ua.mani123.interaction.botInteraction;
 import ua.mani123.interaction.interactions.BUTTON_INTERACTION;
 import ua.mani123.utils.ReplyReason;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class CREATE_BUTTON_EMBED implements Action {
+public class CREATE_BUTTON_EMBED extends botAction {
 
     String id;
     String embedTitle;
     String embedDescription;
     String embedColor;
-    Collection<Interaction> buttons;
+    Collection<botInteraction> buttons;
     ReplyReason replyReason;
 
 
-    public CREATE_BUTTON_EMBED(String id, String embedTitle, String embedDescription, String embedColor, Collection<Interaction> buttons, ReplyReason replyReason) {
+    public CREATE_BUTTON_EMBED(String id, String embedTitle, String embedDescription, String embedColor, Collection<botInteraction> buttons, ReplyReason replyReason) {
         this.id = id;
         this.embedTitle = embedTitle;
         this.embedDescription = embedDescription;
@@ -47,7 +47,7 @@ public class CREATE_BUTTON_EMBED implements Action {
 
     public ArrayList<Button> getButtons() {
         ArrayList<Button> completeButtons = new ArrayList<>();
-        for (Interaction btn: buttons) {
+        for (botInteraction btn: buttons) {
             if (btn instanceof BUTTON_INTERACTION b){
                 completeButtons.add(Button.of(ButtonStyle.valueOf(b.getButtonStyle().toUpperCase()), b.getId(), b.getButtonText()));
             }
@@ -55,12 +55,11 @@ public class CREATE_BUTTON_EMBED implements Action {
         return completeButtons;
     }
 
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
+
     public boolean isOnlyCommand() {
         return false;
     }

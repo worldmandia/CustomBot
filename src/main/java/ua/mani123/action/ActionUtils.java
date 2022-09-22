@@ -2,10 +2,7 @@ package ua.mani123.action;
 
 import com.electronwill.nightconfig.core.Config;
 import ua.mani123.DTBot;
-import ua.mani123.action.actions.CHECK_MIN_MAX_FROM_DATABASE;
-import ua.mani123.action.actions.CREATE_BUTTON_EMBED;
-import ua.mani123.action.actions.CREATE_TEXT_CHAT;
-import ua.mani123.action.actions.CREATE_VOICE_CHAT;
+import ua.mani123.action.actions.*;
 import ua.mani123.interaction.interactions.InteractionUtils;
 import ua.mani123.utils.ReplyReason;
 import ua.mani123.utils.Utils;
@@ -19,7 +16,7 @@ public class ActionUtils {
     //                                action.getOrElse("reply-title", DTBot.getLang().get("action-success.reply-title")),
     //                                action.getOrElse("reply-description", DTBot.getLang().get("action-success.reply-description")),
     //                                action.getOrElse("reply-isEphemeral", DTBot.getLang().get("action-success.reply-isEphemeral"))
-    protected static Map<String, Action> allActions = new HashMap<>();
+    protected static Map<String, botAction> allActions = new HashMap<>();
 
     public static void load() {
         allActions.clear();
@@ -46,7 +43,6 @@ public class ActionUtils {
                         action.getOrElse("action-name", "Not set"),
                         action.getOrElse("action-description", "Not set"),
                         action.getIntOrElse("counter", 0),
-                        action.getOrElse("category-name", "Not set"),
                         action,
                         new ReplyReason(
                                 action.getOrElse("reply-title", "Not set"),
@@ -58,7 +54,6 @@ public class ActionUtils {
                 allActions.put(id, new CREATE_VOICE_CHAT(id,
                         action.getOrElse("action-name", "Not set"),
                         action.getIntOrElse("counter", 0),
-                        action.getOrElse("category-name", "Not set"),
                         action,
                         new ReplyReason(
                                 action.get("reply-title"),
@@ -77,13 +72,18 @@ public class ActionUtils {
                                 action.getOrElse("reply-isEphemeral", true)
                         )
                 ));
+            } else if (type.equalsIgnoreCase("SELECT_CATEGORY")) {
+                allActions.put(id, new SELECT_CATEGORY(id,
+                        action.getOrElse("category", null)
+                ));
+
             } else {
                 DTBot.getLogger().warn(type + " not found");
             }
         }
     }
 
-    public static Map<String, Action> getAllActions() {
+    public static Map<String, botAction> getAllActions() {
         return allActions;
     }
 }

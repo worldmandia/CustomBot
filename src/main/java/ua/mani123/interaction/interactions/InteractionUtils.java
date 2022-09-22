@@ -2,10 +2,10 @@ package ua.mani123.interaction.interactions;
 
 import com.electronwill.nightconfig.core.Config;
 import ua.mani123.DTBot;
-import ua.mani123.action.Action;
+import ua.mani123.action.botAction;
 import ua.mani123.action.ActionUtils;
 import ua.mani123.action.actions.BLANK_ACTION;
-import ua.mani123.interaction.Interaction;
+import ua.mani123.interaction.botInteraction;
 import ua.mani123.utils.Utils;
 
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ import java.util.Map;
 
 public class InteractionUtils {
 
-    protected static Map<String, Interaction> allInteractions = new HashMap<>();
+    protected static Map<String, botInteraction> allInteractions = new HashMap<>();
 
     public static void preLoad() {
         allInteractions.clear();
-        Map<String, Action> preAllAction = new HashMap<>();
+        Map<String, botAction> preAllAction = new HashMap<>();
         List<Config> allInteractionsConfigs = DTBot.getInteraction().get("interaction");
         for (Config interaction : allInteractionsConfigs) {
             preAllAction.put(interaction.get("id"), new BLANK_ACTION());
@@ -54,7 +54,7 @@ public class InteractionUtils {
         }
     }
 
-    public static Map<String, Interaction> getAllInteractions() {
+    public static Map<String, botInteraction> getAllInteractions() {
         return allInteractions;
     }
 }

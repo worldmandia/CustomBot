@@ -1,15 +1,16 @@
 package ua.mani123.action.actions;
 
-import ua.mani123.action.Action;
+import ua.mani123.action.botAction;
 
-public class BLANK_ACTION implements Action {
-    @Override
+public class BLANK_ACTION extends botAction {
+    String id;
+    boolean onlyCommand;
     public String getId() {
-        return null;
+        return id;
     }
 
-    @Override
+
     public boolean isOnlyCommand() {
-        return false;
+        return onlyCommand;
     }
 }

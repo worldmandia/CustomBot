@@ -1,9 +1,9 @@
 package ua.mani123.action.actions;
 
-import ua.mani123.action.Action;
+import ua.mani123.action.botAction;
 import ua.mani123.utils.ReplyReason;
 
-public class CHECK_MIN_MAX_FROM_DATABASE implements Action {
+public class CHECK_MIN_MAX_FROM_DATABASE extends botAction {
 
     String id;
     int min;
@@ -36,12 +36,12 @@ public class CHECK_MIN_MAX_FROM_DATABASE implements Action {
         return section;
     }
 
-    @Override
+
     public String getId() {
         return id;
     }
 
-    @Override
+
     public boolean isOnlyCommand() {
         return false;
     }

@@ -1,4 +1,4 @@
-package ua.mani123.listeners;
+package ua.mani123.events;
 
 import com.electronwill.nightconfig.core.Config;
 import net.dv8tion.jda.api.entities.Activity;
@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class onReadyListener extends ListenerAdapter {
+public class onReadyEvent extends ListenerAdapter {
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {

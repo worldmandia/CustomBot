@@ -1,18 +1,18 @@
 package ua.mani123.interaction.interactions;
 
-import ua.mani123.action.Action;
-import ua.mani123.interaction.Interaction;
+import ua.mani123.action.botAction;
+import ua.mani123.interaction.botInteraction;
 
 import java.util.Collection;
 
-public class BUTTON_INTERACTION implements Interaction {
+public class BUTTON_INTERACTION implements botInteraction {
 
     protected String id;
     protected String buttonStyle;
     protected String buttonText;
-    protected Collection<Action> actions;
+    protected Collection<botAction> actions;
 
-    public BUTTON_INTERACTION(String id, String buttonStyle, String buttonText, Collection<Action> actions) {
+    public BUTTON_INTERACTION(String id, String buttonStyle, String buttonText, Collection<botAction> actions) {
         this.id = id;
         this.buttonStyle = buttonStyle;
         this.buttonText = buttonText;
@@ -27,7 +27,7 @@ public class BUTTON_INTERACTION implements Interaction {
         return buttonText;
     }
 
-    public Collection<Action> getActions() {
+    public Collection<botAction> getActions() {
         return actions;
     }
 

@@ -2,7 +2,7 @@ package ua.mani123.command;
 
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
-import ua.mani123.action.Action;
+import ua.mani123.action.botAction;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,9 +12,9 @@ public class CustomCommand {
     String name;
     String description;
     List<String> permissions;
-    Collection<Action> actions;
+    Collection<botAction> actions;
 
-    public CustomCommand(String name, String description, List<String> permissions, Collection<Action> actions) {
+    public CustomCommand(String name, String description, List<String> permissions, Collection<botAction> actions) {
         this.name = name;
         this.description = description;
         this.permissions = permissions;
@@ -33,7 +33,7 @@ public class CustomCommand {
         return permissions;
     }
 
-    public Collection<Action> getActions() {
+    public Collection<botAction> getActions() {
         return actions;
     }
 

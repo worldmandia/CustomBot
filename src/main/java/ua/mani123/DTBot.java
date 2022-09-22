@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import ua.mani123.action.ActionUtils;
 import ua.mani123.activity.ActivityUtils;
 import ua.mani123.command.CommandUtils;
+import ua.mani123.events.*;
 import ua.mani123.interaction.interactions.InteractionUtils;
-import ua.mani123.listeners.*;
 
 public class DTBot {
     private static CommentedFileConfig config;
@@ -76,12 +76,11 @@ public class DTBot {
         try {
             BotApi = DefaultShardManagerBuilder.createDefault(config.get("bot.bot-token"));
             BotApi.addEventListeners(
-                    new AutoComplete(),
-                    new ButtonListener(),
-                    new onReadyListener(),
-                    new UseCommand(),
-                    new GuildListener(),
-                    new MemberListener()
+                    new CommandEvents(),
+                    new ButtonEvents(),
+                    new onReadyEvent(),
+                    new GuildEvents(),
+                    new MemberEvents()
             );
             BotApi.setCompression(Compression.ZLIB);
             BotApi.setActivity(Activity.of(Activity.ActivityType.LISTENING, "Loading..."));
