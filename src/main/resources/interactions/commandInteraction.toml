@@ -1,0 +1,10 @@
+# Configure command interactions
+[[interaction]]
+    name = "examplecommand"
+    description = "Command for example"
+    actionsIds = [
+        "actionid1"
+    ]
+    botIds = [
+        "792689746156978207"
+    ]
