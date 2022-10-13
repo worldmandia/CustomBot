@@ -21,7 +21,7 @@ public class discordUtils {
             String token = config.get("token");
             if (token != null) {
                 try {
-                    JDA jda = JDABuilder.createDefault(token).build();
+                    JDA jda = JDABuilder.createDefault(token).setContextEnabled(false).build();
                     String id = jda.getSelfUser().getId();
                     config.set("id", id);
                     jda.addEventListener(new readyBot());
@@ -30,7 +30,7 @@ public class discordUtils {
                     }
                     bots.put(id, jda);
                 } catch (InvalidTokenException e) {
-                    CBot.getLog().warning("You get error: " + e.getMessage());
+                    CBot.getLog().warn("You get error: " + e.getMessage());
                 }
             }
         }

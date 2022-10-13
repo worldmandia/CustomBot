@@ -1,13 +1,15 @@
 package ua.mani123;
 
+import ch.qos.logback.classic.Logger;
 import ua.mani123.config.configUtils;
 import ua.mani123.discord.interaction.interactionUtils;
 
-import java.util.logging.Logger;
-
 public class CBot {
 
+    static Logger log;
+
     public static void main(String[] args) {
+        log = utils.initLogger();
         getLog().info("Starting CustomBot");
         configUtils.init();
         interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
@@ -15,6 +17,7 @@ public class CBot {
     }
 
     public static Logger getLog() {
-        return Logger.getGlobal();
+        return log;
     }
+
 }
