@@ -6,18 +6,19 @@ import ua.mani123.discord.interaction.interactionUtils;
 
 public class CBot {
 
-    static Logger log;
+    private static Logger log;
 
     public static void main(String[] args) {
-        log = utils.initLogger();
+        log = Utils.initLogger();
         getLog().info("Starting CustomBot");
         configUtils.init();
+        Utils.initPlaceholders();
         interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
         Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
+        getLog().info("Done!");
     }
 
     public static Logger getLog() {
         return log;
     }
-
 }

@@ -8,7 +8,12 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import org.slf4j.LoggerFactory;
 
-public class utils {
+import java.util.HashMap;
+
+public class Utils {
+
+    private static final HashMap<String, String> placeholders = new HashMap<>();
+
     public static Logger initLogger() {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         PatternLayoutEncoder logEncoder = new PatternLayoutEncoder();
@@ -27,5 +32,16 @@ public class utils {
         log.setLevel(Level.INFO);
         log.addAppender(logConsoleAppender);
         return log;
+    }
+
+    public static void initPlaceholders(){
+        placeholders.put("source-user", "Not-Found");
+        placeholders.put("source-user-mentioned", "Not-Found");
+        placeholders.put("interaction-user", "Not-Found");
+        placeholders.put("interaction-user-mentioned", "Not-Found");
+    }
+
+    public static HashMap<String, String> getPlaceholders() {
+        return placeholders;
     }
 }

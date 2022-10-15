@@ -1,10 +1,40 @@
+
 # Configure command interactions
 [[interaction]]
-    name = "examplecommand"
-    description = "Command for example"
-    actionsIds = [
-        "actionid1"
-    ]
-    botIds = [
-        "792689746156978207"
-    ]
+actionsIds = ["actionid1"]
+name = "examplecommand"
+successTitle = "Mute cmd"
+successDescription = "${source-user-mentioned} is muted by ${interaction-user-mentioned}"
+description = "Command for example"
+optionIds = [
+    "users",
+    "strings"
+]
+botIds = ["792689746156978207"]
+
+    [interaction.option]
+        name = "name"
+        description = "Description"
+        type = "none"
+
+        [interaction.option.users]
+            name = "user"
+            description = "List of users"
+            type = "user"
+            required = true
+
+        [interaction.option.strings]
+            name = "adition"
+            description = "List of strings"
+            type = "string"
+            required = false
+            autocomplete = true
+            autocompleteIds = [
+                "stringsid1",
+                "stringsid2"
+            ]
+
+[autocomplete.stringsid1]
+    actionsIds = ["actionid1", "actionid2"]
+[autocomplete.stringsid2]
+    actionsIds = ["actionid1", "actionid2"]

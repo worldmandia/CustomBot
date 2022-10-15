@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import ua.mani123.CBot;
 import ua.mani123.discord.interaction.interaction;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class CommandInteraction implements interaction {
@@ -17,38 +18,43 @@ public class CommandInteraction implements interaction {
     List<String> botIds;
     String successTitle;
     String successDescription;
-    List<String> autoCompleteIds;
-
+    List<String> optionIds;
+    HashMap<String, List<String>> autocompleteIds = new HashMap<>();
     CommentedConfig config;
 
     public CommandInteraction(CommentedConfig config) {
         this.name = config.get("name");
         this.description = config.get("description");
         this.actionIds = config.get("actionIds");
-        this.botIds = config.getOrElse("botIds", null);
+        this.botIds = config.get("botIds");
         this.successTitle = config.getOrElse("successTitle", "successTitle not set");
         this.successDescription = config.getOrElse("successDescription", "successDescription not set");
-        this.autoCompleteIds = config.getOrElse("autoCompleteIds", null);
+        this.optionIds = config.get("optionIds");
         this.config = config;
     }
 
     public CommandData getCommand() {
         SlashCommandData commandData = Commands.slash(name.toLowerCase(), description);
-        if (!autoCompleteIds.isEmpty()){
-            for (String id : autoCompleteIds) {
-                String type = config.getOrElse("autocomplete." + id + ".type", "none");
-                String name = config.get("autocomplete." + id + ".name");
-                String description = config.get("autocomplete." + id + ".description");
-                boolean required = config.getOrElse("autocomplete." + id + ".required", false);
+        if (!optionIds.isEmpty()) {
+            for (String id : optionIds) {
+                String type = config.getOrElse("option." + id + ".type", "none");
+                String name = config.get("option." + id + ".name");
+                String description = config.get("option." + id + ".description");
+                boolean required = config.getOrElse("option." + id + ".required", false);
+                boolean autocomplete = config.getOrElse("option." + id + ".autocomplete", false);
+                autocompleteIds.put(name, config.get("option." + id + ".autocompleteIds"));
                 try {
-                    commandData.addOption(OptionType.valueOf(type.toUpperCase()), name, description, required);
-                } catch (IllegalArgumentException e) {
+                    commandData.addOption(OptionType.valueOf(type.toUpperCase()), name, description, required, autocomplete);
+                } catch (Exception e) {
                     CBot.getLog().warn("Type: " + type + " not found");
                 }
             }
         }
         return commandData;
+    }
 
+    public HashMap<String, List<String>> getAutocompleteIds() {
+        return autocompleteIds;
     }
 
     public List<String> getBotIds() {
