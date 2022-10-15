@@ -47,7 +47,7 @@ public class configUtils {
 
     public static void init() {
         config = new CConfig(configUtils.initCfg("config.toml", ""));
-        DiscordBotsData = discordUtils.initBots(config);
+        DiscordBotsData = discordUtils.initBots(getConfig());
         actions = configUtils.initFolderCfg("actions/");
         commandInteraction = new CConfig(configUtils.initCfg("commandInteraction.toml", "interactions/"));
         buttonInteraction = new CConfig(configUtils.initCfg("buttonInteraction.toml", "interactions/"));
