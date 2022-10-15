@@ -8,17 +8,18 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import ua.mani123.CBot;
 import ua.mani123.discord.interaction.interaction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class CommandInteraction implements interaction {
     String name;
     String description;
-    String actionIds;
-    List<String> botIds;
+    ArrayList<String> actionIds;
+    ArrayList<String> botIds;
     String successTitle;
     String successDescription;
-    List<String> optionIds;
+    ArrayList<String> optionIds;
     HashMap<String, List<String>> autocompleteIds = new HashMap<>();
     CommentedConfig config;
 
@@ -63,6 +64,10 @@ public class CommandInteraction implements interaction {
 
     public String getName() {
         return name;
+    }
+
+    public List<String> getActionIds() {
+        return actionIds;
     }
 
     public String getSuccessTitle() {

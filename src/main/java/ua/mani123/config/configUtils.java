@@ -36,11 +36,17 @@ public class configUtils {
                 if (!file.getName().startsWith("_")) {
                     CommentedFileConfig cfg = CommentedFileConfig.builder(file).autosave().build();
                     cfg.load();
-                    configs.put(file.getName(), new CConfig(cfg));
+                    if (cfg.get("type") != null){
+                        configs.put(file.getName(), new CConfig(cfg));
+                    } else {
+                        cfg.close();
+                    }
                 }
             }
         } else {
-            folder.mkdirs();
+            if (folder.mkdirs()){
+                initFolderCfg(path);
+            }
         }
         return configs;
     }
