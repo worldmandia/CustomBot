@@ -16,7 +16,7 @@ public class readyBot extends ListenerAdapter {
         CBot.getLog().info("Discord bot: " + event.getJDA().getSelfUser().getName() + " started");
         ArrayList<CommandData> commandData = new ArrayList<>();
         for (CommandInteraction command : interactionUtils.getCommands()) {
-            if (command.getBotIds().contains(event.getJDA().getSelfUser().getId()) || command.getBotIds() == null) {
+            if (command.getBotIds().isEmpty() || command.getBotIds().contains(event.getJDA().getSelfUser().getId())) {
                 commandData.add(command.getCommand());
             }
         }

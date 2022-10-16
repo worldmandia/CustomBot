@@ -28,7 +28,7 @@ public class CommandInteraction implements interaction {
         this.name = config.get("name");
         this.description = config.get("description");
         this.actionIds = config.get("actionsIds");
-        this.botIds = config.get("botIds");
+        this.botIds = config.getOrElse("botIds", new ArrayList<>());
         this.successTitle = config.getOrElse("successTitle", "successTitle not set");
         this.successDescription = config.getOrElse("successDescription", "successDescription not set");
         this.successIsEphemeral = config.getOrElse("successIsEphemeral", true);
