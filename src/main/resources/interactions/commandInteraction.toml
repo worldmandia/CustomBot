@@ -1,50 +1,29 @@
 
 # Configure command interactions
 [[interaction]]
-actionsIds = ["actionid1"]
-name = "examplecommand"
-description = "Command for example"
-optionIds = [
-    "users",
-    "strings"
-]
-botIds = ["792689746156978207"]
-allow-users = [
-    "mani123#3214"
-]
-allow-roles = [
-    "Admin"
-]
+    actionsIds = ["mutecommand"]
+    name = "mute"
+    description = "mute selected user"
+    optionIds = ["users"]
+    botIds = ["792689746156978207"]
+    allow-users = ["mani123#7703"]
+    #allow-roles = []
+
+# you can use only message and embed actions
 [interaction.success]
-actionId = "sendsuccessmessage"
-IsEphemeral = true
+    IsEphemeral = true
+    actionId = "sendsuccessmessage"
+
+# you can use only message and embed actions
 [interaction.error]
-actionId = "senderrormessage"
-IsEphemeral = true
+    IsEphemeral = true
+    actionId = "senderrormessage"
 
-    [interaction.option]
-        name = "name"
-        description = "Description"
-        type = "none"
+[interaction.option]
 
-        [interaction.option.users]
-            name = "user"
-            description = "List of users"
-            type = "user"
-            required = true
+[interaction.option.users]
+    name = "user"
+    description = "List of users"
+    type = "user"
+    required = true
 
-        [interaction.option.strings]
-            name = "adition"
-            description = "List of strings"
-            type = "string"
-            required = false
-            autocomplete = true
-            autocompleteIds = [
-                "stringsid1",
-                "stringsid2"
-            ]
-
-[autocomplete.stringsid1]
-    actionsIds = ["actionid1", "actionid2"]
-[autocomplete.stringsid2]
-    actionsIds = ["actionid1", "actionid2"]
