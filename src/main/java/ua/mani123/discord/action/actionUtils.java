@@ -1,7 +1,9 @@
 package ua.mani123.discord.action;
 
 import ua.mani123.config.CConfig;
+import ua.mani123.discord.action.actions.MUTE_USER;
 import ua.mani123.discord.action.actions.SEND_MESSAGE;
+import ua.mani123.discord.action.actions.UNMUTE_USER;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +17,11 @@ public class actionUtils {
             String type = entry.getValue().getFileCfg().get("type");
             if (type != null) {
                 type = type.toUpperCase().trim();
-                if (type.equals("SEND_MESSAGE")) {
-                    actionMap.put(entry.getKey(), new SEND_MESSAGE(entry.getValue().getFileCfg()));
+                switch (type) {
+                    case "SEND_MESSAGE" ->
+                            actionMap.put(entry.getKey(), new SEND_MESSAGE(entry.getValue().getFileCfg()));
+                    case "MUTE_USER" -> actionMap.put(entry.getKey(), new MUTE_USER(entry.getValue().getFileCfg()));
+                    case "UNMUTE_USER" -> actionMap.put(entry.getKey(), new UNMUTE_USER(entry.getValue().getFileCfg()));
                 }
             }
         }
