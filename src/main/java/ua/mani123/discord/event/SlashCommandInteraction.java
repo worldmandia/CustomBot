@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.apache.commons.text.StringSubstitutor;
 import org.jetbrains.annotations.NotNull;
+import ua.mani123.CBot;
 import ua.mani123.Utils;
 import ua.mani123.discord.action.actionUtils;
 import ua.mani123.discord.interaction.interactionUtils;
@@ -27,10 +28,13 @@ public class SlashCommandInteraction extends ListenerAdapter {
 
         if (actionIds != null) {
             for (String actionId: actionIds) {
-                actionUtils.getActionMap().get(actionId).runWithPlaceholders(event, str);
+                if (actionUtils.getActionMap().containsKey(actionId)){
+                    actionUtils.getActionMap().get(actionId).runWithPlaceholders(event, str);
+                } else {
+                    CBot.getLog().warn(actionId + " - not found");
+                }
             }
         }
-
         event.replyEmbeds(new EmbedBuilder().setTitle(str.replace(commandInteraction.getSuccessTitle())).setDescription(str.replace(commandInteraction.getSuccessDescription())).build()).queue();
     }
 }
