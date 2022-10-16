@@ -35,10 +35,7 @@ public class Utils {
     }
 
     public static void initPlaceholders(){
-        placeholders.put("source-user", "Not-Found");
-        placeholders.put("source-user-mentioned", "Not-Found");
         placeholders.put("interaction-user", "Not-Found");
-        placeholders.put("interaction-user-mentioned", "Not-Found");
     }
 
     public static HashMap<String, String> getPlaceholders() {

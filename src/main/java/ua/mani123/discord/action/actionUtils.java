@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class actionUtils {
 
-    private static final Map<String, Action> actionMap = new HashMap<>();
+    static Map<String, Action> actionMap = new HashMap<>();
 
     public static void init(Map<String, CConfig> configs) {
         for (Map.Entry<String, CConfig> entry : configs.entrySet()) {

@@ -33,11 +33,11 @@ public class configUtils {
         File folder = new File(path);
         if (folder.exists() && folder.isDirectory()) {
             for (File file : folder.listFiles()) {
-                if (!file.getName().startsWith("_")) {
+                if (!file.getName().startsWith("_") && file.getName().endsWith(".toml")) {
                     CommentedFileConfig cfg = CommentedFileConfig.builder(file).autosave().build();
                     cfg.load();
                     if (cfg.get("type") != null){
-                        configs.put(file.getName(), new CConfig(cfg));
+                        configs.put(file.getName().replace(".toml", ""), new CConfig(cfg));
                     } else {
                         cfg.close();
                     }

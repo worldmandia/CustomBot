@@ -26,7 +26,7 @@ public class CommandInteraction implements interaction {
     public CommandInteraction(CommentedConfig config) {
         this.name = config.get("name");
         this.description = config.get("description");
-        this.actionIds = config.get("actionIds");
+        this.actionIds = config.get("actionsIds");
         this.botIds = config.get("botIds");
         this.successTitle = config.getOrElse("successTitle", "successTitle not set");
         this.successDescription = config.getOrElse("successDescription", "successDescription not set");
