@@ -13,15 +13,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CommandInteraction implements interaction {
-    String name;
-    String description;
-    ArrayList<String> actionIds;
-    ArrayList<String> botIds;
-    String successTitle;
-    String successDescription;
-    ArrayList<String> optionIds;
-    HashMap<String, List<String>> autocompleteIds = new HashMap<>();
-    CommentedConfig config;
+    private final String name;
+    private final String description;
+    private final ArrayList<String> actionIds;
+    private final ArrayList<String> botIds;
+    private final String successTitle;
+    private final String successDescription;
+    private final ArrayList<String> optionIds;
+    private final HashMap<String, List<String>> autocompleteIds = new HashMap<>();
+    private final CommentedConfig config;
 
     public CommandInteraction(CommentedConfig config) {
         this.name = config.get("name");

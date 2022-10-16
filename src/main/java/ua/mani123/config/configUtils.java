@@ -12,11 +12,11 @@ import java.util.Map;
 
 public class configUtils {
 
-    static CConfig config;
-    static CConfig commandInteraction;
-    static CConfig buttonInteraction;
-    static Map<String, JDA> DiscordBotsData;
-    static Map<String, CConfig> actions;
+    private static CConfig config;
+    private static CConfig commandInteraction;
+    private static CConfig buttonInteraction;
+    private static Map<String, JDA> DiscordBotsData;
+    private static Map<String, CConfig> actions;
 
     public static CommentedFileConfig initCfg(String file, String path) {
         File folder = new File(path);

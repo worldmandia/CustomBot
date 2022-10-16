@@ -16,7 +16,7 @@ public interface Action {
      * Run action with placeholders, for add your own placeholders use Utils::getPlaceholders.put
      *
      * @param  event  event for run method
-     * @param  str  StringSubstitutor with placeholder
+     * @param  str  StringSubstitutor with placeholders map
      */
     void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str);
 }
