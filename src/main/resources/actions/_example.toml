@@ -1,3 +1,3 @@
-# Files starting with '_' will not be uploaded
+# Files starting with '_' will not be loaded
 type = "random_type"
 message = "Any message"
