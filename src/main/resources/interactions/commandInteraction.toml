@@ -3,8 +3,9 @@
 [[interaction]]
 actionsIds = ["actionid1"]
 name = "examplecommand"
-successTitle = "Mute cmd"
-successDescription = "${source-user-mentioned} is muted by ${interaction-user-mentioned}"
+successTitle = "Example command"
+successDescription = "${interaction-user-mentioned} used command"
+successIsEphemeral = true
 description = "Command for example"
 optionIds = [
     "users",

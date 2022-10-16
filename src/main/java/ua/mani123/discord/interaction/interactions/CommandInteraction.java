@@ -19,6 +19,7 @@ public class CommandInteraction implements interaction {
     private final ArrayList<String> botIds;
     private final String successTitle;
     private final String successDescription;
+    private final boolean successIsEphemeral;
     private final ArrayList<String> optionIds;
     private final HashMap<String, List<String>> autocompleteIds = new HashMap<>();
     private final CommentedConfig config;
@@ -30,6 +31,7 @@ public class CommandInteraction implements interaction {
         this.botIds = config.get("botIds");
         this.successTitle = config.getOrElse("successTitle", "successTitle not set");
         this.successDescription = config.getOrElse("successDescription", "successDescription not set");
+        this.successIsEphemeral = config.getOrElse("successIsEphemeral", true);
         this.optionIds = config.get("optionIds");
         this.config = config;
     }
@@ -52,6 +54,10 @@ public class CommandInteraction implements interaction {
             }
         }
         return commandData;
+    }
+
+    public boolean successIsEphemeral() {
+        return successIsEphemeral;
     }
 
     public HashMap<String, List<String>> getAutocompleteIds() {

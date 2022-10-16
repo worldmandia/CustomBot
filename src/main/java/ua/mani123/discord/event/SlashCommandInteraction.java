@@ -35,6 +35,6 @@ public class SlashCommandInteraction extends ListenerAdapter {
                 }
             }
         }
-        event.replyEmbeds(new EmbedBuilder().setTitle(str.replace(commandInteraction.getSuccessTitle())).setDescription(str.replace(commandInteraction.getSuccessDescription())).build()).queue();
+        event.replyEmbeds(new EmbedBuilder().setTitle(str.replace(commandInteraction.getSuccessTitle())).setDescription(str.replace(commandInteraction.getSuccessDescription())).build()).setEphemeral(commandInteraction.successIsEphemeral()).queue();
     }
 }
