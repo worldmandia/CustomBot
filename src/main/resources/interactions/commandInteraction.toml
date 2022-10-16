@@ -3,15 +3,24 @@
 [[interaction]]
 actionsIds = ["actionid1"]
 name = "examplecommand"
-successTitle = "Example command"
-successDescription = "${interaction-user-mentioned} used command"
-successIsEphemeral = true
 description = "Command for example"
 optionIds = [
     "users",
     "strings"
 ]
 botIds = ["792689746156978207"]
+allow-users = [
+    "mani123#3214"
+]
+allow-roles = [
+    "Admin"
+]
+[interaction.success]
+actionId = "sendsuccessmessage"
+IsEphemeral = true
+[interaction.error]
+actionId = "senderrormessage"
+IsEphemeral = true
 
     [interaction.option]
         name = "name"

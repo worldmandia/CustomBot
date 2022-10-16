@@ -14,8 +14,8 @@ public class CBot {
         getLog().info("Starting CustomBot");
         configUtils.init();
         Utils.initPlaceholders();
-        interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
         actionUtils.init(configUtils.getActions());
+        interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
         Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
         getLog().info("Done!");
     }

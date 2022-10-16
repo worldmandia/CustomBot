@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import ua.mani123.CBot;
+import ua.mani123.discord.action.Action;
+import ua.mani123.discord.action.actionUtils;
 import ua.mani123.discord.interaction.interaction;
 
 import java.util.ArrayList;
@@ -17,10 +19,11 @@ public class CommandInteraction implements interaction {
     private final String description;
     private final ArrayList<String> actionIds;
     private final ArrayList<String> botIds;
-    private final String successTitle;
-    private final String successDescription;
-    private final boolean successIsEphemeral;
+    private final Action successAction;
+    private final Action errorAction;
     private final ArrayList<String> optionIds;
+    private final ArrayList<String> allowUsers;
+    private final ArrayList<String> allowRoles;
     private final HashMap<String, List<String>> autocompleteIds = new HashMap<>();
     private final CommentedConfig config;
 
@@ -29,9 +32,10 @@ public class CommandInteraction implements interaction {
         this.description = config.get("description");
         this.actionIds = config.get("actionsIds");
         this.botIds = config.getOrElse("botIds", new ArrayList<>());
-        this.successTitle = config.getOrElse("successTitle", "successTitle not set");
-        this.successDescription = config.getOrElse("successDescription", "successDescription not set");
-        this.successIsEphemeral = config.getOrElse("successIsEphemeral", true);
+        this.allowUsers = config.getOrElse("allow-users", new ArrayList<>());
+        this.allowRoles = config.getOrElse("allow-roles", new ArrayList<>());
+        this.successAction = actionUtils.getActionMap().get(config.get("success.actionId"));
+        this.errorAction = actionUtils.getActionMap().get(config.get("error.actionId"));
         this.optionIds = config.get("optionIds");
         this.config = config;
     }
@@ -56,10 +60,6 @@ public class CommandInteraction implements interaction {
         return commandData;
     }
 
-    public boolean successIsEphemeral() {
-        return successIsEphemeral;
-    }
-
     public HashMap<String, List<String>> getAutocompleteIds() {
         return autocompleteIds;
     }
@@ -76,11 +76,23 @@ public class CommandInteraction implements interaction {
         return actionIds;
     }
 
-    public String getSuccessTitle() {
-        return successTitle;
+    public Action getSuccessAction() {
+        return successAction;
     }
 
-    public String getSuccessDescription() {
-        return successDescription;
+    public Action getErrorAction() {
+        return errorAction;
+    }
+
+    public ArrayList<String> getAllowUsers() {
+        return allowUsers;
+    }
+
+    public CommentedConfig getConfig() {
+        return config;
+    }
+
+    public ArrayList<String> getAllowRoles() {
+        return allowRoles;
     }
 }

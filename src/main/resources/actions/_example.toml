@@ -1,2 +1,7 @@
 type = "send_message"
 message = "My message"
+[[filter]]
+type = "ROLES"
+roles = [
+
+]
