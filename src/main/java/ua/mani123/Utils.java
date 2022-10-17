@@ -34,7 +34,7 @@ public class Utils {
         return log;
     }
 
-    public static void initPlaceholders(){
+    public static void initPlaceholders() {
         placeholders.put("interaction-user", "Not-Found");
     }
 

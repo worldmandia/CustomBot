@@ -11,13 +11,17 @@ public class CBot {
 
     public static void main(String[] args) {
         log = Utils.initLogger();
-        getLog().info("Starting CustomBot");
-        configUtils.init();
-        Utils.initPlaceholders();
-        actionUtils.init(configUtils.getActions());
-        interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
-        Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
-        getLog().info("Done!");
+        try {
+            getLog().info("Starting CustomBot");
+            configUtils.init();
+            Utils.initPlaceholders();
+            actionUtils.init(configUtils.getActions());
+            interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
+            Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
+            getLog().info("Done!");
+        } catch (Exception e) {
+            log.warn("You received exception: " + e.getMessage());
+        }
     }
 
     public static Logger getLog() {

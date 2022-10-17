@@ -9,6 +9,11 @@ import java.util.List;
 
 public interface Action {
 
+    /*
+     TODO member.deafen(true).queue();
+     TODO member.ban().queue();
+     */
+
     List<Filter> filters = new ArrayList<>();
 
     /**

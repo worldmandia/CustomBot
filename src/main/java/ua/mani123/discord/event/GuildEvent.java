@@ -16,7 +16,7 @@ public class GuildEvent extends ListenerAdapter {
     public void onGuildReady(@NotNull GuildReadyEvent event) {
         ArrayList<CommandData> commandData = new ArrayList<>();
         for (CommandInteraction command : interactionUtils.getCommands()) {
-            if (command.getGuildList().contains(event.getGuild().getName()) && command.isOnlyGuild()){
+            if (command.getGuildList().contains(event.getGuild().getName()) && command.isOnlyGuild()) {
                 if (command.getBotIds().isEmpty() && command.getBotIds().contains(event.getJDA().getSelfUser().getId())) {
                     commandData.add(command.getCommand());
                 }

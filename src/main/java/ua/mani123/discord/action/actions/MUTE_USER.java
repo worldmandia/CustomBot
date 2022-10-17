@@ -54,7 +54,7 @@ public class MUTE_USER implements Action {
         }
 
         if (!voiceChats.isEmpty()) {
-            for (String chatName: voiceChats) {
+            for (String chatName : voiceChats) {
                 members.addAll(event.getGuild().getVoiceChannelsByName(chatName, false).get(0).getMembers());
             }
         }
