@@ -1,3 +1,8 @@
 # Files starting with '_' will not be loaded
 type = "random_type"
 message = "Any message"
+[[filter]]
+type = "ROLE"
+list = [
+    "role"
+]

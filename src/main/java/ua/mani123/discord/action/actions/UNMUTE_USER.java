@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.CBot;
 import ua.mani123.discord.action.Action;
+import ua.mani123.discord.action.filter.Filter;
+import ua.mani123.discord.action.filter.filterUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +18,14 @@ public class UNMUTE_USER implements Action {
     List<String> focusedOptionIds;
     boolean muteIfUnmuted;
 
-    public UNMUTE_USER(CommentedConfig cfg) {
-        this.users = cfg.getOrElse("users", new ArrayList<>());
-        this.focusedOptionIds = cfg.getOrElse("focusedOptionIds", new ArrayList<>());
-        this.muteIfUnmuted = cfg.getOrElse("muteIfUnmuted", false);
+    List<Filter> filters;
+
+    public UNMUTE_USER(CommentedConfig config) {
+        this.users = config.getOrElse("users", new ArrayList<>());
+        this.focusedOptionIds = config.getOrElse("focusedOptionIds", new ArrayList<>());
+        this.muteIfUnmuted = config.getOrElse("muteIfUnmuted", false);
+        this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
+
     }
 
     @Override

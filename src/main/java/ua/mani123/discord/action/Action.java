@@ -2,8 +2,14 @@ package ua.mani123.discord.action;
 
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import org.apache.commons.text.StringSubstitutor;
+import ua.mani123.discord.action.filter.Filter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface Action {
+
+    List<Filter> filters = new ArrayList<>();
 
     /**
      * Run action, recommend to use Action::runWithPlaceholders
@@ -19,4 +25,9 @@ public interface Action {
      * @param  str  StringSubstitutor with placeholders map
      */
     void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str);
+
+    default List<Filter> getFilters() {
+        return filters;
+    }
+
 }

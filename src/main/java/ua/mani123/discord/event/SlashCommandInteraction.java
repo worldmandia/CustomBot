@@ -11,6 +11,7 @@ import ua.mani123.Utils;
 import ua.mani123.discord.action.Action;
 import ua.mani123.discord.action.actionUtils;
 import ua.mani123.discord.action.actions.SEND_MESSAGE;
+import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.interaction.interactionUtils;
 import ua.mani123.discord.interaction.interactions.CommandInteraction;
 
@@ -56,7 +57,16 @@ public class SlashCommandInteraction extends ListenerAdapter {
         if (actionIds != null) {
             for (String actionId : actionIds) {
                 if (actionUtils.getActionMap().containsKey(actionId)) {
-                    actionUtils.getActionMap().get(actionId).runWithPlaceholders(event, str);
+                    Action action = actionUtils.getActionMap().get(actionId);
+                    boolean canUse = true;
+                    for (Filter filter: action.getFilters()) {
+                        if (canUse){
+                            canUse = filter.canRun(event);
+                        }
+                    }
+                    if (canUse){
+                        action.runWithPlaceholders(event, str);
+                    }
                 } else {
                     CBot.getLog().warn(actionId + " - not found");
                 }
