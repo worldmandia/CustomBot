@@ -7,7 +7,7 @@ import ua.mani123.CBot;
 import ua.mani123.config.CConfig;
 import ua.mani123.discord.event.CommandAutoCompleteInteraction;
 import ua.mani123.discord.event.SlashCommandInteraction;
-import ua.mani123.discord.event.readyBot;
+import ua.mani123.discord.event.ReadyBot;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +24,7 @@ public class discordUtils {
                     JDA jda = JDABuilder.createDefault(token).setContextEnabled(false).build();
                     String id = jda.getSelfUser().getId();
                     config.set("id", id);
-                    jda.addEventListener(new readyBot());
+                    jda.addEventListener(new ReadyBot());
                     if (config.getOrElse("enable-command-events", true)) {
                         jda.addEventListener(new SlashCommandInteraction());
                     }

@@ -10,7 +10,7 @@ import ua.mani123.discord.interaction.interactions.CommandInteraction;
 
 import java.util.ArrayList;
 
-public class readyBot extends ListenerAdapter {
+public class ReadyBot extends ListenerAdapter {
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         CBot.getLog().info("Discord bot: " + event.getJDA().getSelfUser().getName() + " started");
