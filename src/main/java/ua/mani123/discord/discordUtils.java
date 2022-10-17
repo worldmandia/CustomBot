@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import ua.mani123.CBot;
 import ua.mani123.config.CConfig;
 import ua.mani123.discord.event.CommandAutoCompleteInteraction;
+import ua.mani123.discord.event.GuildEvent;
 import ua.mani123.discord.event.SlashCommandInteraction;
 import ua.mani123.discord.event.ReadyBot;
 
@@ -30,6 +31,9 @@ public class discordUtils {
                     }
                     if (config.getOrElse("enable-autocomplete-command-events", true)) {
                         jda.addEventListener(new CommandAutoCompleteInteraction());
+                    }
+                    if (config.getOrElse("enable-guild-events", true)) {
+                        jda.addEventListener(new GuildEvent());
                     }
                     bots.put(id, jda);
                 } catch (Exception e) {

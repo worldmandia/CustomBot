@@ -21,9 +21,11 @@ public class CommandInteraction implements interaction {
     private final ArrayList<String> botIds;
     private final Action successAction;
     private final Action errorAction;
+    private final boolean onlyGuild;
     private final ArrayList<String> optionIds;
     private final ArrayList<String> allowUsers;
     private final ArrayList<String> allowRoles;
+    private final ArrayList<String> guildList;
     private final HashMap<String, List<String>> autocompleteIds = new HashMap<>();
     private final CommentedConfig config;
 
@@ -38,6 +40,8 @@ public class CommandInteraction implements interaction {
         this.errorAction = actionUtils.getActionMap().get(config.get("error.actionId"));
         this.optionIds = config.get("optionIds");
         this.config = config;
+        this.onlyGuild = config.getOrElse("onlyGuild", false);
+        this.guildList = config.getOrElse("guildList", new ArrayList<>());
     }
 
     public CommandData getCommand() {
@@ -82,6 +86,14 @@ public class CommandInteraction implements interaction {
 
     public Action getErrorAction() {
         return errorAction;
+    }
+
+    public ArrayList<String> getGuildList() {
+        return guildList;
+    }
+
+    public boolean isOnlyGuild() {
+        return onlyGuild;
     }
 
     public ArrayList<String> getAllowUsers() {

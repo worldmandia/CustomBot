@@ -13,14 +13,13 @@ import java.util.ArrayList;
 public class ReadyBot extends ListenerAdapter {
     @Override
     public void onReady(@NotNull ReadyEvent event) {
-        CBot.getLog().info("Discord bot: " + event.getJDA().getSelfUser().getName() + " started");
         ArrayList<CommandData> commandData = new ArrayList<>();
         for (CommandInteraction command : interactionUtils.getCommands()) {
-            if (command.getBotIds().isEmpty() || command.getBotIds().contains(event.getJDA().getSelfUser().getId())) {
+            if (command.getBotIds().isEmpty() && command.getBotIds().contains(event.getJDA().getSelfUser().getId()) && !command.isOnlyGuild()) {
                 commandData.add(command.getCommand());
             }
         }
         event.getJDA().updateCommands().addCommands(commandData).queue();
-        CBot.getLog().info(commandData.size() + " commands added to this bot");
+        CBot.getLog().info(commandData.size() + " global commands added to " + event.getJDA().getSelfUser().getName());
     }
 }

@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.apache.commons.text.StringSubstitutor;
-import ua.mani123.CBot;
 import ua.mani123.discord.action.Action;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
@@ -18,6 +17,7 @@ public class MUTE_USER implements Action {
     List<String> users;
     List<String> focusedOptionIds;
     boolean unmuteIfMuted;
+    List<String> voiceChats;
 
     List<Filter> filters;
 
@@ -25,13 +25,14 @@ public class MUTE_USER implements Action {
         this.users = config.getOrElse("users", new ArrayList<>());
         this.focusedOptionIds = config.getOrElse("focusedOptionIds", new ArrayList<>());
         this.unmuteIfMuted = config.getOrElse("unmuteIfMuted", false);
+        this.voiceChats = config.getOrElse("voiceChats", new ArrayList<>());
         this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
-
     }
 
     @Override
     public void run(GenericInteractionCreateEvent event) {
         List<Member> members = new ArrayList<>();
+
         if (!users.isEmpty()) {
             for (String name : users) {
                 Member member = event.getGuild().getMemberByTag(name);
@@ -39,20 +40,27 @@ public class MUTE_USER implements Action {
                     members.add(member);
                 }
             }
-        } else if (!focusedOptionIds.isEmpty()) {
-            if (event instanceof SlashCommandInteractionEvent commandEvent){
-                for (String id: focusedOptionIds) {
+        }
+
+        if (!focusedOptionIds.isEmpty()) {
+            if (event instanceof SlashCommandInteractionEvent commandEvent) {
+                for (String id : focusedOptionIds) {
                     Member member = commandEvent.getOption(id).getAsMember();
                     if (member != null) {
                         members.add(member);
                     }
                 }
             }
-        } else {
-            CBot.getLog().warn("Options support only in commands or you not add any data");
         }
+
+        if (!voiceChats.isEmpty()) {
+            for (String chatName: voiceChats) {
+                members.addAll(event.getGuild().getVoiceChannelsByName(chatName, false).get(0).getMembers());
+            }
+        }
+
         for (Member member : members) {
-            if (!member.getVoiceState().isGuildMuted()){
+            if (!member.getVoiceState().isGuildMuted()) {
                 member.mute(true).queue();
             } else if (unmuteIfMuted) {
                 member.mute(false).queue();
