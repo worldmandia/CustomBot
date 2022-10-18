@@ -7,12 +7,15 @@ public interface Filter {
     /*
       TODO users filter
      */
+    boolean defaultCanRun = true;
 
     /**
      * Check actions filters and return true if can or false if cant
      *
-     * @param  event  event for run method
+     * @param event event for run method
      */
-    boolean canRun(GenericInteractionCreateEvent event);
+    default boolean canRun(GenericInteractionCreateEvent event) {
+        return defaultCanRun;
+    }
 
 }
