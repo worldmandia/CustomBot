@@ -22,7 +22,9 @@ public class GuildEvent extends ListenerAdapter {
                 }
             }
         }
-        event.getGuild().updateCommands().addCommands(commandData).queue();
-        CBot.getLog().info(commandData.size() + " commands added to guild: " + event.getGuild().getName());
+        if (commandData.size() > 0) {
+            event.getGuild().updateCommands().addCommands(commandData).queue();
+            CBot.getLog().info(commandData.size() + " commands added to guild: " + event.getGuild().getName());
+        }
     }
 }

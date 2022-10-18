@@ -16,7 +16,7 @@ public class CommandAutoCompleteInteraction extends ListenerAdapter {
 
         if (commandInteraction != null) {
             List<String> list = commandInteraction.getAutocompleteIds().get(event.getFocusedOption().getName());
-            if (list != null){
+            if (list != null) {
                 List<Command.Choice> options = list.stream().filter(string -> string
                                 .startsWith(event.getFocusedOption().getValue()))
                         .map(string -> new Command.Choice(string, string)).toList();

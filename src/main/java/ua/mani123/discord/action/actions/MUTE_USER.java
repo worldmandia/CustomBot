@@ -3,9 +3,9 @@ package ua.mani123.discord.action.actions;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.Action;
+import ua.mani123.discord.action.actionUtils;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
 
@@ -33,31 +33,9 @@ public class MUTE_USER implements Action {
     public void run(GenericInteractionCreateEvent event) {
         List<Member> members = new ArrayList<>();
 
-        if (!users.isEmpty()) {
-            for (String name : users) {
-                Member member = event.getGuild().getMemberByTag(name);
-                if (member != null) {
-                    members.add(member);
-                }
-            }
-        }
-
-        if (!focusedOptionIds.isEmpty()) {
-            if (event instanceof SlashCommandInteractionEvent commandEvent) {
-                for (String id : focusedOptionIds) {
-                    Member member = commandEvent.getOption(id).getAsMember();
-                    if (member != null) {
-                        members.add(member);
-                    }
-                }
-            }
-        }
-
-        if (!voiceChats.isEmpty()) {
-            for (String chatName : voiceChats) {
-                members.addAll(event.getGuild().getVoiceChannelsByName(chatName, false).get(0).getMembers());
-            }
-        }
+        members.addAll(actionUtils.getMembersFromList(event, users));
+        members.addAll(actionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
+        members.addAll(actionUtils.getMembersFromVoiceChat(event, voiceChats));
 
         for (Member member : members) {
             if (!member.getVoiceState().isGuildMuted()) {

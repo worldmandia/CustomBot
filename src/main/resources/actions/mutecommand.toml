@@ -1,4 +1,3 @@
 unmuteIfMuted = true
 type = "MUTE_USER"
 focusedOptionIds = ["user"]
-

@@ -12,14 +12,15 @@ import ua.mani123.discord.action.filter.filterUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UNMUTE_USER implements Action {
+public class UNDEAFEN_USER implements Action {
+
     List<String> users;
     List<String> focusedOptionIds;
     boolean muteIfUnmuted;
     List<String> voiceChats;
     List<Filter> filters;
 
-    public UNMUTE_USER(CommentedConfig config) {
+    public UNDEAFEN_USER(CommentedConfig config) {
         this.users = config.getOrElse("users", new ArrayList<>());
         this.focusedOptionIds = config.getOrElse("focusedOptionIds", new ArrayList<>());
         this.muteIfUnmuted = config.getOrElse("muteIfUnmuted", false);
@@ -38,10 +39,10 @@ public class UNMUTE_USER implements Action {
 
 
         for (Member member : members) {
-            if (member.getVoiceState().isGuildMuted()){
-                member.mute(false).queue();
+            if (member.getVoiceState().isDeafened()){
+                member.deafen(false).queue();
             } else if (muteIfUnmuted) {
-                member.mute(true).queue();
+                member.deafen(true).queue();
             }
         }
     }
@@ -49,5 +50,10 @@ public class UNMUTE_USER implements Action {
     @Override
     public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
         run(event);
+    }
+
+    @Override
+    public List<Filter> getFilters() {
+        return filters;
     }
 }

@@ -1,5 +1,6 @@
 package ua.mani123.discord.event;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -10,6 +11,7 @@ import ua.mani123.CBot;
 import ua.mani123.Utils;
 import ua.mani123.discord.action.Action;
 import ua.mani123.discord.action.actionUtils;
+import ua.mani123.discord.action.actions.SEND_EMBED;
 import ua.mani123.discord.action.actions.SEND_MESSAGE;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.interaction.interactionUtils;
@@ -23,6 +25,7 @@ public class SlashCommandInteraction extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         CommandInteraction commandInteraction = interactionUtils.getCommandByName(event.getName());
+
         Utils.getPlaceholders().put("interaction-user", event.getUser().getName());
         Utils.getPlaceholders().put("interaction-user-mentioned", event.getUser().getAsMention());
         Utils.getPlaceholders().put("interaction-user-as-tag", event.getUser().getAsTag());
@@ -35,8 +38,8 @@ public class SlashCommandInteraction extends ListenerAdapter {
             for (String name : allowRoles) {
                 roles.add(event.getGuild().getRolesByName(name, false).get(0));
             }
-            if (!new HashSet<>(event.getMember().getRoles()).containsAll(roles)){
-                reply(commandInteraction.getErrorAction(), event, commandInteraction.getConfig().getOrElse("error.IsEphemeral", true));
+            if (!new HashSet<>(event.getMember().getRoles()).containsAll(roles)) {
+                reply(commandInteraction.getErrorAction(), event, commandInteraction.getConfig().getOrElse("error.IsEphemeral", true), str);
                 return;
             }
         }
@@ -47,8 +50,8 @@ public class SlashCommandInteraction extends ListenerAdapter {
             for (String name : allowUsers) {
                 members.add(event.getGuild().getMemberByTag(name));
             }
-            if (!members.contains(event.getMember())){
-                reply(commandInteraction.getErrorAction(), event, commandInteraction.getConfig().getOrElse("error.IsEphemeral", true));
+            if (!members.contains(event.getMember())) {
+                reply(commandInteraction.getErrorAction(), event, commandInteraction.getConfig().getOrElse("error.IsEphemeral", true), str);
                 return;
             }
         }
@@ -59,12 +62,14 @@ public class SlashCommandInteraction extends ListenerAdapter {
                 if (actionUtils.getActionMap().containsKey(actionId)) {
                     Action action = actionUtils.getActionMap().get(actionId);
                     boolean canUse = true;
-                    for (Filter filter: action.getFilters()) {
-                        if (canUse){
-                            canUse = filter.canRun(event);
+                    if (!action.getFilters().isEmpty()) {
+                        for (Filter filter : action.getFilters()) {
+                            if (canUse) {
+                                canUse = filter.canRun(event);
+                            }
                         }
                     }
-                    if (canUse){
+                    if (canUse) {
                         action.runWithPlaceholders(event, str);
                     }
                 } else {
@@ -72,14 +77,23 @@ public class SlashCommandInteraction extends ListenerAdapter {
                 }
             }
         }
-
-        reply(commandInteraction.getSuccessAction(), event, commandInteraction.getConfig().getOrElse("success.IsEphemeral", true));
+        reply(commandInteraction.getSuccessAction(), event, commandInteraction.getConfig().getOrElse("success.IsEphemeral", true), str);
 
     }
 
-    private static void reply(Action action, SlashCommandInteractionEvent event, boolean isEphemeral){
-        if (action instanceof SEND_MESSAGE send_message) {
-            event.reply(send_message.getMessage()).setEphemeral(isEphemeral).queue();
+    private static void reply(Action action, SlashCommandInteractionEvent event, boolean isEphemeral, StringSubstitutor stringSubstitutor) {
+        if (action != null) {
+            if (action instanceof SEND_MESSAGE send_message) {
+                event.reply(send_message.getMessage()).setEphemeral(isEphemeral).queue();
+            } else if (action instanceof SEND_EMBED send_embed) {
+                event.replyEmbeds(
+                                new EmbedBuilder()
+                                        .setTitle(stringSubstitutor.replace(send_embed.getTitle()))
+                                        .setDescription(stringSubstitutor.replace(send_embed.getDescription())).build())
+                        .setEphemeral(isEphemeral).queue();
+            }
+        } else {
+            event.reply("Set up in command success and error actions").setEphemeral(true).queue();
         }
     }
 
