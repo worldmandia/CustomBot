@@ -3,10 +3,6 @@ package ua.mani123.discord.action.filter;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 
 public interface Filter {
-
-    /*
-      TODO users filter
-     */
     boolean defaultCanRun = true;
 
     /**
