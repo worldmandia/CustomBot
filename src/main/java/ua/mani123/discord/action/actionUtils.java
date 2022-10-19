@@ -1,12 +1,14 @@
 package ua.mani123.discord.action;
 
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import ua.mani123.config.CConfig;
 import ua.mani123.discord.action.actions.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +31,8 @@ public class actionUtils {
                     case "DEAFEN_USER" -> actionMap.put(entry.getKey(), new DEAFEN_USER(entry.getValue().getFileCfg()));
                     case "UNDEAFEN_USER" -> actionMap.put(entry.getKey(), new UNDEAFEN_USER(entry.getValue().getFileCfg()));
                     case "SEND_EMBED" -> actionMap.put(entry.getKey(), new SEND_EMBED(entry.getValue().getFileCfg()));
+                    case "BAN_USER" -> actionMap.put(entry.getKey(), new BAN_USER(entry.getValue().getFileCfg()));
+                    case "UNBAN_USER" -> actionMap.put(entry.getKey(), new UNBAN_USER(entry.getValue().getFileCfg()));
                 }
             }
         }
@@ -41,6 +45,21 @@ public class actionUtils {
                 Member member = event.getGuild().getMemberByTag(name);
                 if (member != null) {
                     members.add(member);
+                }
+            }
+        }
+        return members;
+    }
+
+    public static List<UserSnowflake> getUserSnowflakeFromList(GenericInteractionCreateEvent event, List<String> users){
+        List<UserSnowflake> members = new ArrayList<>();
+        if (!users.isEmpty()) {
+            for (String name : users) {
+                Member member = event.getGuild().getMemberByTag(name);
+                if (member != null) {
+                    members.add(member);
+                } else {
+                    members.add(event.getJDA().getUserByTag(name));
                 }
             }
         }
@@ -73,6 +92,22 @@ public class actionUtils {
             }
         }
         return members;
+    }
+
+    public static Color getHexToColor(String colorName){
+        colorName = colorName.replace("#", "").toUpperCase();
+        return switch (colorName.length()) {
+            case 6 -> new Color(
+                    Integer.valueOf(colorName.substring(0, 2), 16),
+                    Integer.valueOf(colorName.substring(2, 4), 16),
+                    Integer.valueOf(colorName.substring(4, 6), 16));
+            case 8 -> new Color(
+                    Integer.valueOf(colorName.substring(0, 2), 16),
+                    Integer.valueOf(colorName.substring(2, 4), 16),
+                    Integer.valueOf(colorName.substring(4, 6), 16),
+                    Integer.valueOf(colorName.substring(6, 8), 16));
+            default -> null;
+        };
     }
 
     public static Map<String, Action> getActionMap() {

@@ -39,7 +39,7 @@ public class UNDEAFEN_USER implements Action {
 
 
         for (Member member : members) {
-            if (member.getVoiceState().isDeafened()){
+            if (member.getVoiceState().isDeafened()) {
                 member.deafen(false).queue();
             } else if (muteIfUnmuted) {
                 member.deafen(true).queue();

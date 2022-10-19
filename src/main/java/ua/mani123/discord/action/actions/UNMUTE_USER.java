@@ -36,9 +36,8 @@ public class UNMUTE_USER implements Action {
         members.addAll(actionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
         members.addAll(actionUtils.getMembersFromVoiceChat(event, voiceChats));
 
-
         for (Member member : members) {
-            if (member.getVoiceState().isGuildMuted()){
+            if (member.getVoiceState().isGuildMuted()) {
                 member.mute(false).queue();
             } else if (muteIfUnmuted) {
                 member.mute(true).queue();

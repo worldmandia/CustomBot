@@ -11,9 +11,12 @@ import java.util.List;
 public class USER implements Filter {
 
     List<String> userNames;
+    boolean isBlackList;
+
 
     public USER(CommentedConfig config) {
         this.userNames = config.getOrElse("list", new ArrayList<>());
+        this.isBlackList = config.getOrElse("isBlackList", false);
     }
 
     @Override
@@ -23,7 +26,10 @@ public class USER implements Filter {
             for (String name : userNames) {
                 members.add(event.getGuild().getMemberByTag(name));
             }
-            return members.contains(event.getMember());
+            boolean answer = members.contains(event.getMember());
+            if (isBlackList){
+                return !answer;
+            } else return answer;
         }
         return true;
     }

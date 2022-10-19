@@ -12,9 +12,11 @@ import java.util.List;
 public class ROLE implements Filter {
 
     List<String> rolesNames;
+    boolean isBlackList;
 
     public ROLE(CommentedConfig config) {
         this.rolesNames = config.getOrElse("list", new ArrayList<>());
+        this.isBlackList = config.getOrElse("isBlackList", false);
     }
 
     @Override
@@ -24,7 +26,10 @@ public class ROLE implements Filter {
             for (String name : rolesNames) {
                 roles.add(event.getGuild().getRolesByName(name, false).get(0));
             }
-            return new HashSet<>(event.getMember().getRoles()).containsAll(roles);
+            boolean answer = new HashSet<>(event.getMember().getRoles()).containsAll(roles);
+            if (isBlackList){
+                return !answer;
+            } else return answer;
         }
         return true;
     }
