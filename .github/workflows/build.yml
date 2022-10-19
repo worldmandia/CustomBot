@@ -30,7 +30,7 @@ jobs:
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-        run: ./gradlew clean build
+        run: gradle shadowJar
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
