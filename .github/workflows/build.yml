@@ -35,4 +35,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Jar
-          path: jar/build/libs/CustomBot.jar
+          path: build/libs/CustomBot.jar
