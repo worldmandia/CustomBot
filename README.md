@@ -1,5 +1,5 @@
 # CustomBot
-Discord bot aimed at full customization
+Bot manager aimed at full customization
 
 ## Dependencies
 
@@ -13,7 +13,7 @@ Versions with :white_check_mark: are supported
 | Version | Supported          |
 |---------|--------------------|
 | latest  | :white_check_mark: |
-| < 0.1.5 | :x:                |
+| < 0.2.0 | :x:                |
 
 ## Other good java bots
 
