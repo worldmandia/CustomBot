@@ -33,7 +33,7 @@ dependencies {
 compileJava.options.encoding = 'UTF-8'
 
 shadowJar {
-    archiveFileName = findProperty("bot-name") + ".jar"
+    archiveFileName = findProperty("bot-name") + findProperty("version") + ".jar"
 }
 
 jar {
