@@ -54,9 +54,17 @@ public class configUtils {
     public static void init() {
         config = new CConfig(configUtils.initCfg("config.toml", ""));
         DiscordBotsData = discordUtils.initBots(getConfig());
-        actions = configUtils.initFolderCfg("actions/");
-        commandInteraction = new CConfig(configUtils.initCfg("commandInteraction.toml", "interactions/"));
+        updateActions();
+        updateCommandInteractions();
         buttonInteraction = new CConfig(configUtils.initCfg("buttonInteraction.toml", "interactions/"));
+    }
+
+    public static void updateActions(){
+        actions = configUtils.initFolderCfg("actions/");
+    }
+
+    public static void updateCommandInteractions(){
+        commandInteraction = new CConfig(configUtils.initCfg("commandInteraction.toml", "interactions/"));
     }
 
     public static void saveAll() {
