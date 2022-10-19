@@ -33,11 +33,11 @@ dependencies {
 compileJava.options.encoding = 'UTF-8'
 
 shadowJar {
-    archiveFileName = findProperty("bot-name") + findProperty("version") + ".jar"
+    archiveFileName = findProperty("bot-name") + "-v" + findProperty("version") + ".jar"
 }
 
 jar {
-    archiveFileName = findProperty("bot-name") + "-v" + findProperty("version") + " " + "unshaded" + ".jar"
+    archiveFileName = findProperty("bot-name") + "-v" + findProperty("version") + "-" + "unshaded" + ".jar"
 }
 
 task buyThePlugins {
