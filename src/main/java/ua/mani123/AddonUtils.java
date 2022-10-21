@@ -1,8 +1,8 @@
 package ua.mani123;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import ua.mani123.addon.AddonData;
 import ua.mani123.addon.Addon;
-import ua.mani123.addon.AddonImpl;
 
 import java.io.File;
 import java.net.URL;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class AddonUtils {
 
-    static Map<String, Addon> addonMap = new HashMap<>();
+    static Map<String, AddonData> addonMap = new HashMap<>();
 
     public static void loadAddons(String path) {
         File folder = new File(path);
@@ -23,9 +23,9 @@ public class AddonUtils {
                         ClassLoader classLoader = URLClassLoader.newInstance(new URL[]{file.toURI().toURL()});
                         CommentedFileConfig addonConfig = CommentedFileConfig.of(classLoader.getResource("addon.toml").getFile());
                         addonConfig.load();
-                        AddonImpl addonImpl = (AddonImpl) classLoader.loadClass(addonConfig.get("main")).getDeclaredConstructor().newInstance();
-                        Addon addon = new Addon(addonConfig, addonImpl);
-                        addonMap.put(addon.getName(), addon);
+                        Addon addon = (Addon) classLoader.loadClass(addonConfig.get("main")).getDeclaredConstructor().newInstance();
+                        AddonData addonData = new AddonData(addonConfig, addon);
+                        addonMap.put(addonData.getName(), addonData);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -38,8 +38,8 @@ public class AddonUtils {
         }
     }
 
-    public static void enableAddons(Map<String, Addon> addonMap) {
-        for (Map.Entry<String, Addon> entry : addonMap.entrySet()) {
+    public static void enableAddons(Map<String, AddonData> addonMap) {
+        for (Map.Entry<String, AddonData> entry : addonMap.entrySet()) {
             entry.getValue().getAddon().enable();
         }
     }

@@ -1,39 +1,13 @@
 package ua.mani123.addon;
 
-import com.electronwill.nightconfig.core.CommentedConfig;
+public interface Addon {
 
-public class Addon {
-    String name;
-    String main;
-    String version;
-    String author;
-    AddonImpl addon;
-
-    public Addon(CommentedConfig config, AddonImpl addon) {
-        this.name = config.get("name");
-        this.version = config.get("version");
-        this.main = config.get("main");
-        this.author = config.get("author");
-        this.addon = addon;
+    default void enable() {
     }
 
-    public String getMain() {
-        return main;
+    default void disable() {
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public AddonImpl getAddon() {
-        return addon;
+    default void reload() {
     }
 }
