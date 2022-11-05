@@ -15,14 +15,16 @@ public class CBot {
         try {
             getLog().info("Starting CustomBot");
             configUtils.init();
-            Utils.initPlaceholders();
             actionUtils.init(configUtils.getActions());
             interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
+            AddonUtils.loadAddons("addons");
+            AddonUtils.enableAddons(AddonUtils.addonMap);
             Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
             getLog().info("Done!");
             initConsole();
+
         } catch (Exception e) {
-            log.warn("You received exception: " + e.getMessage());
+            log.warn("You received exception: " + e);
         }
     }
 

@@ -3,6 +3,7 @@ package ua.mani123.config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.file.FileNotFoundAction;
 import net.dv8tion.jda.api.JDA;
+import ua.mani123.AddonUtils;
 import ua.mani123.CBot;
 import ua.mani123.discord.discordUtils;
 
@@ -18,15 +19,30 @@ public class configUtils {
     private static Map<String, JDA> DiscordBotsData;
     private static Map<String, CConfig> actions;
 
+    public static CommentedFileConfig initResourceCfg(String file, String path, ClassLoader classLoader) {
+        File folder = new File(path);
+        if (!folder.exists()) {
+            if (folder.mkdirs()) {
+                CommentedFileConfig config = CommentedFileConfig.builder(path + file).autosave().onFileNotFound(FileNotFoundAction.copyData(classLoader.getResourceAsStream(path + file))).build();
+                config.load();
+                return config;
+            }
+        }
+        return null;
+    }
+
     public static CommentedFileConfig initCfg(String file, String path) {
         File folder = new File(path);
         if (!folder.exists()) {
-            folder.mkdirs();
+            if (folder.mkdirs()) {
+                CommentedFileConfig config = CommentedFileConfig.builder(path + file).autosave().build();
+                config.load();
+                return config;
+            }
         }
-        CommentedFileConfig config = CommentedFileConfig.builder(path + file).autosave().onFileNotFound(FileNotFoundAction.copyData(CBot.class.getClassLoader().getResourceAsStream(path + file))).build();
-        config.load();
-        return config;
+        return null;
     }
+
 
     public static Map<String, CConfig> initFolderCfg(String path) {
         Map<String, CConfig> configs = new HashMap<>();
@@ -36,7 +52,7 @@ public class configUtils {
                 if (!file.getName().startsWith("_") && file.getName().endsWith(".toml")) {
                     CommentedFileConfig cfg = CommentedFileConfig.builder(file).autosave().build();
                     cfg.load();
-                    if (cfg.get("type") != null){
+                    if (cfg.get("type") != null) {
                         configs.put(file.getName().replace(".toml", ""), new CConfig(cfg));
                     } else {
                         cfg.close();
@@ -44,7 +60,7 @@ public class configUtils {
                 }
             }
         } else {
-            if (folder.mkdirs()){
+            if (folder.mkdirs()) {
                 initFolderCfg(path);
             }
         }
@@ -52,29 +68,38 @@ public class configUtils {
     }
 
     public static void init() {
-        config = new CConfig(configUtils.initCfg("config.toml", ""));
         DiscordBotsData = discordUtils.initBots(getConfig());
+        updateConfig();
         updateActions();
         updateCommandInteractions();
-        buttonInteraction = new CConfig(configUtils.initCfg("buttonInteraction.toml", "interactions/"));
+        updateButtonInteraction();
     }
 
-    public static void updateActions(){
+    public static void updateConfig() {
+        config = new CConfig(configUtils.initResourceCfg("config.toml", "", CBot.class.getClassLoader()));
+    }
+
+    public static void updateButtonInteraction() {
+        buttonInteraction = new CConfig(configUtils.initResourceCfg("buttonInteraction.toml", "interactions/", CBot.class.getClassLoader()));
+    }
+
+    public static void updateActions() {
         actions = configUtils.initFolderCfg("actions/");
     }
 
-    public static void updateCommandInteractions(){
-        commandInteraction = new CConfig(configUtils.initCfg("commandInteraction.toml", "interactions/"));
+    public static void updateCommandInteractions() {
+        commandInteraction = new CConfig(configUtils.initResourceCfg("commandInteraction.toml", "interactions/", CBot.class.getClassLoader()));
     }
 
     public static void saveAll() {
-        CBot.getLog().info("Shutting down the bot, saving configs");
+        AddonUtils.addonMap.forEach((key, value) -> value.getAddon().disable());
         config.getFileCfg().save();
         commandInteraction.getFileCfg().save();
         buttonInteraction.getFileCfg().save();
         for (Map.Entry<String, CConfig> cfg : actions.entrySet()) {
             cfg.getValue().getFileCfg().save();
         }
+        CBot.getLog().info("Saving configs");
     }
 
     public static CConfig getConfig() {

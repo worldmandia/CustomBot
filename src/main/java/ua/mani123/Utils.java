@@ -34,10 +34,6 @@ public class Utils {
         return log;
     }
 
-    public static void initPlaceholders() {
-        placeholders.put("interaction-user", "Not-Found");
-    }
-
     public static HashMap<String, String> getPlaceholders() {
         return placeholders;
     }
