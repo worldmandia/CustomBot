@@ -12,7 +12,6 @@ public class CBot {
 
     public static void main(String[] args) {
         log = Utils.initLogger();
-        try {
             getLog().info("Starting CustomBot");
             configUtils.init();
             actionUtils.init(configUtils.getActions());
@@ -23,9 +22,6 @@ public class CBot {
             getLog().info("Done!");
             initConsole();
 
-        } catch (Exception e) {
-            log.warn("You received exception: " + e);
-        }
     }
 
     private static void initConsole() {

@@ -19,16 +19,10 @@ public class configUtils {
     private static Map<String, JDA> DiscordBotsData;
     private static Map<String, CConfig> actions;
 
-    public static CommentedFileConfig initResourceCfg(String file, String path, ClassLoader classLoader) {
-        File folder = new File(path);
-        if (!folder.exists()) {
-            if (folder.mkdirs()) {
-                CommentedFileConfig config = CommentedFileConfig.builder(path + file).autosave().onFileNotFound(FileNotFoundAction.copyData(classLoader.getResourceAsStream(path + file))).build();
-                config.load();
-                return config;
-            }
-        }
-        return null;
+    public static CommentedFileConfig initResourceCfg(String file, ClassLoader classLoader) {
+        CommentedFileConfig config = CommentedFileConfig.builder(file).autosave().onFileNotFound(FileNotFoundAction.copyData(classLoader.getResourceAsStream(file))).build();
+        config.load();
+        return config;
     }
 
     public static CommentedFileConfig initCfg(String file, String path) {
@@ -68,19 +62,19 @@ public class configUtils {
     }
 
     public static void init() {
-        DiscordBotsData = discordUtils.initBots(getConfig());
         updateConfig();
+        DiscordBotsData = discordUtils.initBots(getConfig());
         updateActions();
         updateCommandInteractions();
         updateButtonInteraction();
     }
 
     public static void updateConfig() {
-        config = new CConfig(configUtils.initResourceCfg("config.toml", "", CBot.class.getClassLoader()));
+        config = new CConfig(configUtils.initResourceCfg("config.toml",  CBot.class.getClassLoader()));
     }
 
     public static void updateButtonInteraction() {
-        buttonInteraction = new CConfig(configUtils.initResourceCfg("buttonInteraction.toml", "interactions/", CBot.class.getClassLoader()));
+        buttonInteraction = new CConfig(configUtils.initResourceCfg("interactions/buttonInteraction.toml", CBot.class.getClassLoader()));
     }
 
     public static void updateActions() {
@@ -88,7 +82,7 @@ public class configUtils {
     }
 
     public static void updateCommandInteractions() {
-        commandInteraction = new CConfig(configUtils.initResourceCfg("commandInteraction.toml", "interactions/", CBot.class.getClassLoader()));
+        commandInteraction = new CConfig(configUtils.initResourceCfg("interactions/commandInteraction.toml", CBot.class.getClassLoader()));
     }
 
     public static void saveAll() {

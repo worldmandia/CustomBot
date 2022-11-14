@@ -10,6 +10,7 @@ import ua.mani123.discord.event.GuildEvent;
 import ua.mani123.discord.event.SlashCommandInteraction;
 import ua.mani123.discord.event.ReadyBot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class discordUtils {
     public static Map<String, JDA> initBots(CConfig cfg) {
         Map<String, JDA> bots = new HashMap<>();
-        List<CommentedConfig> discordBotConfigs = cfg.getFileCfg().get("discord-bot");
+        List<CommentedConfig> discordBotConfigs = cfg.getFileCfg().getOrElse("discord-bot", new ArrayList<>());
         for (CommentedConfig config : discordBotConfigs) {
             String token = config.get("token");
             if (token != null) {
