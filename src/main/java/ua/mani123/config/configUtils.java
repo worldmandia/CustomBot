@@ -20,7 +20,7 @@ public class configUtils {
     private static Map<String, CConfig> actions;
 
     public static CommentedFileConfig initResourceCfg(String file, ClassLoader classLoader) {
-        CommentedFileConfig config = CommentedFileConfig.builder(file).autosave().onFileNotFound(FileNotFoundAction.copyData(classLoader.getResourceAsStream(file))).build();
+        CommentedFileConfig config = CommentedFileConfig.builder(file).onFileNotFound(FileNotFoundAction.copyData(classLoader.getResourceAsStream(file))).build();
         config.load();
         return config;
     }
@@ -29,7 +29,7 @@ public class configUtils {
         File folder = new File(path);
         if (!folder.exists()) {
             if (folder.mkdirs()) {
-                CommentedFileConfig config = CommentedFileConfig.builder(path + file).autosave().build();
+                CommentedFileConfig config = CommentedFileConfig.builder(path + file).build();
                 config.load();
                 return config;
             }

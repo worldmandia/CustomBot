@@ -12,15 +12,15 @@ public class CBot {
 
     public static void main(String[] args) {
         log = Utils.initLogger();
-            getLog().info("Starting CustomBot");
-            configUtils.init();
-            actionUtils.init(configUtils.getActions());
-            interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
-            AddonUtils.loadAddons("addons");
-            AddonUtils.enableAddons(AddonUtils.addonMap);
-            Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
-            getLog().info("Done!");
-            initConsole();
+        getLog().info("Starting CustomBot");
+        configUtils.init();
+        actionUtils.init(configUtils.getActions());
+        interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
+        AddonUtils.loadAddons("addons");
+        AddonUtils.enableAddons(AddonUtils.addonMap);
+        Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
+        getLog().info("Done!");
+        initConsole();
 
     }
 
