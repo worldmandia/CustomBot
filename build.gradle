@@ -19,9 +19,11 @@ repositories {
     maven {
         url "https://m2.dv8tion.net/releases"
     }
+    maven { url = uri("https://m2.chew.pro/snapshots") }
 }
 
 dependencies {
+    implementation("pw.chew:jda-chewtils:2.0-SNAPSHOT")
     implementation("net.dv8tion:JDA:$jdaVersion") {
         exclude module: 'opus-java'
     }

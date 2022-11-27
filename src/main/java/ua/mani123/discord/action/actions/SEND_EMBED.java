@@ -14,15 +14,14 @@ import ua.mani123.discord.action.subActions.subActionsUtils;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SEND_EMBED implements Action {
 
     String title;
     String description;
     Color color;
-    List<Filter> filters;
-    List<SubAction> subActions;
+    ArrayList<Filter> filters;
+    ArrayList<SubAction> subActions;
 
     public SEND_EMBED(CommentedFileConfig config) {
         this.title = config.getOrElse("title", "");
@@ -55,15 +54,8 @@ public class SEND_EMBED implements Action {
     }
 
     @Override
-    public List<Filter> getFilters() {
+    public ArrayList<Filter> getFilters() {
         return filters;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 }

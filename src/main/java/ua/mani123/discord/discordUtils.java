@@ -5,10 +5,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import ua.mani123.CBot;
 import ua.mani123.config.CConfig;
-import ua.mani123.discord.event.CommandAutoCompleteInteraction;
-import ua.mani123.discord.event.GuildEvent;
-import ua.mani123.discord.event.SlashCommandInteraction;
-import ua.mani123.discord.event.ReadyBot;
+import ua.mani123.discord.event.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +32,9 @@ public class discordUtils {
                     }
                     if (config.getOrElse("enable-guild-events", true)) {
                         jda.addEventListener(new GuildEvent());
+                    }
+                    if (config.getOrElse("enable-button-events", true)) {
+                        jda.addEventListener(new CButtonInteractionEvent());
                     }
                     bots.put(id, jda);
                 } catch (Exception e) {

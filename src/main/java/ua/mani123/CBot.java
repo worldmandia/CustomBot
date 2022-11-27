@@ -32,4 +32,5 @@ public class CBot {
     public static Logger getLog() {
         return log;
     }
+
 }
