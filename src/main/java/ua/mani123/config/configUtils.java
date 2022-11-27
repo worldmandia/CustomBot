@@ -20,7 +20,7 @@ public class configUtils {
     private static Map<String, CConfig> actions;
 
     public static CommentedFileConfig initResourceCfg(String file, ClassLoader classLoader) {
-        CommentedFileConfig config = CommentedFileConfig.builder(file).onFileNotFound(FileNotFoundAction.copyData(classLoader.getResourceAsStream(file))).build();
+        CommentedFileConfig config = CommentedFileConfig.builder(file).onFileNotFound(FileNotFoundAction.copyData(classLoader.getResource(file))).build();
         config.load();
         return config;
     }

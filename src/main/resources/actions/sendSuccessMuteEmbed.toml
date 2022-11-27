@@ -1,0 +1,4 @@
+type = "SEND_EMBED"
+title = "Success"
+description = "You success unmuted user"
+ephemeral = true

@@ -46,10 +46,12 @@ public class AddonUtils {
     }
 
     public static void enableAddons(Map<String, AddonData> addonMap) {
-        addonMap.forEach((key, value) -> {
-            value.getAddon().disable();
-            CBot.getLog().info("Loading " + value.getName() + " by " + value.getAuthor());
-        });
+        if (!addonMap.isEmpty()) {
+            addonMap.forEach((key, value) -> {
+                value.getAddon().disable();
+                CBot.getLog().info("Loading " + value.getName() + " by " + value.getAuthor());
+            });
+        }
     }
 
 }

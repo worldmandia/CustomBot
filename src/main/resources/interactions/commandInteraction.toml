@@ -1,52 +1,27 @@
 
 # Configure command interactions
 [[interaction]]
-	actionsIds = ["mutecommand", "DEFAINEcmd", "sendbuttonembed"]
+	actionsIds = ["muteAction", "defaineAction", "sendSuccessMuteEmbed"]
 	name = "mute"
 	description = "mute selected user"
 	optionIds = ["users"]
-	botIds = ["1040761244442968185"]
-	allow-users = ["mani123#7703"]
-
-	#allow-roles = []
-	[interaction.success]
-		IsEphemeral = true
-		actionId = "sendsuccessmessage"
-
-	[interaction.error]
-		IsEphemeral = true
-		actionId = "senderrormessage"
-
-	[interaction.option]
-
-		[interaction.option.users]
-			name = "firtsusersmute"
-			description = "List of users2"
-			type = "user"
-			required = true
+	filtersIds = ["myfilter"]
 
 [[interaction]]
-	actionsIds = ["unmutecommand", "UNDEFAINEcmd"]
+actionsIds = ["unmuteAction", "undefaineAction", "sendSuccessMuteEmbed"]
 	name = "unmute"
 	description = "unmute selected user"
-	optionIds = ["users2"]
-	botIds = ["1040761244442968185"]
-	allow-users = ["mani123#7703"]
+	optionIds = ["users"]
+	filtersIds = ["myfilter"]
 
-	#allow-roles = []
-	[interaction.success]
-		IsEphemeral = true
-		actionId = "sendsuccessmessage"
+[option.users]
+	name = "listofusers"
+	description = "List of users"
+	type = "user"
+	required = true
 
-	[interaction.error]
-		IsEphemeral = true
-		actionId = "senderrormessage"
-
-	[interaction.option]
-
-		[interaction.option.users2]
-			name = "firtsusersunmute"
-			description = "List of users2"
-			type = "user"
-			required = true
+[filter.myfilter]
+	type = "USER"
+	list = ["mani123#7703"]
+	filter-actions = ["sendErrorMuteEmbed"]
 

@@ -1,0 +1,2 @@
+type = "MUTE_USER"
+focusedOptionIds = ["listofusers"]

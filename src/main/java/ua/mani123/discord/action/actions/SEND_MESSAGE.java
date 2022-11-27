@@ -58,6 +58,20 @@ public class SEND_MESSAGE implements Action {
 
     @Override
     public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
+        if (ephemeral) {
+            ReplyCallbackAction replyCallbackAction = null;
+            if (event instanceof GenericCommandInteractionEvent commandInteractionEvent) {
+                replyCallbackAction = commandInteractionEvent.reply(message).setEphemeral(ephemeral);
+            } else if (event instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent){
+                replyCallbackAction = componentInteractionCreateEvent.reply(message).setEphemeral(ephemeral);
+            }
+            if (!subActions.isEmpty()) {
+                for (SubAction s : subActions) {
+                    replyCallbackAction.addActionRow(s.getComponent());
+                }
+            }
+            replyCallbackAction.queue();
+        }
         MessageCreateAction messageCreateAction = event.getMessageChannel().sendMessage(str.replace(message));
         if (!subActions.isEmpty()) {
             for (SubAction s : subActions) {

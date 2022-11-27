@@ -31,7 +31,15 @@ public class CommandInteraction implements interaction {
         this.optionIds = config.get("optionIds");
         this.config = config;
         this.onlyGuild = config.getOrElse("onlyGuild", false);
-        this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
+        ArrayList<String> filtersIds = config.getOrElse("filtersIds", new ArrayList<>());
+        ArrayList<CommentedConfig> filtersConfig = new ArrayList<>();
+        for (String filter: filtersIds) {
+            CommentedConfig commentedConfig = config.get("filter." + filter);
+            if (commentedConfig != null) {
+                filtersConfig.add(commentedConfig);
+            }
+        }
+        this.filters = filterUtils.enable(filtersConfig);
     }
 
     public CommandData getCommand() {
