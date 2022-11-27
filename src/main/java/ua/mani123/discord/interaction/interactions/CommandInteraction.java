@@ -35,7 +35,7 @@ public class CommandInteraction implements interaction {
         ArrayList<CommentedConfig> filtersConfig = new ArrayList<>();
         for (String filter: filtersIds) {
             CommentedConfig commentedConfig = config.get("filter." + filter);
-            if (commentedConfig != null) {
+            if (commentedConfig != null){
                 filtersConfig.add(commentedConfig);
             }
         }

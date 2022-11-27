@@ -11,20 +11,20 @@ import java.util.List;
 
 public class BOT implements Filter {
 
-    List<String> guildNames;
+    List<String> botNames;
     boolean isBlackList;
     private final ArrayList<String> actionNames;
 
     public BOT(CommentedConfig config) {
-        this.guildNames = config.getOrElse("list", new ArrayList<>());
+        this.botNames = config.getOrElse("list", new ArrayList<>());
         this.isBlackList = config.getOrElse("isBlackList", false);
         this.actionNames = config.getOrElse("filter-actions", new ArrayList<>());
     }
 
     @Override
     public boolean canRun(GenericInteractionCreateEvent event) {
-        if (!guildNames.isEmpty()) {
-            boolean answer = guildNames.contains(event.getJDA().getSelfUser().getId());
+        if (!botNames.isEmpty()) {
+            boolean answer = botNames.contains(event.getJDA().getSelfUser().getId());
             if (isBlackList){
                 return !answer;
             } else return answer;
@@ -34,8 +34,8 @@ public class BOT implements Filter {
 
     @Override
     public boolean canRun(GenericGuildEvent event) {
-        if (!guildNames.isEmpty()) {
-            boolean answer = guildNames.contains(event.getJDA().getSelfUser().getId());
+        if (!botNames.isEmpty()) {
+            boolean answer = botNames.contains(event.getJDA().getSelfUser().getId());
             if (isBlackList){
                 return !answer;
             } else return answer;
@@ -45,8 +45,8 @@ public class BOT implements Filter {
 
     @Override
     public boolean canRun(GenericSessionEvent event) {
-        if (!guildNames.isEmpty()) {
-            boolean answer = guildNames.contains(event.getJDA().getSelfUser().getId());
+        if (!botNames.isEmpty()) {
+            boolean answer = botNames.contains(event.getJDA().getSelfUser().getId());
             if (isBlackList){
                 return !answer;
             } else return answer;

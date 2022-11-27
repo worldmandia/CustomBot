@@ -40,9 +40,8 @@ public class filterUtils {
         boolean canInteract = true;
         if (!filters.isEmpty()) {
             for (Filter filter : filters) {
-                if (canInteract) {
-                    canInteract = filter.canRun(event);
-                } else {
+                canInteract = filter.canRun(event);
+                if (!canInteract) {
                     for (String actionId: filter.getFilterActionIds()) {
                         actionUtils.getActionMap().get(actionId).runWithPlaceholders(event, str);
                     }
