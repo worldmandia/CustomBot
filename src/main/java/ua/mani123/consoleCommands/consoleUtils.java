@@ -5,7 +5,7 @@ import ua.mani123.CBot;
 import java.util.List;
 import java.util.Scanner;
 
-public class consoleUtils implements Runnable{
+public class consoleUtils implements Runnable {
 
     static boolean isStopped = false;
 

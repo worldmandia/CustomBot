@@ -5,11 +5,10 @@ import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.filter.Filter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public interface Action {
 
-    List<Filter> filters = new ArrayList<>();
+    ArrayList<Filter> filters = new ArrayList<>();
 
     /**
      * Run action, recommend to use Action::runWithPlaceholders
@@ -26,7 +25,7 @@ public interface Action {
      */
     void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str);
 
-    default List<Filter> getFilters() {
+    default ArrayList<Filter> getFilters() {
         return filters;
     }
 

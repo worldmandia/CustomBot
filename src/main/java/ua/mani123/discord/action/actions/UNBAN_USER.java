@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 
 public class UNBAN_USER implements Action {
 
-    List<String> users;
-    List<String> focusedOptionIds;
+    ArrayList<String> users;
+    ArrayList<String> focusedOptionIds;
     boolean banIfUnbaned;
-    List<String> voiceChats;
+    ArrayList<String> voiceChats;
 
-    List<Filter> filters;
+    ArrayList<Filter> filters;
     int deleteBannedUserMessagesDuringTime;
     String deleteBannedUserMessagesTimeType;
     String reason;
@@ -38,7 +38,7 @@ public class UNBAN_USER implements Action {
     }
 
     private List<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event) {
-        List<UserSnowflake> members = new ArrayList<>();
+        ArrayList<UserSnowflake> members = new ArrayList<>();
 
         members.addAll(actionUtils.getMembersFromList(event, users));
         members.addAll(actionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
@@ -85,7 +85,7 @@ public class UNBAN_USER implements Action {
     }
 
     @Override
-    public List<Filter> getFilters() {
+    public ArrayList<Filter> getFilters() {
         return filters;
     }
 }

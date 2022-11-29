@@ -6,8 +6,8 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import ua.mani123.CBot;
-import ua.mani123.discord.action.Action;
-import ua.mani123.discord.action.actionUtils;
+import ua.mani123.discord.action.filter.Filter;
+import ua.mani123.discord.action.filter.filterUtils;
 import ua.mani123.discord.interaction.interaction;
 
 import java.util.ArrayList;
@@ -18,30 +18,28 @@ public class CommandInteraction implements interaction {
     private final String name;
     private final String description;
     private final ArrayList<String> actionIds;
-    private final ArrayList<String> botIds;
-    private final Action successAction;
-    private final Action errorAction;
     private final boolean onlyGuild;
     private final ArrayList<String> optionIds;
-    private final ArrayList<String> allowUsers;
-    private final ArrayList<String> allowRoles;
-    private final ArrayList<String> guildList;
     private final HashMap<String, List<String>> autocompleteIds = new HashMap<>();
     private final CommentedConfig config;
+    private final ArrayList<Filter> filters;
 
     public CommandInteraction(CommentedConfig config) {
         this.name = config.get("name");
         this.description = config.get("description");
         this.actionIds = config.get("actionsIds");
-        this.botIds = config.getOrElse("botIds", new ArrayList<>());
-        this.allowUsers = config.getOrElse("allow-users", new ArrayList<>());
-        this.allowRoles = config.getOrElse("allow-roles", new ArrayList<>());
-        this.successAction = actionUtils.getActionMap().get(config.get("success.actionId"));
-        this.errorAction = actionUtils.getActionMap().get(config.get("error.actionId"));
         this.optionIds = config.get("optionIds");
         this.config = config;
         this.onlyGuild = config.getOrElse("onlyGuild", false);
-        this.guildList = config.getOrElse("guildList", new ArrayList<>());
+        ArrayList<String> filtersIds = config.getOrElse("filtersIds", new ArrayList<>());
+        ArrayList<CommentedConfig> filtersConfig = new ArrayList<>();
+        for (String filter: filtersIds) {
+            CommentedConfig commentedConfig = config.get("filter." + filter);
+            if (commentedConfig != null){
+                filtersConfig.add(commentedConfig);
+            }
+        }
+        this.filters = filterUtils.enable(filtersConfig);
     }
 
     public CommandData getCommand() {
@@ -68,10 +66,6 @@ public class CommandInteraction implements interaction {
         return autocompleteIds;
     }
 
-    public List<String> getBotIds() {
-        return botIds;
-    }
-
     public String getName() {
         return name;
     }
@@ -80,31 +74,15 @@ public class CommandInteraction implements interaction {
         return actionIds;
     }
 
-    public Action getSuccessAction() {
-        return successAction;
-    }
-
-    public Action getErrorAction() {
-        return errorAction;
-    }
-
-    public ArrayList<String> getGuildList() {
-        return guildList;
-    }
-
     public boolean isOnlyGuild() {
         return onlyGuild;
-    }
-
-    public ArrayList<String> getAllowUsers() {
-        return allowUsers;
     }
 
     public CommentedConfig getConfig() {
         return config;
     }
 
-    public ArrayList<String> getAllowRoles() {
-        return allowRoles;
+    public ArrayList<Filter> getFilters() {
+        return filters;
     }
 }

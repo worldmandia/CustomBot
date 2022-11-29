@@ -4,6 +4,7 @@ import com.electronwill.nightconfig.core.CommentedConfig;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import org.apache.commons.text.StringSubstitutor;
+import ua.mani123.CBot;
 import ua.mani123.discord.action.Action;
 import ua.mani123.discord.action.actionUtils;
 import ua.mani123.discord.action.filter.Filter;
@@ -36,12 +37,16 @@ public class UNMUTE_USER implements Action {
         members.addAll(actionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
         members.addAll(actionUtils.getMembersFromVoiceChat(event, voiceChats));
 
-        for (Member member : members) {
-            if (member.getVoiceState().isGuildMuted()) {
-                member.mute(false).queue();
-            } else if (muteIfUnmuted) {
-                member.mute(true).queue();
+        try {
+            for (Member member : members) {
+                if (member.getVoiceState().isGuildMuted()) {
+                    member.mute(false).queue();
+                } else if (muteIfUnmuted) {
+                    member.mute(true).queue();
+                }
             }
+        } catch (IllegalStateException e) {
+            CBot.getLog().warn("The bot cannot mute or unmute a member if they are not in a voice channel, you can ignore it");
         }
     }
 

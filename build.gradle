@@ -7,9 +7,9 @@ mainClassName = 'ua.mani123.CBot'
 
 version findProperty("version")
 
-def jdaVersion = '5.0.0-alpha.21'
+def jdaVersion = '5.0.0-beta.1'
 def tomlVersion = '3.6.6'
-def logbackVersion = '1.4.4'
+def logbackVersion = '1.4.5'
 def textVersion = '1.10.0'
 
 sourceCompatibility = targetCompatibility = 17
@@ -19,9 +19,11 @@ repositories {
     maven {
         url "https://m2.dv8tion.net/releases"
     }
+    maven { url = uri("https://m2.chew.pro/snapshots") }
 }
 
 dependencies {
+    implementation("pw.chew:jda-chewtils:2.0-SNAPSHOT")
     implementation("net.dv8tion:JDA:$jdaVersion") {
         exclude module: 'opus-java'
     }

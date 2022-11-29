@@ -11,7 +11,6 @@ public class interactionUtils {
     static ArrayList<CommandInteraction> commands = new ArrayList<>();
 
     public static void initCmd(List<CommentedConfig> config) {
-        commands.clear();
         for (CommentedConfig cfg : config) {
             commands.add(new CommandInteraction(cfg));
         }

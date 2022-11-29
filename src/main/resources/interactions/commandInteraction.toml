@@ -1,29 +1,27 @@
 
 # Configure command interactions
 [[interaction]]
-    actionsIds = ["mutecommand"]
-    name = "mute"
-    description = "mute selected user"
-    optionIds = ["users"]
-    botIds = ["792689746156978207"]
-    allow-users = ["mani123#7703"]
-    #allow-roles = []
+	actionsIds = ["muteAction", "defaineAction", "sendSuccessMuteEmbed"]
+	name = "mute"
+	description = "mute selected user"
+	optionIds = ["users"]
+	filtersIds = ["myfilter"]
 
-# you can use only message and embed actions
-[interaction.success]
-    IsEphemeral = true
-    actionId = "sendsuccessmessage"
+[[interaction]]
+actionsIds = ["unmuteAction", "undefaineAction", "sendSuccessMuteEmbed"]
+	name = "unmute"
+	description = "unmute selected user"
+	optionIds = ["users"]
+	filtersIds = ["myfilter"]
 
-# you can use only message and embed actions
-[interaction.error]
-    IsEphemeral = true
-    actionId = "senderrormessage"
+[option.users]
+	name = "listofusers"
+	description = "List of users"
+	type = "user"
+	required = true
 
-[interaction.option]
-
-[interaction.option.users]
-    name = "user"
-    description = "List of users"
-    type = "user"
-    required = true
+[filter.myfilter]
+	type = "USER"
+	list = ["mani123#7703"]
+	filter-actions = ["sendErrorMuteEmbed"]
 

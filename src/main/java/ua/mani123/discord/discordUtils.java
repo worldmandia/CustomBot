@@ -5,11 +5,9 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import ua.mani123.CBot;
 import ua.mani123.config.CConfig;
-import ua.mani123.discord.event.CommandAutoCompleteInteraction;
-import ua.mani123.discord.event.GuildEvent;
-import ua.mani123.discord.event.SlashCommandInteraction;
-import ua.mani123.discord.event.ReadyBot;
+import ua.mani123.discord.event.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +15,7 @@ import java.util.Map;
 public class discordUtils {
     public static Map<String, JDA> initBots(CConfig cfg) {
         Map<String, JDA> bots = new HashMap<>();
-        List<CommentedConfig> discordBotConfigs = cfg.getFileCfg().get("discord-bot");
+        List<CommentedConfig> discordBotConfigs = cfg.getFileCfg().getOrElse("discord-bot", new ArrayList<>());
         for (CommentedConfig config : discordBotConfigs) {
             String token = config.get("token");
             if (token != null) {
@@ -34,6 +32,9 @@ public class discordUtils {
                     }
                     if (config.getOrElse("enable-guild-events", true)) {
                         jda.addEventListener(new GuildEvent());
+                    }
+                    if (config.getOrElse("enable-button-events", true)) {
+                        jda.addEventListener(new CButtonInteractionEvent());
                     }
                     bots.put(id, jda);
                 } catch (Exception e) {

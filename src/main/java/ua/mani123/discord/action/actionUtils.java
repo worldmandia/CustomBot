@@ -106,7 +106,7 @@ public class actionUtils {
                     Integer.valueOf(colorName.substring(2, 4), 16),
                     Integer.valueOf(colorName.substring(4, 6), 16),
                     Integer.valueOf(colorName.substring(6, 8), 16));
-            default -> null;
+            default -> Color.BLACK;
         };
     }
 

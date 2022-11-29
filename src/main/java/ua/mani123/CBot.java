@@ -12,18 +12,16 @@ public class CBot {
 
     public static void main(String[] args) {
         log = Utils.initLogger();
-        try {
-            getLog().info("Starting CustomBot");
-            configUtils.init();
-            Utils.initPlaceholders();
-            actionUtils.init(configUtils.getActions());
-            interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
-            Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
-            getLog().info("Done!");
-            initConsole();
-        } catch (Exception e) {
-            log.warn("You received exception: " + e.getMessage());
-        }
+        getLog().info("Starting CustomBot");
+        configUtils.init();
+        actionUtils.init(configUtils.getActions());
+        interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
+        AddonUtils.loadAddons("addons");
+        AddonUtils.enableAddons(AddonUtils.addonMap);
+        Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
+        getLog().info("Done!");
+        initConsole();
+
     }
 
     private static void initConsole() {
@@ -34,4 +32,5 @@ public class CBot {
     public static Logger getLog() {
         return log;
     }
+
 }
