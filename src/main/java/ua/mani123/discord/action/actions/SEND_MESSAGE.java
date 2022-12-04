@@ -25,60 +25,49 @@ public class SEND_MESSAGE implements Action {
 
 
     public SEND_MESSAGE(CommentedFileConfig config) {
-        this.message = config.getOrElse("message", " ");
+        this.message = config.getOrElse("message", "");
         this.ephemeral = config.getOrElse("ephemeral", false);
         this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
         this.subActions = subActionsUtils.enable(config.getOrElse("sub-action", new ArrayList<>()));
     }
 
+    String tempMessage;
+
     @Override
     public void run(GenericInteractionCreateEvent event) {
+        if (tempMessage == null) {
+            tempMessage = message;
+        }
         if (ephemeral) {
             ReplyCallbackAction replyCallbackAction = null;
             if (event instanceof GenericCommandInteractionEvent commandInteractionEvent) {
-                replyCallbackAction = commandInteractionEvent.reply(message).setEphemeral(ephemeral);
-            } else if (event instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent){
-                replyCallbackAction = componentInteractionCreateEvent.reply(message).setEphemeral(ephemeral);
+                replyCallbackAction = commandInteractionEvent.reply(tempMessage).setEphemeral(ephemeral);
+            } else if (event instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent) {
+                replyCallbackAction = componentInteractionCreateEvent.reply(tempMessage).setEphemeral(ephemeral);
             }
             if (!subActions.isEmpty()) {
                 for (SubAction s : subActions) {
                     replyCallbackAction.addActionRow(s.getComponent());
                 }
             }
-            replyCallbackAction.queue();
-        }
-        MessageCreateAction messageCreateAction = event.getMessageChannel().sendMessage(message);
-        if (!subActions.isEmpty()) {
-            for (SubAction s : subActions) {
-                messageCreateAction.addActionRow(s.getComponent());
+            if (replyCallbackAction != null) {
+                replyCallbackAction.queue();
+            } else {
+                MessageCreateAction messageCreateAction = event.getMessageChannel().sendMessage(tempMessage);
+                if (!subActions.isEmpty()) {
+                    for (SubAction s : subActions) {
+                        messageCreateAction.addActionRow(s.getComponent());
+                    }
+                }
+                messageCreateAction.queue();
             }
         }
-        messageCreateAction.queue();
     }
 
     @Override
     public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
-        if (ephemeral) {
-            ReplyCallbackAction replyCallbackAction = null;
-            if (event instanceof GenericCommandInteractionEvent commandInteractionEvent) {
-                replyCallbackAction = commandInteractionEvent.reply(message).setEphemeral(ephemeral);
-            } else if (event instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent){
-                replyCallbackAction = componentInteractionCreateEvent.reply(message).setEphemeral(ephemeral);
-            }
-            if (!subActions.isEmpty()) {
-                for (SubAction s : subActions) {
-                    replyCallbackAction.addActionRow(s.getComponent());
-                }
-            }
-            replyCallbackAction.queue();
-        }
-        MessageCreateAction messageCreateAction = event.getMessageChannel().sendMessage(str.replace(message));
-        if (!subActions.isEmpty()) {
-            for (SubAction s : subActions) {
-                messageCreateAction.addActionRow(s.getComponent());
-            }
-        }
-        messageCreateAction.queue();
+        tempMessage = str.replace(message);
+        run(event);
     }
 
 }

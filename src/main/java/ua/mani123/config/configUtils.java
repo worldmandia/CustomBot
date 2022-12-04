@@ -3,8 +3,8 @@ package ua.mani123.config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.file.FileNotFoundAction;
 import net.dv8tion.jda.api.JDA;
-import ua.mani123.AddonUtils;
 import ua.mani123.CBot;
+import ua.mani123.addon.AddonUtils;
 import ua.mani123.discord.discordUtils;
 
 import java.io.File;
@@ -25,14 +25,16 @@ public class configUtils {
         return config;
     }
 
-    public static CommentedFileConfig initCfg(String file, String path) {
+    public static CommentedFileConfig initCfg(String file, String path, ClassLoader classLoader) {
         File folder = new File(path);
         if (!folder.exists()) {
-            if (folder.mkdirs()) {
-                CommentedFileConfig config = CommentedFileConfig.builder(path + file).build();
-                config.load();
-                return config;
-            }
+            folder.mkdirs();
+            initCfg(file, path, classLoader);
+        } else {
+            String rPath = path + file;
+            CommentedFileConfig config = CommentedFileConfig.builder(rPath).onFileNotFound(FileNotFoundAction.copyData(classLoader.getResource(rPath))).build();
+            config.load();
+            return config;
         }
         return null;
     }
@@ -44,7 +46,7 @@ public class configUtils {
         if (folder.exists() && folder.isDirectory()) {
             for (File file : folder.listFiles()) {
                 if (!file.getName().startsWith("_") && file.getName().endsWith(".toml")) {
-                    CommentedFileConfig cfg = CommentedFileConfig.builder(file).autosave().build();
+                    CommentedFileConfig cfg = CommentedFileConfig.builder(file).build();
                     cfg.load();
                     if (cfg.get("type") != null) {
                         configs.put(file.getName().replace(".toml", ""), new CConfig(cfg));
@@ -70,11 +72,11 @@ public class configUtils {
     }
 
     public static void updateConfig() {
-        config = new CConfig(configUtils.initResourceCfg("config.toml",  CBot.class.getClassLoader()));
+        config = new CConfig(configUtils.initResourceCfg("config.toml", CBot.class.getClassLoader()));
     }
 
     public static void updateButtonInteraction() {
-        buttonInteraction = new CConfig(configUtils.initResourceCfg("interactions/buttonInteraction.toml", CBot.class.getClassLoader()));
+        buttonInteraction = new CConfig(configUtils.initCfg("buttonInteraction.toml", "interactions/", CBot.class.getClassLoader()));
     }
 
     public static void updateActions() {
@@ -82,7 +84,7 @@ public class configUtils {
     }
 
     public static void updateCommandInteractions() {
-        commandInteraction = new CConfig(configUtils.initResourceCfg("interactions/commandInteraction.toml", CBot.class.getClassLoader()));
+        commandInteraction = new CConfig(configUtils.initCfg("commandInteraction.toml", "interactions/", CBot.class.getClassLoader()));
     }
 
     public static void saveAll() {

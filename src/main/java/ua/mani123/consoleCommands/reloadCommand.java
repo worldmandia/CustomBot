@@ -1,6 +1,6 @@
 package ua.mani123.consoleCommands;
 
-import ua.mani123.AddonUtils;
+import ua.mani123.addon.AddonUtils;
 import ua.mani123.CBot;
 import ua.mani123.addon.AddonData;
 import ua.mani123.config.configUtils;

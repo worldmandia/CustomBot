@@ -19,6 +19,7 @@ public class CommandInteraction implements interaction {
     private final String description;
     private final ArrayList<String> actionIds;
     private final boolean onlyGuild;
+    private final boolean isNSFW;
     private final ArrayList<String> optionIds;
     private final HashMap<String, List<String>> autocompleteIds = new HashMap<>();
     private final CommentedConfig config;
@@ -31,6 +32,7 @@ public class CommandInteraction implements interaction {
         this.optionIds = config.get("optionIds");
         this.config = config;
         this.onlyGuild = config.getOrElse("onlyGuild", false);
+        this.isNSFW = config.getOrElse("isNSFW", false);
         ArrayList<String> filtersIds = config.getOrElse("filtersIds", new ArrayList<>());
         ArrayList<CommentedConfig> filtersConfig = new ArrayList<>();
         for (String filter: filtersIds) {
@@ -43,7 +45,7 @@ public class CommandInteraction implements interaction {
     }
 
     public CommandData getCommand() {
-        SlashCommandData commandData = Commands.slash(name.toLowerCase(), description);
+        SlashCommandData commandData = Commands.slash(name.toLowerCase(), description).setNSFW(isNSFW);
         if (!optionIds.isEmpty()) {
             for (String id : optionIds) {
                 String type = config.getOrElse("option." + id + ".type", "none");

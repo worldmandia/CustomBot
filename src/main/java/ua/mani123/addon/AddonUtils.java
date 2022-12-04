@@ -1,8 +1,7 @@
-package ua.mani123;
+package ua.mani123.addon;
 
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import ua.mani123.addon.Addon;
-import ua.mani123.addon.AddonData;
+import ua.mani123.CBot;
 
 import java.io.File;
 import java.io.FileOutputStream;

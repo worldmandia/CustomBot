@@ -37,9 +37,13 @@ public class SEND_EMBED implements Action {
         this.color = actionUtils.getHexToColor(config.getOrElse("color", "ffffff"));
     }
 
+    MessageEmbed messageEmbed;
+
     @Override
     public void run(GenericInteractionCreateEvent event) {
-        MessageEmbed messageEmbed = new EmbedBuilder().setTitle(title).setDescription(description).setColor(color).build();
+        if (messageEmbed == null) {
+            messageEmbed = new EmbedBuilder().setTitle(title).setDescription(description).setColor(color).build();
+        }
         if (ephemeral) {
             ReplyCallbackAction replyCallbackAction = null;
             if (event instanceof GenericCommandInteractionEvent commandInteractionEvent) {
@@ -65,28 +69,8 @@ public class SEND_EMBED implements Action {
 
     @Override
     public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
-        MessageEmbed messageEmbed = new EmbedBuilder().setTitle(str.replace(title)).setDescription(str.replace(description)).setColor(color).build();
-        if (ephemeral) {
-            ReplyCallbackAction replyCallbackAction = null;
-            if (event instanceof GenericCommandInteractionEvent commandInteractionEvent) {
-                replyCallbackAction = commandInteractionEvent.replyEmbeds(messageEmbed).setEphemeral(ephemeral);
-            } else if (event instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent){
-                replyCallbackAction = componentInteractionCreateEvent.replyEmbeds(messageEmbed).setEphemeral(ephemeral);
-            }
-            if (!subActions.isEmpty()) {
-                for (SubAction s : subActions) {
-                    replyCallbackAction.addActionRow(s.getComponent());
-                }
-            }
-            replyCallbackAction.queue();
-        }
-        if (!subActions.isEmpty()){
-            MessageCreateAction messageCreateAction = null;
-            for (SubAction s : subActions) {
-                messageCreateAction = event.getMessageChannel().sendMessageEmbeds(messageEmbed).addActionRow(s.getComponent());
-            }
-            messageCreateAction.queue();
-        }
+        messageEmbed = new EmbedBuilder().setTitle(str.replace(title)).setDescription(str.replace(description)).setColor(color).build();
+        run(event);
     }
 
     @Override

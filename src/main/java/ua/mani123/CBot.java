@@ -1,6 +1,7 @@
 package ua.mani123;
 
 import ch.qos.logback.classic.Logger;
+import ua.mani123.addon.AddonUtils;
 import ua.mani123.config.configUtils;
 import ua.mani123.consoleCommands.consoleUtils;
 import ua.mani123.discord.action.actionUtils;
@@ -15,13 +16,13 @@ public class CBot {
         getLog().info("Starting CustomBot");
         configUtils.init();
         actionUtils.init(configUtils.getActions());
-        interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
+        interactionUtils.initCmd(configUtils.getCommandInteraction().getList("command"));
+        interactionUtils.initButton(configUtils.getButtonInteraction().getList("button"));
         AddonUtils.loadAddons("addons");
         AddonUtils.enableAddons(AddonUtils.addonMap);
         Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
         getLog().info("Done!");
         initConsole();
-
     }
 
     private static void initConsole() {
