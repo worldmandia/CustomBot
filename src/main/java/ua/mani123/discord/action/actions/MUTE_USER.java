@@ -3,12 +3,13 @@ package ua.mani123.discord.action.actions;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.CBot;
 import ua.mani123.discord.action.Action;
-import ua.mani123.discord.action.actionUtils;
+import ua.mani123.discord.action.ActionUtils;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
 
@@ -33,19 +34,19 @@ public class MUTE_USER implements Action {
   public void run(GenericInteractionCreateEvent event) {
     List<Member> members = new ArrayList<>();
 
-    members.addAll(actionUtils.getMembersFromList(event, users));
-    members.addAll(actionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
-    members.addAll(actionUtils.getMembersFromVoiceChat(event, voiceChats));
+    members.addAll(ActionUtils.getMembersFromList(event, users));
+    members.addAll(ActionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
+    members.addAll(ActionUtils.getMembersFromVoiceChat(event, voiceChats));
 
     try {
       for (Member member : members) {
-        if (!member.getVoiceState().isGuildMuted()) {
+        if (!Objects.requireNonNull(member.getVoiceState()).isGuildMuted()) {
           member.mute(true).queue();
         } else if (unmuteIfMuted) {
           member.mute(false).queue();
         }
       }
-    } catch (IllegalStateException e) {
+    } catch (Exception e) {
       CBot.getLog().warn("The bot cannot mute or unmute a member if they are not in a voice channel, you can ignore it");
     }
   }

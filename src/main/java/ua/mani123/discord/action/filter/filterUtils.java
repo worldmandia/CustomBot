@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.session.GenericSessionEvent;
 import org.apache.commons.text.StringSubstitutor;
-import ua.mani123.discord.action.actionUtils;
+import ua.mani123.discord.action.ActionUtils;
 import ua.mani123.discord.action.filter.filters.BOT;
 import ua.mani123.discord.action.filter.filters.GUILD;
 import ua.mani123.discord.action.filter.filters.ROLE;
@@ -41,7 +41,7 @@ public class filterUtils {
         canInteract = filter.canRun(event);
         if (!canInteract) {
           for (String actionId : filter.getFilterActionIds()) {
-            actionUtils.getActionMap().get(actionId).runWithPlaceholders(event, str);
+            ActionUtils.getActionMap().get(actionId).runWithPlaceholders(event, str);
           }
         }
       }

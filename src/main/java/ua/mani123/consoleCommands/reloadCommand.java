@@ -6,8 +6,8 @@ import ua.mani123.CBot;
 import ua.mani123.addon.AddonData;
 import ua.mani123.addon.AddonUtils;
 import ua.mani123.config.configUtils;
-import ua.mani123.discord.action.actionUtils;
-import ua.mani123.discord.interaction.interactionUtils;
+import ua.mani123.discord.action.ActionUtils;
+import ua.mani123.discord.interaction.InteractionUtils;
 
 public class reloadCommand {
 
@@ -16,13 +16,13 @@ public class reloadCommand {
       switch (parts.get(1)) {
         case "commands" -> {
           configUtils.updateCommandInteractions();
-          interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
+          InteractionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
           CBot.getLog().info("commandInteraction reloaded");
           return;
         }
         case "actions" -> {
           configUtils.updateActions();
-          actionUtils.init(configUtils.getActions());
+          ActionUtils.init(configUtils.getActions());
           CBot.getLog().info("actions reloaded");
           return;
         }

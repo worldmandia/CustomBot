@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.Action;
-import ua.mani123.discord.action.actionUtils;
+import ua.mani123.discord.action.ActionUtils;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
 import ua.mani123.discord.action.subActions.SubAction;
@@ -34,7 +34,7 @@ public class SEND_EMBED implements Action {
     this.ephemeral = config.getOrElse("ephemeral", false);
     this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
     this.subActions = subActionsUtils.enable(config.getOrElse("sub-action", new ArrayList<>()));
-    this.color = actionUtils.getHexToColor(config.getOrElse("color", "ffffff"));
+    this.color = ActionUtils.getHexToColor(config.getOrElse("color", "ffffff"));
   }
 
   @Override
@@ -51,9 +51,11 @@ public class SEND_EMBED implements Action {
       }
       if (!subActions.isEmpty()) {
         for (SubAction s : subActions) {
+          assert replyCallbackAction != null;
           replyCallbackAction.addActionRow(s.getComponent());
         }
       }
+      assert replyCallbackAction != null;
       replyCallbackAction.queue();
     }
     if (!subActions.isEmpty()) {

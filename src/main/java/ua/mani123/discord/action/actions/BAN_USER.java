@@ -3,13 +3,14 @@ package ua.mani123.discord.action.actions;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.Action;
-import ua.mani123.discord.action.actionUtils;
+import ua.mani123.discord.action.ActionUtils;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
 
@@ -39,10 +40,10 @@ public class BAN_USER implements Action {
   private List<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event) {
     ArrayList<UserSnowflake> members = new ArrayList<>();
 
-    members.addAll(actionUtils.getMembersFromList(event, users));
-    members.addAll(actionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
-    members.addAll(actionUtils.getMembersFromVoiceChat(event, voiceChats));
-    members.addAll(actionUtils.getUserSnowflakeFromList(event, users));
+    members.addAll(ActionUtils.getMembersFromList(event, users));
+    members.addAll(ActionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
+    members.addAll(ActionUtils.getMembersFromVoiceChat(event, voiceChats));
+    members.addAll(ActionUtils.getUserSnowflakeFromList(event, users));
 
     return members;
   }
@@ -50,7 +51,7 @@ public class BAN_USER implements Action {
   @Override
   public void run(GenericInteractionCreateEvent event) {
     for (UserSnowflake member : getAllUsers(event)) {
-      event.getGuild().retrieveBan(member).queue(
+      Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> {
             if (unbanIfBaned) {
               event.getGuild().unban(success.getUser()).queue();
@@ -71,7 +72,7 @@ public class BAN_USER implements Action {
   @Override
   public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
     for (UserSnowflake member : getAllUsers(event)) {
-      event.getGuild().retrieveBan(member).queue(
+      Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> {
             if (unbanIfBaned) {
               event.getGuild().unban(success.getUser()).queue();

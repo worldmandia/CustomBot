@@ -4,8 +4,8 @@ import ch.qos.logback.classic.Logger;
 import ua.mani123.addon.AddonUtils;
 import ua.mani123.config.configUtils;
 import ua.mani123.consoleCommands.consoleUtils;
-import ua.mani123.discord.action.actionUtils;
-import ua.mani123.discord.interaction.interactionUtils;
+import ua.mani123.discord.action.ActionUtils;
+import ua.mani123.discord.interaction.InteractionUtils;
 
 public class CBot {
 
@@ -15,9 +15,9 @@ public class CBot {
     log = Utils.initLogger();
     getLog().info("Starting CustomBot");
     configUtils.init();
-    actionUtils.init(configUtils.getActions());
-    interactionUtils.initCmd(configUtils.getCommandInteraction().getList("command"));
-    interactionUtils.initButton(configUtils.getButtonInteraction().getList("button"));
+    ActionUtils.init(configUtils.getActions());
+    InteractionUtils.initCmd(configUtils.getCommandInteraction().getList("command"));
+    InteractionUtils.initButton(configUtils.getButtonInteraction().getList("button"));
     AddonUtils.loadAddons("addons");
     AddonUtils.enableAddons(AddonUtils.getAddonMap());
     Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));

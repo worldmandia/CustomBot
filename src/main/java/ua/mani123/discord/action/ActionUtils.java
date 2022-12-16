@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import ua.mani123.CBot;
 import ua.mani123.addon.AddonData;
 import ua.mani123.addon.AddonUtils;
 import ua.mani123.config.CConfig;
@@ -23,7 +25,7 @@ import ua.mani123.discord.action.actions.UNBAN_USER;
 import ua.mani123.discord.action.actions.UNDEAFEN_USER;
 import ua.mani123.discord.action.actions.UNMUTE_USER;
 
-public class actionUtils {
+public class ActionUtils {
 
   static Map<String, Action> actionMap = new HashMap<>();
 
@@ -59,9 +61,11 @@ public class actionUtils {
     List<Member> members = new ArrayList<>();
     if (!users.isEmpty()) {
       for (String name : users) {
-        Member member = event.getGuild().getMemberByTag(name);
-        if (member != null) {
+        try {
+          Member member = Objects.requireNonNull(event.getGuild()).getMemberByTag(name);
           members.add(member);
+        } catch (Exception e) {
+          CBot.getLog().warn("Member with name: " + name + " not found");
         }
       }
     }
@@ -72,7 +76,7 @@ public class actionUtils {
     List<UserSnowflake> members = new ArrayList<>();
     if (!users.isEmpty()) {
       for (String name : users) {
-        Member member = event.getGuild().getMemberByTag(name);
+        Member member = Objects.requireNonNull(event.getGuild()).getMemberByTag(name);
         if (member != null) {
           members.add(member);
         } else {
@@ -87,7 +91,7 @@ public class actionUtils {
     List<Member> members = new ArrayList<>();
     if (!voiceChats.isEmpty()) {
       for (String chatName : voiceChats) {
-        VoiceChannel voiceChannel = event.getGuild().getVoiceChannelsByName(chatName, false).get(0);
+        VoiceChannel voiceChannel = Objects.requireNonNull(event.getGuild()).getVoiceChannelsByName(chatName, false).get(0);
         if (voiceChannel != null) {
           members.addAll(voiceChannel.getMembers());
         }
@@ -101,7 +105,7 @@ public class actionUtils {
     if (!focusedOptionIds.isEmpty()) {
       if (event instanceof SlashCommandInteractionEvent commandEvent) {
         for (String id : focusedOptionIds) {
-          Member member = commandEvent.getOption(id).getAsMember();
+          Member member = Objects.requireNonNull(commandEvent.getOption(id)).getAsMember();
           if (member != null) {
             members.add(member);
           }
