@@ -1,39 +1,38 @@
-
 [filter]
 
-	[filter.myfilter]
-		type = "USER"
-		list = ["mani123#7703"]
-		filter-actions = ["sendErrorMuteEmbed"]
+[filter.myfilter]
+type = "USER"
+list = ["mani123#7703"]
+filter-actions = ["sendErrorMuteEmbed"]
 
 # Configure command interactions
 [[command]]
-	actionsIds = ["muteAction", "defaineAction", "sendSuccessMuteEmbed"]
-	filtersIds = ["myfilter"]
-	name = "mute"
-	description = "mute selected user"
-	optionIds = ["users1"]
+actionsIds = ["muteAction", "defaineAction", "sendSuccessMuteEmbed"]
+filtersIds = ["myfilter"]
+name = "mute"
+description = "mute selected user"
+optionIds = ["users1"]
 
-	[command.option]
+[command.option]
 
-		[command.option.users1]
-			name = "listofusers"
-			description = "List of users"
-			type = "user"
-			required = true
+[command.option.users1]
+name = "listofusers"
+description = "List of users"
+type = "user"
+required = true
 
 [[command]]
-	actionsIds = ["unmuteAction", "undefaineAction", "sendSuccessMuteEmbed"]
-	filtersIds = ["myfilter"]
-	name = "unmute"
-	description = "unmute selected user"
-	optionIds = ["users"]
+actionsIds = ["unmuteAction", "undefaineAction", "sendSuccessMuteEmbed"]
+filtersIds = ["myfilter"]
+name = "unmute"
+description = "unmute selected user"
+optionIds = ["users"]
 
-	[command.option]
+[command.option]
 
-		[command.option.users]
-			name = "listofusers"
-			description = "List of users"
-			type = "user"
-			required = true
+[command.option.users]
+name = "listofusers"
+description = "List of users"
+type = "user"
+required = true
 
