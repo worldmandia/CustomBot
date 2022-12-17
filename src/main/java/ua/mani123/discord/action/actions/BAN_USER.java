@@ -17,7 +17,7 @@ public class BAN_USER implements Action {
 
   ArrayList<String> users;
   ArrayList<String> focusedOptionIds;
-  boolean unbanIfBaned;
+  boolean unbanIfBanned;
   ArrayList<String> voiceChats;
 
   ArrayList<Filter> filters;
@@ -28,7 +28,7 @@ public class BAN_USER implements Action {
   public BAN_USER(CommentedConfig config) {
     this.users = config.getOrElse("users", new ArrayList<>());
     this.focusedOptionIds = config.getOrElse("focusedOptionIds", new ArrayList<>());
-    this.unbanIfBaned = config.getOrElse("unbanIfBaned", false);
+    this.unbanIfBanned = config.getOrElse("unbanIfBanned", false);
     this.voiceChats = config.getOrElse("voiceChats", new ArrayList<>());
     this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
     this.deleteBannedUserMessagesDuringTime = config.getIntOrElse("deleteBannedUserMessagesDuringTime", 0);
@@ -41,7 +41,7 @@ public class BAN_USER implements Action {
     for (UserSnowflake member : ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats)) {
       Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> {
-            if (unbanIfBaned) {
+            if (unbanIfBanned) {
               event.getGuild().unban(success.getUser()).queue();
             }
           }, (error) -> {
@@ -62,7 +62,7 @@ public class BAN_USER implements Action {
     for (UserSnowflake member : ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats)) {
       Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> {
-            if (unbanIfBaned) {
+            if (unbanIfBanned) {
               event.getGuild().unban(success.getUser()).queue();
             }
           }, (error) -> {

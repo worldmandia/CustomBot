@@ -17,7 +17,7 @@ public class UNBAN_USER implements Action {
 
   ArrayList<String> users;
   ArrayList<String> focusedOptionIds;
-  boolean banIfUnbaned;
+  boolean banIfUnbanned;
   ArrayList<String> voiceChats;
 
   ArrayList<Filter> filters;
@@ -28,7 +28,7 @@ public class UNBAN_USER implements Action {
   public UNBAN_USER(CommentedConfig config) {
     this.users = config.getOrElse("users", new ArrayList<>());
     this.focusedOptionIds = config.getOrElse("focusedOptionIds", new ArrayList<>());
-    this.banIfUnbaned = config.getOrElse("banIfUnbaned", false);
+    this.banIfUnbanned = config.getOrElse("banIfUnbanned", false);
     this.voiceChats = config.getOrElse("voiceChats", new ArrayList<>());
     this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
     this.deleteBannedUserMessagesDuringTime = config.getIntOrElse("deleteBannedUserMessagesDuringTime", 0);
@@ -41,7 +41,7 @@ public class UNBAN_USER implements Action {
     for (UserSnowflake member : ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats)) {
       Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> event.getGuild().unban(success.getUser()).queue(), (error) -> {
-            if (banIfUnbaned) {
+            if (banIfUnbanned) {
               AuditableRestAction<Void> auditableRestAction = event.getGuild()
                   .ban(member, deleteBannedUserMessagesDuringTime, TimeUnit.valueOf(deleteBannedUserMessagesTimeType));
               if (reason != null) {
@@ -60,7 +60,7 @@ public class UNBAN_USER implements Action {
     for (UserSnowflake member : ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats)) {
       Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> event.getGuild().unban(success.getUser()).queue(), (error) -> {
-            if (banIfUnbaned) {
+            if (banIfUnbanned) {
               AuditableRestAction<Void> auditableRestAction = event.getGuild()
                   .ban(member, deleteBannedUserMessagesDuringTime, TimeUnit.valueOf(deleteBannedUserMessagesTimeType));
               if (reason != null) {
