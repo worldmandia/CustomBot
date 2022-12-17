@@ -2,8 +2,9 @@ package ua.mani123.discord.action.actions;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import org.apache.commons.text.StringSubstitutor;
@@ -15,11 +16,11 @@ import ua.mani123.discord.action.filter.filterUtils;
 
 public class UNMUTE_USER implements Action {
 
-  List<String> users;
-  List<String> focusedOptionIds;
+  ArrayList<String> users;
+  ArrayList<String> focusedOptionIds;
   boolean muteIfUnmuted;
-  List<String> voiceChats;
-  List<Filter> filters;
+  ArrayList<String> voiceChats;
+  ArrayList<Filter> filters;
 
   public UNMUTE_USER(CommentedConfig config) {
     this.users = config.getOrElse("users", new ArrayList<>());
@@ -32,7 +33,7 @@ public class UNMUTE_USER implements Action {
 
   @Override
   public void run(GenericInteractionCreateEvent event) {
-    List<Member> members = new ArrayList<>();
+    Set<Member> members = new HashSet<>();
 
     members.addAll(ActionUtils.getMembersFromList(event, users));
     members.addAll(ActionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));

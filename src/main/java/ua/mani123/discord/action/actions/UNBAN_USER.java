@@ -2,7 +2,6 @@ package ua.mani123.discord.action.actions;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.entities.UserSnowflake;
@@ -37,20 +36,9 @@ public class UNBAN_USER implements Action {
     this.reason = config.getOrElse("reason", null);
   }
 
-  private List<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event) {
-    ArrayList<UserSnowflake> members = new ArrayList<>();
-
-    members.addAll(ActionUtils.getMembersFromList(event, users));
-    members.addAll(ActionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
-    members.addAll(ActionUtils.getMembersFromVoiceChat(event, voiceChats));
-    members.addAll(ActionUtils.getUserSnowflakeFromList(event, users));
-
-    return members;
-  }
-
   @Override
   public void run(GenericInteractionCreateEvent event) {
-    for (UserSnowflake member : getAllUsers(event)) {
+    for (UserSnowflake member : ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats)) {
       Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> event.getGuild().unban(success.getUser()).queue(), (error) -> {
             if (banIfUnbaned) {
@@ -69,7 +57,7 @@ public class UNBAN_USER implements Action {
 
   @Override
   public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
-    for (UserSnowflake member : getAllUsers(event)) {
+    for (UserSnowflake member : ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats)) {
       Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> event.getGuild().unban(success.getUser()).queue(), (error) -> {
             if (banIfUnbaned) {

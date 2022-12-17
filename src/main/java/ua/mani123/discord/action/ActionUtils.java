@@ -4,9 +4,11 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
@@ -112,6 +114,17 @@ public class ActionUtils {
         }
       }
     }
+    return members;
+  }
+
+  public static Set<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event, ArrayList<String> users, ArrayList<String> focusedOptionIds, ArrayList<String> voiceChats) {
+    Set<UserSnowflake> members = new HashSet<>();
+
+    members.addAll(getMembersFromList(event, users));
+    members.addAll(getMembersFromFocusedOptions(event, focusedOptionIds));
+    members.addAll(getMembersFromVoiceChat(event, voiceChats));
+    members.addAll(getUserSnowflakeFromList(event, users));
+
     return members;
   }
 
