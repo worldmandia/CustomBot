@@ -6,3 +6,6 @@ type = "ROLE"
 list = [
     "role"
 ]
+[[sub-action]]
+type = "random_type"
+id = "Another id"
