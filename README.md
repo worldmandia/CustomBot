@@ -1,6 +1,8 @@
 # CustomBot
 Bot manager aimed at full customization
 
+[Discord support server](https://discord.gg/ayjZCtsh5j)
+
 ## Dependencies
 
 - [Java 17+](https://adoptium.net/temurin/releases/)
