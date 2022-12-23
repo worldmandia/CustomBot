@@ -20,9 +20,9 @@ public class ADD_BUTTON implements SubAction {
   public ADD_BUTTON(CommentedConfig config) {
     this.id = config.getOrElse("id", null);
     this.label = config.getOrElse("label", "");
+    this.buttonStyle = ButtonStyle.valueOf(config.getOrElse("button-style", "SECONDARY").toUpperCase());
     this.emojiString = config.getOrElse("emoji", "");
     this.emojiId = config.getOrElse("emoji-id", 0L);
-    this.buttonStyle = ButtonStyle.valueOf(config.getOrElse("button-style", "SECONDARY").toUpperCase());
     if (!emojiString.isEmpty()) {
       if (emojiId != 0L) {
         this.emoji = Emoji.fromCustom(emojiString, emojiId, true);

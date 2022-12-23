@@ -35,15 +35,16 @@ public class SEND_MESSAGE implements Action {
     if (tempMessage == null) {
       tempMessage = message;
     }
-    if (ephemeral) {
-      ReplyCallbackAction replyCallbackAction = null;
-      if (event instanceof GenericCommandInteractionEvent commandInteractionEvent) {
-        replyCallbackAction = commandInteractionEvent.reply(tempMessage).setEphemeral(ephemeral);
-      } else if (event instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent) {
-        replyCallbackAction = componentInteractionCreateEvent.reply(tempMessage).setEphemeral(ephemeral);
-      }
+      if (ephemeral) {
+        ReplyCallbackAction replyCallbackAction = null;
+        if (event instanceof GenericCommandInteractionEvent commandInteractionEvent) {
+          replyCallbackAction = commandInteractionEvent.reply(tempMessage).setEphemeral(ephemeral);
+        } else if (event instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent) {
+          replyCallbackAction = componentInteractionCreateEvent.reply(tempMessage).setEphemeral(ephemeral);
+        }
       if (!subActions.isEmpty()) {
         for (SubAction s : subActions) {
+          assert replyCallbackAction != null;
           replyCallbackAction.addActionRow(s.getComponent());
         }
       }
