@@ -46,9 +46,9 @@ public class SEND_EMBED implements Action {
     if (ephemeral) {
       ReplyCallbackAction replyCallbackAction = null;
       if (event instanceof GenericCommandInteractionEvent commandInteractionEvent) {
-        replyCallbackAction = commandInteractionEvent.replyEmbeds(messageEmbed).setEphemeral(ephemeral);
+        replyCallbackAction = commandInteractionEvent.replyEmbeds(messageEmbed);
       } else if (event instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent) {
-        replyCallbackAction = componentInteractionCreateEvent.replyEmbeds(messageEmbed).setEphemeral(ephemeral);
+        replyCallbackAction = componentInteractionCreateEvent.replyEmbeds(messageEmbed);
       }
       if (!subActions.isEmpty()) {
         for (SubAction s : subActions) {
@@ -57,12 +57,13 @@ public class SEND_EMBED implements Action {
         }
       }
       assert replyCallbackAction != null;
-      replyCallbackAction.queue();
-    }
-    if (!subActions.isEmpty()) {
-      MessageCreateAction messageCreateAction = null;
-      for (SubAction s : subActions) {
-        messageCreateAction = event.getMessageChannel().sendMessageEmbeds(messageEmbed).addActionRow(s.getComponent());
+      replyCallbackAction.setEphemeral(ephemeral).queue();
+    } else {
+      MessageCreateAction messageCreateAction = event.getMessageChannel().sendMessageEmbeds(messageEmbed);
+      if (!subActions.isEmpty()) {
+        for (SubAction s : subActions) {
+          messageCreateAction = messageCreateAction.addActionRow(s.getComponent());
+        }
       }
       messageCreateAction.queue();
     }
