@@ -18,7 +18,7 @@ public class ReadyBot extends ListenerAdapter {
     ArrayList<CommandData> commandData = new ArrayList<>();
     for (Map.Entry<String, CommandInteraction> command : InteractionUtils.getCommands().entrySet()) {
       if (!command.getValue().isOnlyGuild() && filterUtils.filterCheck(command.getValue().getFilters(), event)) {
-        commandData.add(command.getValue().getCommand());
+        commandData.add(command.getValue().getCommandData());
       }
     }
     event.getJDA().updateCommands().addCommands(commandData).queue();

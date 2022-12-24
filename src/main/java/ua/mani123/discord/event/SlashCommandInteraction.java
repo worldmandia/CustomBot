@@ -15,11 +15,8 @@ public class SlashCommandInteraction extends ListenerAdapter {
   public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
     if (InteractionUtils.getCommands().containsKey(event.getName())) {
       CommandInteraction commandInteraction = InteractionUtils.getCommands().get(event.getName());
-      Utils.getPlaceholders().put("interaction-user", event.getUser().getName());
-      Utils.getPlaceholders().put("interaction-user-mentioned", event.getUser().getAsMention());
-      Utils.getPlaceholders().put("interaction-user-as-tag", event.getUser().getAsTag());
 
-      StringSubstitutor str = new StringSubstitutor(Utils.getPlaceholders());
+      StringSubstitutor str = new StringSubstitutor(Utils.getPlaceholders(event));
 
       if (filterUtils.filterCheck(commandInteraction.getFilters(), event, str)) {
         EventUtils.runActions(commandInteraction.getActionIds(), event, str);
