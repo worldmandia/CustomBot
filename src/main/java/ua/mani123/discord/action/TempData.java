@@ -1,5 +1,6 @@
 package ua.mani123.discord.action;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import net.dv8tion.jda.api.entities.Role;
@@ -13,6 +14,7 @@ public class TempData {
   HashSet<VoiceChannel> voiceChannels = new HashSet<>();
   HashSet<TextChannel> textChannels = new HashSet<>();
   HashSet<Role> roles = new HashSet<>();
+  HashMap<String, String> contentData = new HashMap<>();
 
   public Set<UserSnowflake> getUserSnowflakes() {
     return userSnowflakes;
@@ -28,5 +30,9 @@ public class TempData {
 
   public Set<Role> getRoles() {
     return roles;
+  }
+
+  public HashMap<String, String> getContentData() {
+    return contentData;
   }
 }

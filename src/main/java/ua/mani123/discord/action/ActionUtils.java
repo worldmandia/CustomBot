@@ -18,9 +18,11 @@ import ua.mani123.CBot;
 import ua.mani123.addon.AddonData;
 import ua.mani123.addon.AddonUtils;
 import ua.mani123.config.CConfig;
+import ua.mani123.discord.action.actions.ADD_MEMBER_ROLE;
 import ua.mani123.discord.action.actions.BAN_USER;
 import ua.mani123.discord.action.actions.DEAFEN_USER;
 import ua.mani123.discord.action.actions.MUTE_USER;
+import ua.mani123.discord.action.actions.REMOVE_MEMBER_ROLE;
 import ua.mani123.discord.action.actions.SEND_EMBED;
 import ua.mani123.discord.action.actions.SEND_MESSAGE;
 import ua.mani123.discord.action.actions.TEMP_DATA_ADD;
@@ -31,7 +33,7 @@ import ua.mani123.discord.action.actions.UNMUTE_USER;
 
 public class ActionUtils {
 
-  static Map<String, Action> actionMap = new HashMap<>();
+  static HashMap<String, Action> actionMap = new HashMap<>();
 
   public static void init(Map<String, CConfig> configs) {
     for (Map.Entry<String, CConfig> entry : configs.entrySet()) {
@@ -55,6 +57,8 @@ public class ActionUtils {
       case "SEND_EMBED" -> actionMap.put(key, new SEND_EMBED(config));
       case "BAN_USER" -> actionMap.put(key, new BAN_USER(config));
       case "UNBAN_USER" -> actionMap.put(key, new UNBAN_USER(config));
+      case "ADD_MEMBER_ROLE" -> actionMap.put(key, new ADD_MEMBER_ROLE(config));
+      case "REMOVE_MEMBER_ROLE" -> actionMap.put(key, new REMOVE_MEMBER_ROLE(config));
       default -> {
         for (Map.Entry<String, AddonData> addons : AddonUtils.getAddonMap().entrySet()) {
           actionMap.put(key, addons.getValue().getAddon().addCustomAction(type, key, config));
@@ -63,7 +67,7 @@ public class ActionUtils {
     }
   }
 
-  public static List<Member> getMembersFromList(GenericInteractionCreateEvent event, List<String> users) {
+  public static List<Member> getMembersFromList(GenericInteractionCreateEvent event, HashSet<String> users) {
     List<Member> members = new ArrayList<>();
     if (!users.isEmpty()) {
       for (String name : users) {
@@ -78,7 +82,7 @@ public class ActionUtils {
     return members;
   }
 
-  public static List<UserSnowflake> getUserSnowflakeFromList(GenericInteractionCreateEvent event, List<String> users) {
+  public static List<UserSnowflake> getUserSnowflakeFromList(GenericInteractionCreateEvent event, HashSet<String> users) {
     List<UserSnowflake> members = new ArrayList<>();
     if (!users.isEmpty()) {
       for (String name : users) {
@@ -93,7 +97,7 @@ public class ActionUtils {
     return members;
   }
 
-  public static List<Member> getMembersFromVoiceChat(GenericInteractionCreateEvent event, List<String> voiceChats) {
+  public static List<Member> getMembersFromVoiceChat(GenericInteractionCreateEvent event, HashSet<String> voiceChats) {
     List<Member> members = new ArrayList<>();
     if (!voiceChats.isEmpty()) {
       for (String chatName : voiceChats) {
@@ -106,7 +110,7 @@ public class ActionUtils {
     return members;
   }
 
-  public static List<Member> getMembersFromFocusedOptions(GenericInteractionCreateEvent event, List<String> focusedOptionIds) {
+  public static List<Member> getMembersFromFocusedOptions(GenericInteractionCreateEvent event, HashSet<String> focusedOptionIds) {
     List<Member> members = new ArrayList<>();
     if (!focusedOptionIds.isEmpty()) {
       if (event instanceof SlashCommandInteractionEvent commandEvent) {
@@ -121,15 +125,15 @@ public class ActionUtils {
     return members;
   }
 
-  public static Set<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event, ArrayList<String> users, ArrayList<String> focusedOptionIds, ArrayList<String> voiceChats) {
-    Set<UserSnowflake> members = new HashSet<>();
+  public static Set<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event, HashSet<String> users, HashSet<String> focusedOptionIds, HashSet<String> voiceChats, HashSet<String> members) {
+    HashSet<UserSnowflake> UserSnowflake = new HashSet<>();
 
-    members.addAll(getMembersFromList(event, users));
-    members.addAll(getMembersFromFocusedOptions(event, focusedOptionIds));
-    members.addAll(getMembersFromVoiceChat(event, voiceChats));
-    members.addAll(getUserSnowflakeFromList(event, users));
+    UserSnowflake.addAll(getMembersFromList(event, members));
+    UserSnowflake.addAll(getMembersFromFocusedOptions(event, focusedOptionIds));
+    UserSnowflake.addAll(getMembersFromVoiceChat(event, voiceChats));
+    UserSnowflake.addAll(getUserSnowflakeFromList(event, users));
 
-    return members;
+    return UserSnowflake;
   }
 
   public static Color getHexToColor(String colorName) {
@@ -150,7 +154,7 @@ public class ActionUtils {
     };
   }
 
-  public static Map<String, Action> getActionMap() {
+  public static HashMap<String, Action> getActionMap() {
     return actionMap;
   }
 }
