@@ -67,7 +67,7 @@ public class ActionUtils {
     }
   }
 
-  public static List<Member> getMembersFromList(GenericInteractionCreateEvent event, HashSet<String> users) {
+  public static List<Member> getMembersFromList(GenericInteractionCreateEvent event, ArrayList<String> users) {
     List<Member> members = new ArrayList<>();
     if (!users.isEmpty()) {
       for (String name : users) {
@@ -82,7 +82,7 @@ public class ActionUtils {
     return members;
   }
 
-  public static List<UserSnowflake> getUserSnowflakeFromList(GenericInteractionCreateEvent event, HashSet<String> users) {
+  public static List<UserSnowflake> getUserSnowflakeFromList(GenericInteractionCreateEvent event, ArrayList<String> users) {
     List<UserSnowflake> members = new ArrayList<>();
     if (!users.isEmpty()) {
       for (String name : users) {
@@ -97,7 +97,7 @@ public class ActionUtils {
     return members;
   }
 
-  public static List<Member> getMembersFromVoiceChat(GenericInteractionCreateEvent event, HashSet<String> voiceChats) {
+  public static List<Member> getMembersFromVoiceChat(GenericInteractionCreateEvent event, ArrayList<String> voiceChats) {
     List<Member> members = new ArrayList<>();
     if (!voiceChats.isEmpty()) {
       for (String chatName : voiceChats) {
@@ -110,7 +110,7 @@ public class ActionUtils {
     return members;
   }
 
-  public static List<Member> getMembersFromFocusedOptions(GenericInteractionCreateEvent event, HashSet<String> focusedOptionIds) {
+  public static List<Member> getMembersFromFocusedOptions(GenericInteractionCreateEvent event, ArrayList<String> focusedOptionIds) {
     List<Member> members = new ArrayList<>();
     if (!focusedOptionIds.isEmpty()) {
       if (event instanceof SlashCommandInteractionEvent commandEvent) {
@@ -125,7 +125,7 @@ public class ActionUtils {
     return members;
   }
 
-  public static Set<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event, HashSet<String> users, HashSet<String> focusedOptionIds, HashSet<String> voiceChats, HashSet<String> members) {
+  public static Set<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event, ArrayList<String> users, ArrayList<String> focusedOptionIds, ArrayList<String> voiceChats, ArrayList<String> members) {
     HashSet<UserSnowflake> UserSnowflake = new HashSet<>();
 
     UserSnowflake.addAll(getMembersFromList(event, members));

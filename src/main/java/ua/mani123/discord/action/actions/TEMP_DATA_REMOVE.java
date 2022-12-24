@@ -2,7 +2,6 @@ package ua.mani123.discord.action.actions;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Objects;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -14,23 +13,23 @@ import ua.mani123.discord.action.filter.Filter;
 
 public class TEMP_DATA_REMOVE implements Action {
 
-  HashSet<String> users;
-  HashSet<String> focusedUserOptionIds;
-  HashSet<String> focusedStringOptionIds;
-  HashSet<String> voiceChannels;
-  HashSet<String> textChannels;
-  HashSet<String> roles;
-  HashSet<String> members;
+  ArrayList<String> users;
+  ArrayList<String> focusedUserOptionIds;
+  ArrayList<String> focusedStringOptionIds;
+  ArrayList<String> voiceChannels;
+  ArrayList<String> textChannels;
+  ArrayList<String> roles;
+  ArrayList<String> members;
   boolean allowAddInteractionUser;
 
   public TEMP_DATA_REMOVE(CommentedConfig config) {
-    this.users = config.getOrElse("users", new HashSet<>());
-    this.focusedUserOptionIds = config.getOrElse("focusedUserOptionIds", new HashSet<>());
-    this.focusedStringOptionIds = config.getOrElse("focusedStringOptionIds", new HashSet<>());
-    this.voiceChannels = config.getOrElse("voiceChannels", new HashSet<>());
-    this.textChannels = config.getOrElse("textChannels", new HashSet<>());
-    this.roles = config.getOrElse("roles", new HashSet<>());
-    this.members = config.getOrElse("members", new HashSet<>());
+    this.users = config.getOrElse("users", new ArrayList<>());
+    this.focusedUserOptionIds = config.getOrElse("focusedUserOptionIds", new ArrayList<>());
+    this.focusedStringOptionIds = config.getOrElse("focusedStringOptionIds", new ArrayList<>());
+    this.voiceChannels = config.getOrElse("voiceChannels", new ArrayList<>());
+    this.textChannels = config.getOrElse("textChannels", new ArrayList<>());
+    this.roles = config.getOrElse("roles", new ArrayList<>());
+    this.members = config.getOrElse("members", new ArrayList<>());
     this.allowAddInteractionUser = config.getOrElse("allowAddInteractionUser", false);
   }
 
