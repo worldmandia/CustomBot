@@ -1,4 +1,4 @@
-<img align="right" src="https://github.com/DV8FromTheWorld/JDA/blob/assets/assets/readme/logo.png?raw=true" height="200" width="200" alt="Logo">
+<img align="right" src="https://github.com/mani1232/CustomBot/blob/master/src/main/resources/CustomBot_Banner.png?raw=true" height="250px" width="500px" alt="Logo">
 
 # CustomBot
 
