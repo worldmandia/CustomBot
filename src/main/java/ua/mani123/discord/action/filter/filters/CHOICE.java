@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.session.GenericSessionEvent;
 import ua.mani123.CBot;
+import ua.mani123.discord.action.ActionUtils;
 import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.Filter;
 
@@ -19,15 +20,19 @@ public class CHOICE implements Filter {
   private final ArrayList<String> actionNames;
   HashSet<String> options;
   boolean isBlackList;
+  private final ArrayList<String> beforeActionNames;
+
 
   public CHOICE(CommentedConfig config) {
     this.options = config.getOrElse("options", new HashSet<>());
     this.isBlackList = config.getOrElse("isBlackList", false);
     this.actionNames = config.getOrElse("filter-actions", new ArrayList<>());
+    this.beforeActionNames = config.getOrElse("before-filter-actions", new ArrayList<>());
   }
 
   @Override
   public boolean canRun(GenericInteractionCreateEvent event, TempData tempData) {
+    beforeActionNames.forEach(s -> ActionUtils.getActionMap().get(s).run(event, tempData));
     if (event instanceof SlashCommandInteractionEvent commandInteractionEvent) {
       if (!options.isEmpty()) {
         AtomicBoolean answer = new AtomicBoolean(true);
