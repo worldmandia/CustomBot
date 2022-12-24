@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.session.GenericSessionEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.ActionUtils;
 import ua.mani123.discord.action.filter.filters.BOT;
+import ua.mani123.discord.action.filter.filters.CHOICE;
 import ua.mani123.discord.action.filter.filters.GUILD;
 import ua.mani123.discord.action.filter.filters.ROLE;
 import ua.mani123.discord.action.filter.filters.USER;
@@ -27,6 +28,7 @@ public class filterUtils {
             case "USER" -> filterList.add(new USER(config));
             case "GUILD" -> filterList.add(new GUILD(config));
             case "BOT" -> filterList.add(new BOT(config));
+            case "CHOICE" -> filterList.add(new CHOICE(config));
           }
         }
       }

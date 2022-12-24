@@ -7,8 +7,7 @@ import net.dv8tion.jda.api.events.session.GenericSessionEvent;
 
 public interface Filter {
 
-  boolean defaultCanRun = true;
-  ArrayList<String> filterActionIds = new ArrayList<>();
+  boolean defaultCanRun = false;
 
   /**
    * Check actions filters and return true if can or false if cant
@@ -19,12 +18,24 @@ public interface Filter {
     return defaultCanRun;
   }
 
-  boolean canRun(GenericGuildEvent event);
-
-  boolean canRun(GenericSessionEvent event);
-
-  default ArrayList<String> getFilterActionIds() {
-    return filterActionIds;
+  /**
+   * Check actions filters and return true if can or false if cant
+   *
+   * @param event event for run method
+   */
+  default boolean canRun(GenericGuildEvent event) {
+    return defaultCanRun;
   }
+
+  /**
+   * Check actions filters and return true if can or false if cant
+   *
+   * @param event event for run method
+   */
+  default boolean canRun(GenericSessionEvent event) {
+    return defaultCanRun;
+  }
+
+  ArrayList<String> getFilterActionIds();
 
 }

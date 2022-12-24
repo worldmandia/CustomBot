@@ -22,7 +22,9 @@ public interface Action {
    * @param event event for run method
    * @param str   StringSubstitutor with placeholders map
    */
-  void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str);
+  default void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
+    run(event);
+  }
 
   default ArrayList<Filter> getFilters() {
     return filters;
