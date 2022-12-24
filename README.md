@@ -1,7 +1,7 @@
 # CustomBot
 Bot manager aimed at full customization
 
-[Discord support server](https://discord.gg/ayjZCtsh5j)
+[![DevServer](https://discordapp.com/api/guilds/1041851761796841554/widget.png?style=shield)](https://discord.gg/ayjZCtsh5j)
 
 ## Dependencies
 
