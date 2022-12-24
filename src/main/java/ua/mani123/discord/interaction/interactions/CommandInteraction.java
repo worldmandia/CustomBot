@@ -27,8 +27,8 @@ public class CommandInteraction implements interaction {
   public CommandInteraction(CommentedConfig config) {
     this.name = config.get("name");
     this.description = config.get("description");
-    this.actionIds = config.get("actionsIds");
-    this.optionIds = config.get("optionIds");
+    this.actionIds = config.getOrElse("actionsIds", new ArrayList<>());
+    this.optionIds = config.getOrElse("optionIds", new ArrayList<>());
     this.config = config;
     this.onlyGuild = config.getOrElse("onlyGuild", false);
     this.isNSFW = config.getOrElse("isNSFW", false);
