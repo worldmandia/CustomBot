@@ -1,3 +1,5 @@
+<img align="right" src="https://github.com/DV8FromTheWorld/JDA/blob/assets/assets/readme/logo.png?raw=true" height="200" width="200" alt="Logo">
+
 # CustomBot
 
 Bot manager aimed at full customization
