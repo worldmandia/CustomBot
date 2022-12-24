@@ -44,7 +44,7 @@ tasks.register('buyThePlugins') {
 
 shadowJar {
     finalizedBy('buyThePlugins')
-    archiveFileName = findProperty("bot-name") + "-v" + findProperty("version") + ".jar"
+    archiveFileName = findProperty("project-name") + "-v" + findProperty("version") + ".jar"
 }
 
 build {
