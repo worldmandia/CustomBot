@@ -2,10 +2,9 @@ package ua.mani123.discord.action.actions;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.CBot;
@@ -34,18 +33,19 @@ public class MUTE_USER implements Action {
 
   @Override
   public void run(GenericInteractionCreateEvent event, TempData tempData) {
-    Set<Member> members = new HashSet<>();
 
-    members.addAll(ActionUtils.getMembersFromList(event, users));
-    members.addAll(ActionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
-    members.addAll(ActionUtils.getMembersFromVoiceChat(event, voiceChats));
+    tempData.getUserSnowflakes().addAll(ActionUtils.getMembersFromList(event, users));
+    tempData.getUserSnowflakes().addAll(ActionUtils.getMembersFromFocusedOptions(event, focusedOptionIds));
+    tempData.getUserSnowflakes().addAll(ActionUtils.getMembersFromVoiceChat(event, voiceChats));
 
     try {
-      for (Member member : members) {
-        if (!Objects.requireNonNull(member.getVoiceState()).isGuildMuted()) {
-          member.mute(true).queue();
-        } else if (unmuteIfMuted) {
-          member.mute(false).queue();
+      for (UserSnowflake userSnowflake : tempData.getUserSnowflakes()) {
+        if (userSnowflake instanceof Member member) {
+          if (!Objects.requireNonNull(member.getVoiceState()).isGuildMuted()) {
+            member.mute(true).queue();
+          } else if (unmuteIfMuted) {
+            member.mute(false).queue();
+          }
         }
       }
     } catch (Exception e) {

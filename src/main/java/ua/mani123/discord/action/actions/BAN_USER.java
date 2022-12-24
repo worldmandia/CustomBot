@@ -39,7 +39,8 @@ public class BAN_USER implements Action {
 
   @Override
   public void run(GenericInteractionCreateEvent event, TempData tempData) {
-    for (UserSnowflake member : ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats)) {
+    tempData.getUserSnowflakes().addAll(ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats));
+    for (UserSnowflake member : tempData.getUserSnowflakes()) {
       Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> {
             if (unbanIfBanned) {
@@ -60,7 +61,8 @@ public class BAN_USER implements Action {
 
   @Override
   public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
-    for (UserSnowflake member : ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats)) {
+    tempData.getUserSnowflakes().addAll(ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats));
+    for (UserSnowflake member : tempData.getUserSnowflakes()) {
       Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> {
             if (unbanIfBanned) {
