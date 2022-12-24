@@ -23,6 +23,8 @@ import ua.mani123.discord.action.actions.DEAFEN_USER;
 import ua.mani123.discord.action.actions.MUTE_USER;
 import ua.mani123.discord.action.actions.SEND_EMBED;
 import ua.mani123.discord.action.actions.SEND_MESSAGE;
+import ua.mani123.discord.action.actions.TEMP_DATA_ADD;
+import ua.mani123.discord.action.actions.TEMP_DATA_REMOVE;
 import ua.mani123.discord.action.actions.UNBAN_USER;
 import ua.mani123.discord.action.actions.UNDEAFEN_USER;
 import ua.mani123.discord.action.actions.UNMUTE_USER;
@@ -43,6 +45,8 @@ public class ActionUtils {
 
   public static void sortActions(String type, String key, CommentedFileConfig config) {
     switch (type) {
+      case "TEMP_DATA_ADD" -> actionMap.put(key, new TEMP_DATA_ADD(config));
+      case "TEMP_DATA_REMOVE" -> actionMap.put(key, new TEMP_DATA_REMOVE(config));
       case "SEND_MESSAGE" -> actionMap.put(key, new SEND_MESSAGE(config));
       case "MUTE_USER" -> actionMap.put(key, new MUTE_USER(config));
       case "UNMUTE_USER" -> actionMap.put(key, new UNMUTE_USER(config));
