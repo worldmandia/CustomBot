@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.Action;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
 import ua.mani123.discord.action.subActions.SubAction;
@@ -31,7 +32,7 @@ public class SEND_MESSAGE implements Action {
   }
 
   @Override
-  public void run(GenericInteractionCreateEvent event) {
+  public void run(GenericInteractionCreateEvent event, TempData tempData) {
     if (tempMessage == null) {
       tempMessage = message;
     }
@@ -63,9 +64,9 @@ public class SEND_MESSAGE implements Action {
   }
 
   @Override
-  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
+  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
     tempMessage = str.replace(message);
-    run(event);
+    run(event, tempData);
   }
 
 }

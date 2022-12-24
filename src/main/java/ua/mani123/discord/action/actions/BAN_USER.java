@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.Action;
 import ua.mani123.discord.action.ActionUtils;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
 
@@ -37,7 +38,7 @@ public class BAN_USER implements Action {
   }
 
   @Override
-  public void run(GenericInteractionCreateEvent event) {
+  public void run(GenericInteractionCreateEvent event, TempData tempData) {
     for (UserSnowflake member : ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats)) {
       Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> {
@@ -58,7 +59,7 @@ public class BAN_USER implements Action {
   }
 
   @Override
-  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
+  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
     for (UserSnowflake member : ActionUtils.getAllUsers(event, users, focusedOptionIds, voiceChats)) {
       Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
           (success) -> {

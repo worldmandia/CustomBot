@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.session.GenericSessionEvent;
 import ua.mani123.CBot;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.Filter;
 
 public class CHOICE implements Filter {
@@ -26,7 +27,7 @@ public class CHOICE implements Filter {
   }
 
   @Override
-  public boolean canRun(GenericInteractionCreateEvent event) {
+  public boolean canRun(GenericInteractionCreateEvent event, TempData tempData) {
     if (event instanceof SlashCommandInteractionEvent commandInteractionEvent) {
       if (!options.isEmpty()) {
         AtomicBoolean answer = new AtomicBoolean(true);
@@ -54,13 +55,13 @@ public class CHOICE implements Filter {
   }
 
   @Override
-  public boolean canRun(GenericGuildEvent event) {
+  public boolean canRun(GenericGuildEvent event, TempData tempData) {
     CBot.getLog().warn("GenericGuildEvent not support CHOICE feature");
     return false;
   }
 
   @Override
-  public boolean canRun(GenericSessionEvent event) {
+  public boolean canRun(GenericSessionEvent event, TempData tempData) {
     CBot.getLog().warn("GenericSessionEvent not support CHOICE feature");
     return false;
   }

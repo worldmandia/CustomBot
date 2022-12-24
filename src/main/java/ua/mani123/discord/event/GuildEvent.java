@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.jetbrains.annotations.NotNull;
 import ua.mani123.CBot;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.filterUtils;
 import ua.mani123.discord.interaction.InteractionUtils;
 import ua.mani123.discord.interaction.interactions.CommandInteraction;
@@ -16,8 +17,9 @@ public class GuildEvent extends ListenerAdapter {
   @Override
   public void onGuildReady(@NotNull GuildReadyEvent event) {
     ArrayList<CommandData> commandData = new ArrayList<>();
+    TempData tempData = new TempData();
     for (Map.Entry<String, CommandInteraction> command : InteractionUtils.getCommands().entrySet()) {
-      if (command.getValue().isOnlyGuild() && filterUtils.filterCheck(command.getValue().getFilters(), event)) {
+      if (command.getValue().isOnlyGuild() && filterUtils.filterCheck(command.getValue().getFilters(), event, tempData)) {
         commandData.add(command.getValue().getCommandData());
       }
     }

@@ -11,6 +11,7 @@ import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.CBot;
 import ua.mani123.discord.action.Action;
 import ua.mani123.discord.action.ActionUtils;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
 
@@ -32,7 +33,7 @@ public class MUTE_USER implements Action {
   }
 
   @Override
-  public void run(GenericInteractionCreateEvent event) {
+  public void run(GenericInteractionCreateEvent event, TempData tempData) {
     Set<Member> members = new HashSet<>();
 
     members.addAll(ActionUtils.getMembersFromList(event, users));
@@ -53,7 +54,7 @@ public class MUTE_USER implements Action {
   }
 
   @Override
-  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
-    run(event);
+  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
+    run(event, tempData);
   }
 }

@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.Action;
 import ua.mani123.discord.action.ActionUtils;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
 import ua.mani123.discord.action.subActions.SubAction;
@@ -38,7 +39,7 @@ public class SEND_EMBED implements Action {
   }
 
   @Override
-  public void run(GenericInteractionCreateEvent event) {
+  public void run(GenericInteractionCreateEvent event, TempData tempData) {
     if (messageEmbed == null) {
       messageEmbed = new EmbedBuilder().setTitle(title).setDescription(description).setColor(color).build();
     }
@@ -68,9 +69,9 @@ public class SEND_EMBED implements Action {
   }
 
   @Override
-  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
+  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
     messageEmbed = new EmbedBuilder().setTitle(str.replace(title)).setDescription(str.replace(description)).setColor(color).build();
-    run(event);
+    run(event, tempData);
   }
 
   @Override

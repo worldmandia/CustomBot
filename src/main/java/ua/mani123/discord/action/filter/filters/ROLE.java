@@ -4,10 +4,12 @@ import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.session.GenericSessionEvent;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.Filter;
 
 public class ROLE implements Filter {
@@ -24,13 +26,13 @@ public class ROLE implements Filter {
   }
 
   @Override
-  public boolean canRun(GenericInteractionCreateEvent event) {
+  public boolean canRun(GenericInteractionCreateEvent event, TempData tempData) {
     if (!rolesNames.isEmpty()) {
       List<Role> roles = new ArrayList<>();
       for (String name : rolesNames) {
-        roles.add(event.getGuild().getRolesByName(name, false).get(0));
+        roles.add(Objects.requireNonNull(event.getGuild()).getRolesByName(name, false).get(0));
       }
-      boolean answer = new HashSet<>(event.getMember().getRoles()).containsAll(roles);
+      boolean answer = new HashSet<>(Objects.requireNonNull(event.getMember()).getRoles()).containsAll(roles);
       if (isBlackList) {
         return !answer;
       } else {
@@ -41,7 +43,7 @@ public class ROLE implements Filter {
   }
 
   @Override
-  public boolean canRun(GenericGuildEvent event) {
+  public boolean canRun(GenericGuildEvent event, TempData tempData) {
     if (!rolesNames.isEmpty()) {
       List<Role> roles = new ArrayList<>();
       for (String name : rolesNames) {
@@ -58,7 +60,7 @@ public class ROLE implements Filter {
   }
 
   @Override
-  public boolean canRun(GenericSessionEvent genericSessionEvent) {
+  public boolean canRun(GenericSessionEvent genericSessionEvent, TempData tempData) {
     return true;
   }
 

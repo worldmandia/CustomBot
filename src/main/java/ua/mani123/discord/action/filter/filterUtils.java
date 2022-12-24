@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.session.GenericSessionEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.ActionUtils;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.filters.BOT;
 import ua.mani123.discord.action.filter.filters.CHOICE;
 import ua.mani123.discord.action.filter.filters.GUILD;
@@ -36,14 +37,14 @@ public class filterUtils {
     return filterList;
   }
 
-  public static boolean filterCheck(ArrayList<Filter> filters, GenericInteractionCreateEvent event, StringSubstitutor str) {
+  public static boolean filterCheck(ArrayList<Filter> filters, GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
     boolean canInteract = true;
     if (!filters.isEmpty()) {
       for (Filter filter : filters) {
-        canInteract = filter.canRun(event);
+        canInteract = filter.canRun(event, tempData);
         if (!canInteract) {
           for (String actionId : filter.getFilterActionIds()) {
-            ActionUtils.getActionMap().get(actionId).runWithPlaceholders(event, str);
+            ActionUtils.getActionMap().get(actionId).runWithPlaceholders(event, str, tempData);
           }
         }
       }
@@ -51,24 +52,24 @@ public class filterUtils {
     return canInteract;
   }
 
-  public static boolean filterCheck(ArrayList<Filter> filters, GenericGuildEvent event) {
+  public static boolean filterCheck(ArrayList<Filter> filters, GenericGuildEvent event, TempData tempData) {
     boolean canInteract = true;
     if (!filters.isEmpty()) {
       for (Filter filter : filters) {
         if (canInteract) {
-          canInteract = filter.canRun(event);
+          canInteract = filter.canRun(event, tempData);
         }
       }
     }
     return canInteract;
   }
 
-  public static boolean filterCheck(ArrayList<Filter> filters, GenericSessionEvent event) {
+  public static boolean filterCheck(ArrayList<Filter> filters, GenericSessionEvent event, TempData tempData) {
     boolean canInteract = true;
     if (!filters.isEmpty()) {
       for (Filter filter : filters) {
         if (canInteract) {
-          canInteract = filter.canRun(event);
+          canInteract = filter.canRun(event, tempData);
         }
       }
     }

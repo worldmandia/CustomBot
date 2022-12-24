@@ -13,17 +13,19 @@ public interface Action {
    * Run action, recommend to use Action::runWithPlaceholders
    *
    * @param event event for run method
+   * @param tempData Temporary data created when the event is fired
    */
-  void run(GenericInteractionCreateEvent event);
+  void run(GenericInteractionCreateEvent event, TempData tempData);
 
   /**
    * Run action with placeholders, for add your own placeholders use Utils::getPlaceholders.put
    *
    * @param event event for run method
+   * @param tempData Temporary data created when the event is fired
    * @param str   StringSubstitutor with placeholders map
    */
-  default void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str) {
-    run(event);
+  default void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
+    run(event, tempData);
   }
 
   default ArrayList<Filter> getFilters() {
