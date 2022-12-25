@@ -13,7 +13,6 @@ import ua.mani123.discord.action.filter.Filter;
 
 public class TEMP_DATA_REMOVE implements Action {
 
-  ArrayList<String> users;
   ArrayList<String> focusedUserOptionIds;
   ArrayList<String> focusedStringOptionIds;
   ArrayList<String> voiceChannels;
@@ -23,7 +22,6 @@ public class TEMP_DATA_REMOVE implements Action {
   boolean allowAddInteractionUser;
 
   public TEMP_DATA_REMOVE(CommentedConfig config) {
-    this.users = config.getOrElse("users", new ArrayList<>());
     this.focusedUserOptionIds = config.getOrElse("focusedUserOptionIds", new ArrayList<>());
     this.focusedStringOptionIds = config.getOrElse("focusedStringOptionIds", new ArrayList<>());
     this.voiceChannels = config.getOrElse("voiceChannels", new ArrayList<>());
@@ -35,10 +33,10 @@ public class TEMP_DATA_REMOVE implements Action {
 
   @Override
   public void run(GenericInteractionCreateEvent event, TempData tempData) {
-    tempData.getUserSnowflakes().removeAll(ActionUtils.getAllUsers(event, users, focusedUserOptionIds, voiceChannels, members));
-    voiceChannels.forEach(s -> Objects.requireNonNull(event.getGuild()).getVoiceChannelsByName(s, false).forEach(tempData.getVoiceChannels()::remove));
-    textChannels.forEach(s -> Objects.requireNonNull(event.getGuild()).getTextChannelsByName(s, false).forEach(tempData.getTextChannels()::remove));
-    roles.forEach(s -> Objects.requireNonNull(event.getGuild()).getRolesByName(s, false).forEach(tempData.getRoles()::remove));
+    tempData.getUserSnowflakes().removeAll(ActionUtils.getAllUsers(event, focusedUserOptionIds, voiceChannels, members));
+    voiceChannels.forEach(s -> ActionUtils.getVoiceChannelsByNameOrId(event, s, false).forEach(tempData.getVoiceChannels()::remove));
+    textChannels.forEach(s -> ActionUtils.getTextChannelsByNameOrId(event, s, false).forEach(tempData.getTextChannels()::remove));
+    roles.forEach(s -> ActionUtils.getRolesByNameOrId(event, s, false).forEach(tempData.getRoles()::remove));
     if (allowAddInteractionUser) {
       tempData.getUserSnowflakes().remove(event.getInteraction().getUser());
     }

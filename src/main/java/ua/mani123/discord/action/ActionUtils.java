@@ -3,19 +3,20 @@ package ua.mani123.discord.action;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import ua.mani123.CBot;
-import ua.mani123.addon.Addon;
 import ua.mani123.addon.AddonData;
 import ua.mani123.addon.AddonUtils;
 import ua.mani123.config.CConfig;
@@ -73,71 +74,54 @@ public class ActionUtils {
     }
   }
 
-  public static List<Member> getMembersFromList(GenericInteractionCreateEvent event, ArrayList<String> users) {
-    List<Member> members = new ArrayList<>();
+  public static HashSet<UserSnowflake> getMembersOrUsers(GenericInteractionCreateEvent event, ArrayList<String> users) {
     if (!users.isEmpty()) {
-      for (String name : users) {
+      HashSet<UserSnowflake> members = new HashSet<>();
+      users.forEach(s -> {
         try {
-          Member member = Objects.requireNonNull(event.getGuild()).getMemberByTag(name);
-          members.add(member);
-        } catch (Exception e) {
-          CBot.getLog().warn("Member with name: " + name + " not found");
-        }
-      }
-    }
-    return members;
-  }
-
-  public static List<UserSnowflake> getUserSnowflakeFromList(GenericInteractionCreateEvent event, ArrayList<String> users) {
-    List<UserSnowflake> members = new ArrayList<>();
-    if (!users.isEmpty()) {
-      for (String name : users) {
-        Member member = Objects.requireNonNull(event.getGuild()).getMemberByTag(name);
-        if (member != null) {
-          members.add(member);
-        } else {
-          members.add(event.getJDA().getUserByTag(name));
-        }
-      }
-    }
-    return members;
-  }
-
-  public static List<Member> getMembersFromVoiceChat(GenericInteractionCreateEvent event, ArrayList<String> voiceChats) {
-    List<Member> members = new ArrayList<>();
-    if (!voiceChats.isEmpty()) {
-      for (String chatName : voiceChats) {
-        VoiceChannel voiceChannel = Objects.requireNonNull(event.getGuild()).getVoiceChannelsByName(chatName, false).get(0);
-        if (voiceChannel != null) {
-          members.addAll(voiceChannel.getMembers());
-        }
-      }
-    }
-    return members;
-  }
-
-  public static List<Member> getMembersFromFocusedOptions(GenericInteractionCreateEvent event, ArrayList<String> focusedOptionIds) {
-    List<Member> members = new ArrayList<>();
-    if (!focusedOptionIds.isEmpty()) {
-      if (event instanceof SlashCommandInteractionEvent commandEvent) {
-        for (String id : focusedOptionIds) {
-          Member member = Objects.requireNonNull(commandEvent.getOption(id)).getAsMember();
-          if (member != null) {
-            members.add(member);
+          members.add(Objects.requireNonNull(event.getGuild()).getMemberById(s));
+        } catch (NumberFormatException numberFormatException) {
+          members.add(Objects.requireNonNull(event.getGuild()).getMemberByTag(s));
+        } catch (NullPointerException nullPointerException) {
+          CBot.getLog().info("User: " + s + " not found in guild");
+          try {
+            members.add(event.getUser().getJDA().getUserById(s));
+          } catch (NumberFormatException numberFormatException) {
+            members.add(event.getUser().getJDA().getUserByTag(s));
           }
         }
-      }
+      });
+      return members;
     }
-    return members;
+    return new HashSet<>();
   }
 
-  public static Set<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event, ArrayList<String> users, ArrayList<String> focusedOptionIds, ArrayList<String> voiceChats, ArrayList<String> members) {
+  public static HashSet<Member> getMembersFromVoiceChat(GenericInteractionCreateEvent event, ArrayList<String> voiceChats) {
+    if (!voiceChats.isEmpty()) {
+      HashSet<Member> members = new HashSet<>();
+      voiceChats.forEach(s -> getVoiceChannelsByNameOrId(event, s, false).forEach(voiceChannel -> members.addAll(voiceChannel.getMembers())));
+      return members;
+    }
+    return new HashSet<>();
+  }
+
+  public static HashSet<Member> getMembersFromFocusedOptions(GenericInteractionCreateEvent event, ArrayList<String> focusedOptionIds) {
+    if (!focusedOptionIds.isEmpty()) {
+      if (event instanceof SlashCommandInteractionEvent commandEvent) {
+        HashSet<Member> members = new HashSet<>();
+        focusedOptionIds.forEach(s -> members.add(Objects.requireNonNull(commandEvent.getOption(s)).getAsMember()));
+        return members;
+      }
+    }
+    return new HashSet<>();
+  }
+
+  public static Set<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event, ArrayList<String> focusedOptionIds, ArrayList<String> voiceChats, ArrayList<String> members) {
     HashSet<UserSnowflake> UserSnowflake = new HashSet<>();
 
-    UserSnowflake.addAll(getMembersFromList(event, members));
     UserSnowflake.addAll(getMembersFromFocusedOptions(event, focusedOptionIds));
     UserSnowflake.addAll(getMembersFromVoiceChat(event, voiceChats));
-    UserSnowflake.addAll(getUserSnowflakeFromList(event, users));
+    UserSnowflake.addAll(getMembersOrUsers(event, members));
 
     return UserSnowflake;
   }
@@ -158,6 +142,36 @@ public class ActionUtils {
       );
       default -> Color.BLACK;
     };
+  }
+
+  public static ArrayList<VoiceChannel> getVoiceChannelsByNameOrId(GenericInteractionCreateEvent event, String name, boolean ignoreCase) {
+    try {
+      return new ArrayList<>(Collections.singletonList(Objects.requireNonNull(event.getGuild()).getVoiceChannelById(name)));
+    } catch (NumberFormatException e) {
+      return new ArrayList<>(Objects.requireNonNull(event.getGuild()).getVoiceChannelsByName(name, ignoreCase));
+    } catch (NullPointerException e) {
+      return new ArrayList<>();
+    }
+  }
+
+  public static ArrayList<TextChannel> getTextChannelsByNameOrId(GenericInteractionCreateEvent event, String name, boolean ignoreCase) {
+    try {
+      return new ArrayList<>(Collections.singletonList(Objects.requireNonNull(event.getGuild()).getTextChannelById(name)));
+    } catch (NumberFormatException e) {
+      return new ArrayList<>(Objects.requireNonNull(event.getGuild()).getTextChannelsByName(name, ignoreCase));
+    } catch (NullPointerException e) {
+      return new ArrayList<>();
+    }
+  }
+
+  public static ArrayList<Role> getRolesByNameOrId(GenericInteractionCreateEvent event, String name, boolean ignoreCase) {
+    try {
+      return new ArrayList<>(Collections.singletonList(Objects.requireNonNull(event.getGuild()).getRoleById(name)));
+    } catch (NumberFormatException e) {
+      return new ArrayList<>(Objects.requireNonNull(event.getGuild()).getRolesByName(name, ignoreCase));
+    } catch (NullPointerException e) {
+      return new ArrayList<>();
+    }
   }
 
   public static HashMap<String, ArrayList<Action>> getActionMap() {

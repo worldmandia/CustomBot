@@ -28,12 +28,15 @@ public class MUTE_USER implements Action {
   public void run(GenericInteractionCreateEvent event, TempData tempData) {
     try {
       for (UserSnowflake userSnowflake : tempData.getUserSnowflakes()) {
-        Member member = Objects.requireNonNull(event.getGuild()).getMember(userSnowflake);
+        if (userSnowflake instanceof Member member) {
           if (!Objects.requireNonNull(member.getVoiceState()).isGuildMuted()) {
             member.mute(true).queue();
           } else if (unmuteIfMuted) {
             member.mute(false).queue();
           }
+        } else {
+          CBot.getLog().info(userSnowflake.getId() + " not in guild");
+        }
       }
     } catch (Exception e) {
       CBot.getLog().warn("The bot cannot mute or unmute a member if they are not in a voice channel, you can ignore it");
