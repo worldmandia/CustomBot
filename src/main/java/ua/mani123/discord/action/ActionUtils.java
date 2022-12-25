@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.UserSnowflake;
@@ -116,7 +115,8 @@ public class ActionUtils {
     return new HashSet<>();
   }
 
-  public static Set<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event, ArrayList<String> focusedOptionIds, ArrayList<String> voiceChats, ArrayList<String> members) {
+  public static HashSet<UserSnowflake> getAllUsers(GenericInteractionCreateEvent event, ArrayList<String> focusedOptionIds, ArrayList<String> voiceChats,
+      ArrayList<String> members) {
     HashSet<UserSnowflake> UserSnowflake = new HashSet<>();
 
     UserSnowflake.addAll(getMembersFromFocusedOptions(event, focusedOptionIds));
@@ -144,33 +144,33 @@ public class ActionUtils {
     };
   }
 
-  public static ArrayList<VoiceChannel> getVoiceChannelsByNameOrId(GenericInteractionCreateEvent event, String name, boolean ignoreCase) {
+  public static HashSet<VoiceChannel> getVoiceChannelsByNameOrId(GenericInteractionCreateEvent event, String name, boolean ignoreCase) {
     try {
-      return new ArrayList<>(Collections.singletonList(Objects.requireNonNull(event.getGuild()).getVoiceChannelById(name)));
+      return new HashSet<>(Collections.singletonList(Objects.requireNonNull(event.getGuild()).getVoiceChannelById(name)));
     } catch (NumberFormatException e) {
-      return new ArrayList<>(Objects.requireNonNull(event.getGuild()).getVoiceChannelsByName(name, ignoreCase));
+      return new HashSet<>(Objects.requireNonNull(event.getGuild()).getVoiceChannelsByName(name, ignoreCase));
     } catch (NullPointerException e) {
-      return new ArrayList<>();
+      return new HashSet<>();
     }
   }
 
-  public static ArrayList<TextChannel> getTextChannelsByNameOrId(GenericInteractionCreateEvent event, String name, boolean ignoreCase) {
+  public static HashSet<TextChannel> getTextChannelsByNameOrId(GenericInteractionCreateEvent event, String name, boolean ignoreCase) {
     try {
-      return new ArrayList<>(Collections.singletonList(Objects.requireNonNull(event.getGuild()).getTextChannelById(name)));
+      return new HashSet<>(Collections.singletonList(Objects.requireNonNull(event.getGuild()).getTextChannelById(name)));
     } catch (NumberFormatException e) {
-      return new ArrayList<>(Objects.requireNonNull(event.getGuild()).getTextChannelsByName(name, ignoreCase));
+      return new HashSet<>(Objects.requireNonNull(event.getGuild()).getTextChannelsByName(name, ignoreCase));
     } catch (NullPointerException e) {
-      return new ArrayList<>();
+      return new HashSet<>();
     }
   }
 
-  public static ArrayList<Role> getRolesByNameOrId(GenericInteractionCreateEvent event, String name, boolean ignoreCase) {
+  public static HashSet<Role> getRolesByNameOrId(GenericInteractionCreateEvent event, String name, boolean ignoreCase) {
     try {
-      return new ArrayList<>(Collections.singletonList(Objects.requireNonNull(event.getGuild()).getRoleById(name)));
+      return new HashSet<>(Collections.singletonList(Objects.requireNonNull(event.getGuild()).getRoleById(name)));
     } catch (NumberFormatException e) {
-      return new ArrayList<>(Objects.requireNonNull(event.getGuild()).getRolesByName(name, ignoreCase));
+      return new HashSet<>(Objects.requireNonNull(event.getGuild()).getRolesByName(name, ignoreCase));
     } catch (NullPointerException e) {
-      return new ArrayList<>();
+      return new HashSet<>();
     }
   }
 

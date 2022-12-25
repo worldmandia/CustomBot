@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
@@ -62,10 +63,12 @@ public class SEND_EMBED implements Action {
           if (!s.isNextRow()) {
             itemComponents.add(s.getComponent());
           } else {
-            replyCallbackAction = replyCallbackAction.addActionRow(itemComponents);
+            replyCallbackAction = replyCallbackAction.addComponents(ActionRow.of(itemComponents));
             itemComponents.clear();
           }
-          replyCallbackAction = replyCallbackAction.addActionRow(itemComponents);
+          if (!itemComponents.isEmpty()) {
+            replyCallbackAction = replyCallbackAction.addComponents(ActionRow.of(itemComponents));
+          }
         }
       }
       assert replyCallbackAction != null;
@@ -78,10 +81,12 @@ public class SEND_EMBED implements Action {
           if (!s.isNextRow()) {
             itemComponents.add(s.getComponent());
           } else {
-            messageCreateAction = messageCreateAction.addActionRow(itemComponents);
+            messageCreateAction = messageCreateAction.addComponents(ActionRow.of(itemComponents));
             itemComponents.clear();
           }
-          messageCreateAction = messageCreateAction.addActionRow(itemComponents);
+          if (!itemComponents.isEmpty()) {
+            messageCreateAction = messageCreateAction.addComponents(ActionRow.of(itemComponents));
+          }
         }
       }
       messageCreateAction.queue();
