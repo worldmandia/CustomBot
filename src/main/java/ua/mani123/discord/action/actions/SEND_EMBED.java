@@ -28,6 +28,7 @@ public class SEND_EMBED implements Action {
   ArrayList<Filter> filters;
   ArrayList<String> filterIds;
   ArrayList<SubAction> subActions;
+  ArrayList<String> subActionIds;
   boolean ephemeral;
   MessageEmbed messageEmbed;
 
@@ -36,8 +37,9 @@ public class SEND_EMBED implements Action {
     this.description = config.getOrElse("description", "");
     this.ephemeral = config.getOrElse("ephemeral", false);
     this.filterIds = config.getOrElse("filter-ids", new ArrayList<>());
+    this.subActionIds = config.getOrElse("sub-action-ids", new ArrayList<>());
     this.filters = filterUtils.enable(filterIds, config);
-    this.subActions = subActionsUtils.enable(config.getOrElse("sub-action", new ArrayList<>()));
+    this.subActions = subActionsUtils.enable(subActionIds, config);
     this.color = ActionUtils.getHexToColor(config.getOrElse("color", "ffffff"));
   }
 

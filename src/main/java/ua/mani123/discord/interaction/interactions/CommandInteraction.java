@@ -34,9 +34,9 @@ public class CommandInteraction implements interaction {
     this.isNSFW = config.getOrElse("isNSFW", false);
     this.filterIds = config.getOrElse("filtersIds", new ArrayList<>());
     this.filters = filterUtils.enable(filterIds, config);
-
-
     this.commandData = Commands.slash(name.toLowerCase(), description).setNSFW(isNSFW);
+
+    // Options feature
     ArrayList<OptionData> optionDataArrayList = new ArrayList<>();
     if (!optionIds.isEmpty()) {
       for (String id : optionIds) {
@@ -57,6 +57,7 @@ public class CommandInteraction implements interaction {
         optionDataArrayList.add(tempOptionData);
       }
     }
+    // Add to command
     this.commandData.addOptions(optionDataArrayList);
   }
 

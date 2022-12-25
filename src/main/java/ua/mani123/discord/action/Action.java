@@ -25,7 +25,7 @@ public interface Action {
    * @param str   StringSubstitutor with placeholders map
    */
   default void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
-    run(event, tempData);
+    this.run(event, tempData);
   }
 
   default ArrayList<Filter> getFilters() {

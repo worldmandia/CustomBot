@@ -24,13 +24,15 @@ public class SEND_MESSAGE implements Action {
   ArrayList<String> filterIds;
   ArrayList<SubAction> subActions;
   String tempMessage;
+  ArrayList<String> subActionIds;
 
   public SEND_MESSAGE(CommentedConfig config) {
     this.message = config.getOrElse("message", "");
     this.ephemeral = config.getOrElse("ephemeral", false);
     this.filterIds = config.getOrElse("filter-ids", new ArrayList<>());
+    this.subActionIds = config.getOrElse("sub-action-ids", new ArrayList<>());
     this.filters = filterUtils.enable(filterIds, config);
-    this.subActions = subActionsUtils.enable(config.getOrElse("sub-action", new ArrayList<>()));
+    this.subActions = subActionsUtils.enable(subActionIds, config);
   }
 
   @Override
