@@ -2,7 +2,7 @@
 
 [filter.myfilter]
 type = "USER"
-list = ["mani123#7703"]
+before-filter-actions = ["addAdminUsers"]
 filter-actions = ["sendErrorMuteEmbed"]
 
 # Configure command interactions
