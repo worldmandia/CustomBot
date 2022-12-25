@@ -26,10 +26,10 @@ Bot manager aimed at full customization
 
 Versions with :white_check_mark: are supported
 
-| Version | Supported          |
-|---------|--------------------|
-| latest  | :white_check_mark: |
-| < 0.2.5 | :x:                |
+| Version   | Supported          |
+|-----------|--------------------|
+| latest    | :white_check_mark: |
+| < 0.2.6.0 | :x:                |
 
 ## Other good java bots
 
