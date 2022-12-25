@@ -1,3 +1,4 @@
 # Configure command interactions
-[[interaction]]
+[[button]]
 id = ""
+actionsIds = [""]

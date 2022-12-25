@@ -1,4 +1,5 @@
 # Files starting with '_' will not be loaded
+[[action]]
 type = "random_type"
 message = "Any message"
 [[filter]]
@@ -6,3 +7,6 @@ type = "ROLE"
 list = [
     "role"
 ]
+[[sub-action]]
+type = "random_type"
+id = "Another id"

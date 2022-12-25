@@ -1,32 +1,35 @@
 package ua.mani123.discord.action;
 
+import java.util.ArrayList;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.filter.Filter;
 
-import java.util.ArrayList;
-
 public interface Action {
 
-    ArrayList<Filter> filters = new ArrayList<>();
+  ArrayList<Filter> filters = new ArrayList<>();
 
-    /**
-     * Run action, recommend to use Action::runWithPlaceholders
-     *
-     * @param  event  event for run method
-     */
-    void run(GenericInteractionCreateEvent event);
+  /**
+   * Run action, recommend to use Action::runWithPlaceholders
+   *
+   * @param event event for run method
+   * @param tempData Temporary data created when the event is fired
+   */
+  void run(GenericInteractionCreateEvent event, TempData tempData);
 
-    /**
-     * Run action with placeholders, for add your own placeholders use Utils::getPlaceholders.put
-     *
-     * @param  event  event for run method
-     * @param  str  StringSubstitutor with placeholders map
-     */
-    void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str);
+  /**
+   * Run action with placeholders, for add your own placeholders use Utils::getPlaceholders.put
+   *
+   * @param event event for run method
+   * @param tempData Temporary data created when the event is fired
+   * @param str   StringSubstitutor with placeholders map
+   */
+  default void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
+    this.run(event, tempData);
+  }
 
-    default ArrayList<Filter> getFilters() {
-        return filters;
-    }
+  default ArrayList<Filter> getFilters() {
+    return filters;
+  }
 
 }

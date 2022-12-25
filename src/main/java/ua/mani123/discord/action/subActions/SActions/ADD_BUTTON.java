@@ -9,35 +9,42 @@ import ua.mani123.discord.action.subActions.SubAction;
 
 public class ADD_BUTTON implements SubAction {
 
-    ItemComponent itemComponent;
-    String id;
-    String label;
-    Emoji emoji;
-    Long emojiId;
-    String emojiString;
-    ButtonStyle buttonStyle;
+  ItemComponent itemComponent;
+  String id;
+  String label;
+  Emoji emoji;
+  Long emojiId;
+  String emojiString;
+  boolean nextRow;
+  ButtonStyle buttonStyle;
 
-    public ADD_BUTTON(CommentedConfig config) {
-        this.id = config.getOrElse("id", null);
-        this.label = config.getOrElse("label", "");
-        this.emojiString = config.getOrElse("emoji", "none");
-        this.emojiId = config.getOrElse("emoji-id", 0L);
-        this.buttonStyle = ButtonStyle.valueOf(config.getOrElse("button-style", "SECONDARY").toUpperCase());
-        if (!emojiString.equals("none")) {
-            if (emojiId != 0L) {
-                this.emoji = Emoji.fromCustom(emojiString, emojiId, true);
-            } else {
-                this.emoji = Emoji.fromFormatted(emojiString);
-            }
-        }
-        if (emoji != null){
-            this.itemComponent = Button.of(buttonStyle, id, label, emoji);
-        }
-        this.itemComponent = Button.of(buttonStyle, id, label);
+  public ADD_BUTTON(CommentedConfig config) {
+    this.id = config.getOrElse("id", null);
+    this.label = config.getOrElse("label", "");
+    this.nextRow = config.getOrElse("next-row", false);
+    this.buttonStyle = ButtonStyle.valueOf(config.getOrElse("button-style", "SECONDARY").toUpperCase());
+    this.emojiString = config.getOrElse("emoji", "");
+    this.emojiId = config.getOrElse("emoji-id", 0L);
+    if (!emojiString.isEmpty()) {
+      if (emojiId != 0L) {
+        this.emoji = Emoji.fromCustom(emojiString, emojiId, true);
+      } else {
+        this.emoji = Emoji.fromFormatted(emojiString);
+      }
     }
+    if (emoji != null) {
+      this.itemComponent = Button.of(buttonStyle, id, label, emoji);
+    }
+    this.itemComponent = Button.of(buttonStyle, id, label);
+  }
 
-    @Override
-    public ItemComponent getComponent() {
-        return this.itemComponent;
-    }
+  @Override
+  public boolean isNextRow() {
+    return nextRow;
+  }
+
+  @Override
+  public ItemComponent getComponent() {
+    return this.itemComponent;
+  }
 }

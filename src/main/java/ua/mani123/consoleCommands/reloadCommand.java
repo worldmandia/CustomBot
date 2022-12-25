@@ -1,40 +1,40 @@
 package ua.mani123.consoleCommands;
 
-import ua.mani123.AddonUtils;
-import ua.mani123.CBot;
-import ua.mani123.addon.AddonData;
-import ua.mani123.config.configUtils;
-import ua.mani123.discord.action.actionUtils;
-import ua.mani123.discord.interaction.interactionUtils;
-
 import java.util.List;
 import java.util.Map;
+import ua.mani123.CBot;
+import ua.mani123.addon.AddonData;
+import ua.mani123.addon.AddonUtils;
+import ua.mani123.config.configUtils;
+import ua.mani123.discord.action.ActionUtils;
+import ua.mani123.discord.interaction.InteractionUtils;
 
 public class reloadCommand {
-    public static void use(List<String> parts) {
-        if (parts.size() > 1) {
-            switch (parts.get(1)) {
-                case "commands" -> {
-                    configUtils.updateCommandInteractions();
-                    interactionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
-                    CBot.getLog().info("commandInteraction reloaded");
-                    return;
-                }
-                case "actions" -> {
-                    configUtils.updateActions();
-                    actionUtils.init(configUtils.getActions());
-                    CBot.getLog().info("actions reloaded");
-                    return;
-                }
-                case "addons" -> {
-                    for (Map.Entry<String, AddonData> addon : AddonUtils.addonMap.entrySet()) {
-                        addon.getValue().getAddon().reload();
-                    }
-                    CBot.getLog().info("addons reloaded");
-                    return;
-                }
-            }
+
+  public static void use(List<String> parts) {
+    if (parts.size() > 1) {
+      switch (parts.get(1)) {
+        case "commands" -> {
+          configUtils.updateCommandInteractions();
+          InteractionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
+          CBot.getLog().info("commandInteraction reloaded");
+          return;
         }
-        CBot.getLog().info("Usage: reload [actions, commands, addons]");
+        case "actions" -> {
+          configUtils.updateActions();
+          ActionUtils.init(configUtils.getActions());
+          CBot.getLog().info("actions reloaded");
+          return;
+        }
+        case "addons" -> {
+          for (Map.Entry<String, AddonData> addon : AddonUtils.getAddonMap().entrySet()) {
+            addon.getValue().getAddon().reload();
+          }
+          CBot.getLog().info("addons reloaded");
+          return;
+        }
+      }
     }
+    CBot.getLog().info("Usage: reload [actions, commands, addons]");
+  }
 }
