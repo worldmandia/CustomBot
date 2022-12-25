@@ -28,15 +28,14 @@ public class REMOVE_MEMBER_ROLE implements Action {
   @Override
   public void run(GenericInteractionCreateEvent event, TempData tempData) {
     for (UserSnowflake userSnowflake : tempData.getUserSnowflakes()) {
-      if (userSnowflake instanceof Member member) {
-        for (Role role : tempData.getRoles()) {
+      Member member = Objects.requireNonNull(event.getGuild()).getMember(userSnowflake);
+      for (Role role : tempData.getRoles()) {
           if (!member.getRoles().contains(role)) {
             Objects.requireNonNull(event.getGuild()).removeRoleFromMember(member, role).reason(reason).queue();
           } else if (addIfNot) {
             Objects.requireNonNull(event.getGuild()).addRoleToMember(member, role).reason(reason).queue();
           }
         }
-      }
     }
   }
 

@@ -26,14 +26,13 @@ public class UNDEAFEN_USER implements Action {
   public void run(GenericInteractionCreateEvent event, TempData tempData) {
     try {
       for (UserSnowflake userSnowflake : tempData.getUserSnowflakes()) {
-        if (userSnowflake instanceof Member member) {
-          if (Objects.requireNonNull(member.getVoiceState()).isDeafened()) {
+        Member member = Objects.requireNonNull(event.getGuild()).getMember(userSnowflake);
+        if (Objects.requireNonNull(member.getVoiceState()).isDeafened()) {
             member.deafen(false).queue();
           } else if (muteIfUnmuted) {
             member.deafen(true).queue();
           }
         }
-      }
     } catch (Exception e) {
       CBot.getLog().warn("The bot cannot mute or unmute a member if they are not in a voice channel, you can ignore it");
     }

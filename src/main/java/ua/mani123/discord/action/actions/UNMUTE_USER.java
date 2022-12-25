@@ -28,14 +28,13 @@ public class UNMUTE_USER implements Action {
   public void run(GenericInteractionCreateEvent event, TempData tempData) {
     try {
       for (UserSnowflake userSnowflake : tempData.getUserSnowflakes()) {
-        if (userSnowflake instanceof Member member) {
-          if (Objects.requireNonNull(member.getVoiceState()).isGuildMuted()) {
+        Member member = Objects.requireNonNull(event.getGuild()).getMember(userSnowflake);
+        if (Objects.requireNonNull(member.getVoiceState()).isGuildMuted()) {
             member.mute(false).queue();
           } else if (muteIfUnmuted) {
             member.mute(true).queue();
           }
         }
-      }
     } catch (Exception e) {
       CBot.getLog().warn("The bot cannot mute or unmute a member if they are not in a voice channel, you can ignore it");
     }

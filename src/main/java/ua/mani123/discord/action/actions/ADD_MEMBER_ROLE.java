@@ -28,7 +28,7 @@ public class ADD_MEMBER_ROLE implements Action {
   @Override
   public void run(GenericInteractionCreateEvent event, TempData tempData) {
     for (UserSnowflake userSnowflake: tempData.getUserSnowflakes()) {
-      if (userSnowflake instanceof Member member){
+      Member member = Objects.requireNonNull(event.getGuild()).getMember(userSnowflake);
         for (Role role: tempData.getRoles()) {
           if (!member.getRoles().contains(role)) {
             Objects.requireNonNull(event.getGuild()).addRoleToMember(member, role).reason(reason).queue();
@@ -36,7 +36,6 @@ public class ADD_MEMBER_ROLE implements Action {
             Objects.requireNonNull(event.getGuild()).removeRoleFromMember(member, role).reason(reason).queue();
           }
         }
-      }
     }
   }
 
