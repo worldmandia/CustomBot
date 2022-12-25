@@ -2,11 +2,11 @@ package ua.mani123.discord.action.filter;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
-import java.util.List;
 import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.session.GenericSessionEvent;
 import org.apache.commons.text.StringSubstitutor;
+import ua.mani123.discord.action.Action;
 import ua.mani123.discord.action.ActionUtils;
 import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.filters.BOT;
@@ -17,19 +17,21 @@ import ua.mani123.discord.action.filter.filters.USER;
 
 public class filterUtils {
 
-  public static ArrayList<Filter> enable(List<CommentedConfig> configs) {
+  public static ArrayList<Filter> enable(ArrayList<String> filterIds, CommentedConfig config) {
     ArrayList<Filter> filterList = new ArrayList<>();
-    if (!configs.isEmpty()) {
-      for (CommentedConfig config : configs) {
-        String type = config.get("type");
-        if (type != null) {
-          type = type.toUpperCase().trim();
-          switch (type) {
-            case "MEMBER_ROLE" -> filterList.add(new MEMBER_ROLE(config));
-            case "USER" -> filterList.add(new USER(config));
-            case "GUILD" -> filterList.add(new GUILD(config));
-            case "BOT" -> filterList.add(new BOT(config));
-            case "CHOICE" -> filterList.add(new CHOICE(config));
+    if (!filterIds.isEmpty()) {
+      for (String id : filterIds) {
+        CommentedConfig filterConfig = config.get("filter." + id);
+        if (filterConfig != null) {
+          String type = filterConfig.get("type");
+          if (type != null) {
+            switch (type.toUpperCase().trim()) {
+              case "MEMBER_ROLE" -> filterList.add(new MEMBER_ROLE(filterConfig));
+              case "USER" -> filterList.add(new USER(filterConfig));
+              case "GUILD" -> filterList.add(new GUILD(filterConfig));
+              case "BOT" -> filterList.add(new BOT(filterConfig));
+              case "CHOICE" -> filterList.add(new CHOICE(filterConfig));
+            }
           }
         }
       }
@@ -44,7 +46,10 @@ public class filterUtils {
         canInteract = filter.canRun(event, tempData);
         if (!canInteract) {
           for (String actionId : filter.getFilterActionIds()) {
-            ActionUtils.getActionMap().get(actionId).runWithPlaceholders(event, str, tempData);
+            ArrayList<Action> actionArrayList = ActionUtils.getActionMap().get(actionId);
+            for (Action action : actionArrayList) {
+              action.runWithPlaceholders(event, str, tempData);
+            }
           }
         }
       }

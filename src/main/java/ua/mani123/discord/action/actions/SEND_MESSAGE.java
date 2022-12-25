@@ -1,11 +1,11 @@
 package ua.mani123.discord.action.actions;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
-import java.util.List;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
+import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import org.apache.commons.text.StringSubstitutor;
@@ -20,14 +20,16 @@ public class SEND_MESSAGE implements Action {
 
   String message;
   boolean ephemeral;
-  List<Filter> filters;
-  List<SubAction> subActions;
+  ArrayList<Filter> filters;
+  ArrayList<String> filterIds;
+  ArrayList<SubAction> subActions;
   String tempMessage;
 
-  public SEND_MESSAGE(CommentedFileConfig config) {
+  public SEND_MESSAGE(CommentedConfig config) {
     this.message = config.getOrElse("message", "");
     this.ephemeral = config.getOrElse("ephemeral", false);
-    this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
+    this.filterIds = config.getOrElse("filter-ids", new ArrayList<>());
+    this.filters = filterUtils.enable(filterIds, config);
     this.subActions = subActionsUtils.enable(config.getOrElse("sub-action", new ArrayList<>()));
   }
 
@@ -44,9 +46,16 @@ public class SEND_MESSAGE implements Action {
           replyCallbackAction = componentInteractionCreateEvent.reply(tempMessage).setEphemeral(ephemeral);
         }
       if (!subActions.isEmpty()) {
+        ArrayList<ItemComponent> itemComponents = new ArrayList<>();
         for (SubAction s : subActions) {
           assert replyCallbackAction != null;
-          replyCallbackAction.addActionRow(s.getComponent());
+          if (!s.isNextRow()) {
+            itemComponents.add(s.getComponent());
+          } else {
+            replyCallbackAction = replyCallbackAction.addActionRow(itemComponents);
+            itemComponents.clear();
+          }
+          replyCallbackAction = replyCallbackAction.addActionRow(itemComponents);
         }
       }
       if (replyCallbackAction != null) {
@@ -54,9 +63,17 @@ public class SEND_MESSAGE implements Action {
       } else {
         MessageCreateAction messageCreateAction = event.getMessageChannel().sendMessage(tempMessage);
         if (!subActions.isEmpty()) {
+          ArrayList<ItemComponent> itemComponents = new ArrayList<>();
           for (SubAction s : subActions) {
-            messageCreateAction.addActionRow(s.getComponent());
+            if (!s.isNextRow()) {
+              itemComponents.add(s.getComponent());
+            } else {
+              messageCreateAction = messageCreateAction.addActionRow(itemComponents);
+              itemComponents.clear();
+              itemComponents.add(s.getComponent());
+            }
           }
+          messageCreateAction = messageCreateAction.addActionRow(itemComponents);
         }
         messageCreateAction.queue();
       }

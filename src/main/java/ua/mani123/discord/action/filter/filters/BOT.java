@@ -27,7 +27,7 @@ public class BOT implements Filter {
 
   @Override
   public boolean canRun(GenericInteractionCreateEvent event, TempData tempData) {
-    beforeActionNames.forEach(s -> ActionUtils.getActionMap().get(s).run(event, tempData));
+    beforeActionNames.forEach(s -> ActionUtils.getActionMap().get(s).forEach(action -> action.run(event, tempData)));
     if (!botNames.isEmpty()) {
       boolean answer = botNames.contains(event.getJDA().getSelfUser().getId());
       if (isBlackList) {

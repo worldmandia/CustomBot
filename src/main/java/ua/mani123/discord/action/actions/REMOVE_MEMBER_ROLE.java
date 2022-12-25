@@ -18,11 +18,13 @@ public class REMOVE_MEMBER_ROLE implements Action {
   boolean addIfNot;
   String reason;
   ArrayList<Filter> filters;
+  ArrayList<String> filterIds;
 
   public REMOVE_MEMBER_ROLE(CommentedConfig config) {
     this.addIfNot = config.getOrElse("addIfNot", false);
     this.reason = config.getOrElse("reason", "ADD_MEMBER_ROLE");
-    this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
+    this.filterIds = config.getOrElse("filter-ids", new ArrayList<>());
+    this.filters = filterUtils.enable(filterIds, config);
   }
 
   @Override

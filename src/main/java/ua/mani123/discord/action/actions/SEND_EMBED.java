@@ -1,6 +1,6 @@
 package ua.mani123.discord.action.actions;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.CommentedConfig;
 import java.awt.Color;
 import java.util.ArrayList;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
+import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import org.apache.commons.text.StringSubstitutor;
@@ -25,15 +26,17 @@ public class SEND_EMBED implements Action {
   String description;
   Color color;
   ArrayList<Filter> filters;
+  ArrayList<String> filterIds;
   ArrayList<SubAction> subActions;
   boolean ephemeral;
   MessageEmbed messageEmbed;
 
-  public SEND_EMBED(CommentedFileConfig config) {
+  public SEND_EMBED(CommentedConfig config) {
     this.title = config.getOrElse("title", "");
     this.description = config.getOrElse("description", "");
     this.ephemeral = config.getOrElse("ephemeral", false);
-    this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
+    this.filterIds = config.getOrElse("filter-ids", new ArrayList<>());
+    this.filters = filterUtils.enable(filterIds, config);
     this.subActions = subActionsUtils.enable(config.getOrElse("sub-action", new ArrayList<>()));
     this.color = ActionUtils.getHexToColor(config.getOrElse("color", "ffffff"));
   }
@@ -51,9 +54,16 @@ public class SEND_EMBED implements Action {
         replyCallbackAction = componentInteractionCreateEvent.replyEmbeds(messageEmbed);
       }
       if (!subActions.isEmpty()) {
+        ArrayList<ItemComponent> itemComponents = new ArrayList<>();
         for (SubAction s : subActions) {
           assert replyCallbackAction != null;
-          replyCallbackAction.addActionRow(s.getComponent());
+          if (!s.isNextRow()) {
+            itemComponents.add(s.getComponent());
+          } else {
+            replyCallbackAction = replyCallbackAction.addActionRow(itemComponents);
+            itemComponents.clear();
+          }
+          replyCallbackAction = replyCallbackAction.addActionRow(itemComponents);
         }
       }
       assert replyCallbackAction != null;
@@ -61,8 +71,15 @@ public class SEND_EMBED implements Action {
     } else {
       MessageCreateAction messageCreateAction = event.getMessageChannel().sendMessageEmbeds(messageEmbed);
       if (!subActions.isEmpty()) {
+        ArrayList<ItemComponent> itemComponents = new ArrayList<>();
         for (SubAction s : subActions) {
-          messageCreateAction = messageCreateAction.addActionRow(s.getComponent());
+          if (!s.isNextRow()) {
+            itemComponents.add(s.getComponent());
+          } else {
+            messageCreateAction = messageCreateAction.addActionRow(itemComponents);
+            itemComponents.clear();
+          }
+          messageCreateAction = messageCreateAction.addActionRow(itemComponents);
         }
       }
       messageCreateAction.queue();

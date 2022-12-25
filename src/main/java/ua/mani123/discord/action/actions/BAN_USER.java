@@ -16,13 +16,15 @@ import ua.mani123.discord.action.filter.filterUtils;
 public class BAN_USER implements Action {
   boolean unbanIfBanned;
   ArrayList<Filter> filters;
+  ArrayList<String> filterIds;
   int deleteBannedUserMessagesDuringTime;
   String deleteBannedUserMessagesTimeType;
   String reason;
 
   public BAN_USER(CommentedConfig config) {
     this.unbanIfBanned = config.getOrElse("unbanIfBanned", false);
-    this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
+    this.filterIds = config.getOrElse("filter-ids", new ArrayList<>());
+    this.filters = filterUtils.enable(filterIds, config);
     this.deleteBannedUserMessagesDuringTime = config.getIntOrElse("deleteBannedUserMessagesDuringTime", 0);
     this.deleteBannedUserMessagesTimeType = config.getOrElse("deleteBannedUserMessagesTimeType", "MINUTES");
     this.reason = config.getOrElse("reason", null);

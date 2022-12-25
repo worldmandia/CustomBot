@@ -1,6 +1,6 @@
 package ua.mani123.discord.event;
 
-import java.util.List;
+import java.util.ArrayList;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.CBot;
@@ -11,13 +11,15 @@ import ua.mani123.discord.action.filter.filterUtils;
 
 public class EventUtils {
 
-  public static void runActions(List<String> actionIds, GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData){
+  public static void runActions(ArrayList<String> actionIds, GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData){
     if (actionIds != null) {
       for (String actionId : actionIds) {
         if (ActionUtils.getActionMap().containsKey(actionId)) {
-          Action action = ActionUtils.getActionMap().get(actionId);
-          if (filterUtils.filterCheck(action.getFilters(), event, str, tempData)) {
-            action.runWithPlaceholders(event, str, tempData);
+          ArrayList<Action> actionArrayList = ActionUtils.getActionMap().get(actionId);
+          for (Action action : actionArrayList) {
+            if (filterUtils.filterCheck(action.getFilters(), event, str, tempData)) {
+              action.runWithPlaceholders(event, str, tempData);
+            }
           }
         } else {
           CBot.getLog().warn(actionId + " - not found");

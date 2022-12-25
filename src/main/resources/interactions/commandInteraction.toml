@@ -7,7 +7,7 @@ filter-actions = ["sendErrorMuteEmbed"]
 
 # Configure command interactions
 [[command]]
-actionsIds = ["addmutecmddata", "muteAction", "defaineAction", "sendSuccessMuteEmbed"]
+actionsIds = ["mutecmd"]
 filtersIds = ["myfilter"]
 name = "mute"
 description = "mute selected user"
@@ -22,7 +22,7 @@ type = "user"
 required = true
 
 [[command]]
-actionsIds = ["addmutecmddata", "unmuteAction", "undefaineAction", "sendSuccessMuteEmbed"]
+actionsIds = ["unmutecmd"]
 filtersIds = ["myfilter"]
 name = "unmute"
 description = "unmute selected user"

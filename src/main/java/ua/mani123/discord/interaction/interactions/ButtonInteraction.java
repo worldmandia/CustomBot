@@ -10,20 +10,14 @@ public class ButtonInteraction implements interaction {
 
   private final String id;
   private final ArrayList<String> actionIds;
+  private final ArrayList<String> filterIds;
   private final ArrayList<Filter> filters;
 
   public ButtonInteraction(CommentedConfig config) {
     this.id = config.getOrElse("id", "");
     this.actionIds = config.getOrElse("actionsIds", new ArrayList<>());
-    ArrayList<String> filtersIds = config.getOrElse("filtersIds", new ArrayList<>());
-    ArrayList<CommentedConfig> filtersConfig = new ArrayList<>();
-    for (String filter : filtersIds) {
-      CommentedConfig commentedConfig = config.get("filter." + filter);
-      if (commentedConfig != null) {
-        filtersConfig.add(commentedConfig);
-      }
-    }
-    this.filters = filterUtils.enable(filtersConfig);
+    this.filterIds = config.getOrElse("filtersIds", new ArrayList<>());
+    this.filters = filterUtils.enable(filterIds, config);
   }
 
   public ArrayList<Filter> getFilters() {
@@ -36,5 +30,9 @@ public class ButtonInteraction implements interaction {
 
   public ArrayList<String> getActionIds() {
     return actionIds;
+  }
+
+  public ArrayList<String> getFilterIds() {
+    return filterIds;
   }
 }

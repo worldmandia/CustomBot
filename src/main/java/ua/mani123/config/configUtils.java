@@ -5,6 +5,7 @@ import com.electronwill.nightconfig.core.file.FileNotFoundAction;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import net.dv8tion.jda.api.JDA;
 import ua.mani123.CBot;
 import ua.mani123.addon.AddonUtils;
@@ -19,7 +20,8 @@ public class configUtils {
   private static Map<String, CConfig> actions;
 
   public static CommentedFileConfig initResourceCfg(String file, ClassLoader classLoader) {
-    CommentedFileConfig config = CommentedFileConfig.builder(file).onFileNotFound(FileNotFoundAction.copyData(classLoader.getResource(file))).build();
+    CommentedFileConfig config = CommentedFileConfig.builder(file).onFileNotFound(FileNotFoundAction.copyData(
+        Objects.requireNonNull(classLoader.getResource(file)))).build();
     config.load();
     return config;
   }
@@ -27,11 +29,13 @@ public class configUtils {
   public static CommentedFileConfig initCfg(String file, String path, ClassLoader classLoader) {
     File folder = new File(path);
     if (!folder.exists()) {
-      folder.mkdirs();
-      initCfg(file, path, classLoader);
+      if (folder.mkdirs()) {
+        initCfg(file, path, classLoader);
+      }
     } else {
       String rPath = path + file;
-      CommentedFileConfig config = CommentedFileConfig.builder(rPath).onFileNotFound(FileNotFoundAction.copyData(classLoader.getResource(rPath))).build();
+      CommentedFileConfig config = CommentedFileConfig.builder(rPath).onFileNotFound(FileNotFoundAction.copyData(
+          Objects.requireNonNull(classLoader.getResource(rPath)))).build();
       config.load();
       return config;
     }
@@ -43,15 +47,11 @@ public class configUtils {
     Map<String, CConfig> configs = new HashMap<>();
     File folder = new File(path);
     if (folder.exists() && folder.isDirectory()) {
-      for (File file : folder.listFiles()) {
+      for (File file : Objects.requireNonNull(folder.listFiles())) {
         if (!file.getName().startsWith("_") && file.getName().endsWith(".toml")) {
           CommentedFileConfig cfg = CommentedFileConfig.builder(file).build();
           cfg.load();
-          if (cfg.get("type") != null) {
-            configs.put(file.getName().replace(".toml", ""), new CConfig(cfg));
-          } else {
-            cfg.close();
-          }
+          configs.put(file.getName().replace(".toml", ""), new CConfig(cfg));
         }
       }
     } else {

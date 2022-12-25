@@ -3,7 +3,6 @@ package ua.mani123.discord.interaction.interactions;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -19,9 +18,10 @@ public class CommandInteraction implements interaction {
   private final boolean onlyGuild;
   private final boolean isNSFW;
   private final ArrayList<String> optionIds;
-  private final HashMap<String, List<String>> autocompleteIds = new HashMap<>();
+  private final HashMap<String, ArrayList<String>> autocompleteIds = new HashMap<>();
   private final CommentedConfig config;
   private final ArrayList<Filter> filters;
+  private final ArrayList<String> filterIds;
   private final SlashCommandData commandData;
 
   public CommandInteraction(CommentedConfig config) {
@@ -32,15 +32,8 @@ public class CommandInteraction implements interaction {
     this.config = config;
     this.onlyGuild = config.getOrElse("onlyGuild", false);
     this.isNSFW = config.getOrElse("isNSFW", false);
-    ArrayList<String> filtersIds = config.getOrElse("filtersIds", new ArrayList<>());
-    ArrayList<CommentedConfig> filtersConfig = new ArrayList<>();
-    for (String filter : filtersIds) {
-      CommentedConfig commentedConfig = config.get("filter." + filter);
-      if (commentedConfig != null) {
-        filtersConfig.add(commentedConfig);
-      }
-    }
-    this.filters = filterUtils.enable(filtersConfig);
+    this.filterIds = config.getOrElse("filtersIds", new ArrayList<>());
+    this.filters = filterUtils.enable(filterIds, config);
 
 
     this.commandData = Commands.slash(name.toLowerCase(), description).setNSFW(isNSFW);
@@ -71,7 +64,7 @@ public class CommandInteraction implements interaction {
     return commandData;
   }
 
-  public HashMap<String, List<String>> getAutocompleteIds() {
+  public HashMap<String, ArrayList<String>> getAutocompleteIds() {
     return autocompleteIds;
   }
 
@@ -79,7 +72,7 @@ public class CommandInteraction implements interaction {
     return name;
   }
 
-  public List<String> getActionIds() {
+  public ArrayList<String> getActionIds() {
     return actionIds;
   }
 
@@ -105,5 +98,9 @@ public class CommandInteraction implements interaction {
 
   public ArrayList<String> getOptionIds() {
     return optionIds;
+  }
+
+  public ArrayList<String> getFilterIds() {
+    return filterIds;
   }
 }

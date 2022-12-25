@@ -16,10 +16,12 @@ import ua.mani123.discord.action.filter.filterUtils;
 public class MUTE_USER implements Action {
   boolean unmuteIfMuted;
   ArrayList<Filter> filters;
+  ArrayList<String> filterIds;
 
   public MUTE_USER(CommentedConfig config) {
     this.unmuteIfMuted = config.getOrElse("unmuteIfMuted", false);
-    this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
+    this.filterIds = config.getOrElse("filter-ids", new ArrayList<>());
+    this.filters = filterUtils.enable(filterIds, config);
   }
 
   @Override

@@ -17,11 +17,12 @@ public class UNMUTE_USER implements Action {
 
   boolean muteIfUnmuted;
   ArrayList<Filter> filters;
+  ArrayList<String> filterIds;
 
   public UNMUTE_USER(CommentedConfig config) {
     this.muteIfUnmuted = config.getOrElse("muteIfUnmuted", false);
-    this.filters = filterUtils.enable(config.getOrElse("filter", new ArrayList<>()));
-
+    this.filterIds = config.getOrElse("filter-ids", new ArrayList<>());
+    this.filters = filterUtils.enable(filterIds, config);
   }
 
   @Override

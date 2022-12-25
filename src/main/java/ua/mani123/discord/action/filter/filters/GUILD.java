@@ -28,7 +28,7 @@ public class GUILD implements Filter {
 
   @Override
   public boolean canRun(GenericInteractionCreateEvent event, TempData tempData) {
-    beforeActionNames.forEach(s -> ActionUtils.getActionMap().get(s).run(event, tempData));
+    beforeActionNames.forEach(s -> ActionUtils.getActionMap().get(s).forEach(action -> action.run(event, tempData)));
     if (!guildNames.isEmpty()) {
       boolean answer = guildNames.contains(Objects.requireNonNull(event.getGuild()).getName());
       if (isBlackList) {

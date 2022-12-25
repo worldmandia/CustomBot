@@ -1,6 +1,6 @@
 package ua.mani123.discord.action;
 
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.CommentedConfig;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import ua.mani123.CBot;
+import ua.mani123.addon.Addon;
 import ua.mani123.addon.AddonData;
 import ua.mani123.addon.AddonUtils;
 import ua.mani123.config.CConfig;
@@ -33,35 +34,40 @@ import ua.mani123.discord.action.actions.UNMUTE_USER;
 
 public class ActionUtils {
 
-  static HashMap<String, Action> actionMap = new HashMap<>();
+  static HashMap<String, ArrayList<Action>> actionMap = new HashMap<>();
 
   public static void init(Map<String, CConfig> configs) {
     for (Map.Entry<String, CConfig> entry : configs.entrySet()) {
-      String type = entry.getValue().getFileCfg().get("type");
-      if (type != null) {
-        type = type.toUpperCase().trim();
-        sortActions(type, entry.getKey(), entry.getValue().getFileCfg());
-      }
+      ArrayList<CommentedConfig> actionsCfg = entry.getValue().getFileCfg().getOrElse("action", new ArrayList<>());
+      String key = entry.getKey();
+      actionMap.put(key, new ArrayList<>());
+      sortActions(key, actionsCfg);
     }
   }
 
-  public static void sortActions(String type, String key, CommentedFileConfig config) {
-    switch (type) {
-      case "TEMP_DATA_ADD" -> actionMap.put(key, new TEMP_DATA_ADD(config));
-      case "TEMP_DATA_REMOVE" -> actionMap.put(key, new TEMP_DATA_REMOVE(config));
-      case "SEND_MESSAGE" -> actionMap.put(key, new SEND_MESSAGE(config));
-      case "MUTE_USER" -> actionMap.put(key, new MUTE_USER(config));
-      case "UNMUTE_USER" -> actionMap.put(key, new UNMUTE_USER(config));
-      case "DEAFEN_USER" -> actionMap.put(key, new DEAFEN_USER(config));
-      case "UNDEAFEN_USER" -> actionMap.put(key, new UNDEAFEN_USER(config));
-      case "SEND_EMBED" -> actionMap.put(key, new SEND_EMBED(config));
-      case "BAN_USER" -> actionMap.put(key, new BAN_USER(config));
-      case "UNBAN_USER" -> actionMap.put(key, new UNBAN_USER(config));
-      case "ADD_MEMBER_ROLE" -> actionMap.put(key, new ADD_MEMBER_ROLE(config));
-      case "REMOVE_MEMBER_ROLE" -> actionMap.put(key, new REMOVE_MEMBER_ROLE(config));
-      default -> {
-        for (Map.Entry<String, AddonData> addons : AddonUtils.getAddonMap().entrySet()) {
-          actionMap.put(key, addons.getValue().getAddon().addCustomAction(type, key, config));
+  public static void sortActions(String key, ArrayList<CommentedConfig> config) {
+    for (CommentedConfig cfg : config) {
+      String type = cfg.get("type");
+      switch (type.trim().toUpperCase()) {
+        case "TEMP_DATA_ADD" -> actionMap.get(key).add(new TEMP_DATA_ADD(cfg));
+        case "TEMP_DATA_REMOVE" -> actionMap.get(key).add(new TEMP_DATA_REMOVE(cfg));
+        case "SEND_MESSAGE" -> actionMap.get(key).add(new SEND_MESSAGE(cfg));
+        case "MUTE_USER" -> actionMap.get(key).add(new MUTE_USER(cfg));
+        case "UNMUTE_USER" -> actionMap.get(key).add(new UNMUTE_USER(cfg));
+        case "DEAFEN_USER" -> actionMap.get(key).add(new DEAFEN_USER(cfg));
+        case "UNDEAFEN_USER" -> actionMap.get(key).add(new UNDEAFEN_USER(cfg));
+        case "SEND_EMBED" -> actionMap.get(key).add(new SEND_EMBED(cfg));
+        case "BAN_USER" -> actionMap.get(key).add(new BAN_USER(cfg));
+        case "UNBAN_USER" -> actionMap.get(key).add(new UNBAN_USER(cfg));
+        case "ADD_MEMBER_ROLE" -> actionMap.get(key).add(new ADD_MEMBER_ROLE(cfg));
+        case "REMOVE_MEMBER_ROLE" -> actionMap.get(key).add(new REMOVE_MEMBER_ROLE(cfg));
+        default -> {
+          for (Map.Entry<String, AddonData> addons : AddonUtils.getAddonMap().entrySet()) {
+            Action action = addons.getValue().getAddon().addCustomAction(type, key, cfg);
+            if (action != null) {
+              actionMap.get(key).add(action);
+            }
+          }
         }
       }
     }
@@ -154,7 +160,7 @@ public class ActionUtils {
     };
   }
 
-  public static HashMap<String, Action> getActionMap() {
+  public static HashMap<String, ArrayList<Action>> getActionMap() {
     return actionMap;
   }
 }
