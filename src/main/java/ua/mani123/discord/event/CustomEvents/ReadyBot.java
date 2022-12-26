@@ -1,4 +1,4 @@
-package ua.mani123.discord.event;
+package ua.mani123.discord.event.CustomEvents;
 
 import java.util.ArrayList;
 import java.util.Map;

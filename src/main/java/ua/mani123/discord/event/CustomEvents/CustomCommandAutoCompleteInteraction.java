@@ -1,4 +1,4 @@
-package ua.mani123.discord.event;
+package ua.mani123.discord.event.CustomEvents;
 
 import java.util.List;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ua.mani123.discord.interaction.InteractionUtils;
 import ua.mani123.discord.interaction.interactions.CommandInteraction;
 
-public class CommandAutoCompleteInteraction extends ListenerAdapter {
+public class CustomCommandAutoCompleteInteraction extends ListenerAdapter {
 
   @Override
   public void onCommandAutoCompleteInteraction(@NotNull CommandAutoCompleteInteractionEvent event) {

@@ -12,6 +12,7 @@ import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.filter.Filter;
 
 public class TEMP_DATA_ADD implements Action {
+
   ArrayList<String> focusedUserOptionIds;
   ArrayList<String> focusedStringOptionIds;
   ArrayList<String> voiceChannels;
@@ -19,6 +20,8 @@ public class TEMP_DATA_ADD implements Action {
   ArrayList<String> roles;
   ArrayList<String> members;
   boolean allowAddInteractionUser;
+  boolean contentDataAddToPlaceholders;
+  boolean updateDefaultPlaceholders;
 
   public TEMP_DATA_ADD(CommentedConfig config) {
     this.focusedUserOptionIds = config.getOrElse("focusedUserOptionIds", new ArrayList<>());
@@ -28,6 +31,19 @@ public class TEMP_DATA_ADD implements Action {
     this.roles = config.getOrElse("roles", new ArrayList<>());
     this.members = config.getOrElse("members", new ArrayList<>());
     this.allowAddInteractionUser = config.getOrElse("allowAddInteractionUser", false);
+    this.contentDataAddToPlaceholders = config.getOrElse("contentDataAddToPlaceholders", false);
+    this.updateDefaultPlaceholders = config.getOrElse("updateDefaultPlaceholders", false);
+  }
+
+  public static void addDefaultPlaceholders(GenericInteractionCreateEvent event, TempData tempData) {
+    tempData.getPlaceholders().put("interaction-user", event.getUser().getName());
+    tempData.getPlaceholders().put("interaction-user-mentioned", event.getUser().getAsMention());
+    tempData.getPlaceholders().put("interaction-user-as-tag", event.getUser().getAsTag());
+    tempData.getPlaceholders().put("guild-name", Objects.requireNonNull(event.getGuild()).getName());
+    tempData.getPlaceholders().put("guild-owner-mentioned", Objects.requireNonNull(event.getGuild().getOwner()).getAsMention());
+    tempData.getPlaceholders().put("guild-owner-nickname", event.getGuild().getOwner().getNickname());
+    tempData.getPlaceholders().put("channel-mentioned", Objects.requireNonNull(event.getChannel()).getAsMention());
+    tempData.getPlaceholders().put("channel-type", event.getInteraction().getChannelType().toString());
   }
 
   @Override
@@ -44,6 +60,13 @@ public class TEMP_DATA_ADD implements Action {
         tempData.getContentData().put(optionId, Objects.requireNonNull(slashCommandInteractionEvent.getOption(optionId)).getAsString());
       }
     }
+    if (updateDefaultPlaceholders) {
+      addDefaultPlaceholders(event, tempData);
+    }
+    if (contentDataAddToPlaceholders && !tempData.getContentData().isEmpty()) {
+      tempData.getPlaceholders().putAll(tempData.getContentData());
+    }
+
   }
 
   @Override
