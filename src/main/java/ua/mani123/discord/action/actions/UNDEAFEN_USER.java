@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.UserSnowflake;
-import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
+import net.dv8tion.jda.api.events.GenericEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.CBot;
 import ua.mani123.discord.action.Action;
@@ -25,7 +25,7 @@ public class UNDEAFEN_USER implements Action {
   }
 
   @Override
-  public void run(GenericInteractionCreateEvent event, TempData tempData) {
+  public void run(GenericEvent event, TempData tempData) {
     try {
       for (UserSnowflake userSnowflake : tempData.getUserSnowflakes()) {
         if (userSnowflake instanceof Member member) {
@@ -44,7 +44,7 @@ public class UNDEAFEN_USER implements Action {
   }
 
   @Override
-  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
+  public void runWithPlaceholders(GenericEvent event, StringSubstitutor str, TempData tempData) {
     run(event, tempData);
   }
 

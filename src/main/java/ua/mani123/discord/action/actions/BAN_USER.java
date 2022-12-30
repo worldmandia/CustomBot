@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
 import org.apache.commons.text.StringSubstitutor;
@@ -31,28 +32,30 @@ public class BAN_USER implements Action {
   }
 
   @Override
-  public void run(GenericInteractionCreateEvent event, TempData tempData) {
-    for (UserSnowflake member : tempData.getUserSnowflakes()) {
-      Objects.requireNonNull(event.getGuild()).retrieveBan(member).queue(
-          (success) -> {
-            if (unbanIfBanned) {
-              event.getGuild().unban(success.getUser()).queue();
+  public void run(GenericEvent event, TempData tempData) {
+    if (event instanceof GenericInteractionCreateEvent genericInteractionCreateEvent) {
+      for (UserSnowflake member : tempData.getUserSnowflakes()) {
+        Objects.requireNonNull(genericInteractionCreateEvent.getGuild()).retrieveBan(member).queue(
+            (success) -> {
+              if (unbanIfBanned) {
+                genericInteractionCreateEvent.getGuild().unban(success.getUser()).queue();
+              }
+            }, (error) -> {
+              AuditableRestAction<Void> auditableRestAction = genericInteractionCreateEvent.getGuild()
+                  .ban(member, deleteBannedUserMessagesDuringTime, TimeUnit.valueOf(deleteBannedUserMessagesTimeType));
+              if (reason != null) {
+                auditableRestAction.reason(reason).queue();
+              } else {
+                auditableRestAction.queue();
+              }
             }
-          }, (error) -> {
-            AuditableRestAction<Void> auditableRestAction = event.getGuild()
-                .ban(member, deleteBannedUserMessagesDuringTime, TimeUnit.valueOf(deleteBannedUserMessagesTimeType));
-            if (reason != null) {
-              auditableRestAction.reason(reason).queue();
-            } else {
-              auditableRestAction.queue();
-            }
-          }
-      );
+        );
+      }
     }
   }
 
   @Override
-  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
+  public void runWithPlaceholders(GenericEvent event, StringSubstitutor str, TempData tempData) {
     reason = str.replace(reason);
     run(event, tempData);
   }

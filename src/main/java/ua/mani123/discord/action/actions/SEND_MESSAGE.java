@@ -2,6 +2,7 @@ package ua.mani123.discord.action.actions;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
+import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
@@ -37,57 +38,59 @@ public class SEND_MESSAGE implements Action {
   }
 
   @Override
-  public void run(GenericInteractionCreateEvent event, TempData tempData) {
-    if (tempMessage == null) {
-      tempMessage = message;
-    }
+  public void run(GenericEvent event, TempData tempData) {
+    if (event instanceof GenericInteractionCreateEvent genericInteractionCreateEvent) {
+      if (tempMessage == null) {
+        tempMessage = message;
+      }
       if (ephemeral) {
         ReplyCallbackAction replyCallbackAction = null;
-        if (event instanceof GenericCommandInteractionEvent commandInteractionEvent) {
+        if (genericInteractionCreateEvent instanceof GenericCommandInteractionEvent commandInteractionEvent) {
           replyCallbackAction = commandInteractionEvent.reply(tempMessage).setEphemeral(ephemeral);
-        } else if (event instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent) {
+        } else if (genericInteractionCreateEvent instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent) {
           replyCallbackAction = componentInteractionCreateEvent.reply(tempMessage).setEphemeral(ephemeral);
         }
-      if (!subActions.isEmpty()) {
-        ArrayList<ItemComponent> itemComponents = new ArrayList<>();
-        for (SubAction s : subActions) {
-          assert replyCallbackAction != null;
-          if (!s.isNextRow()) {
-            itemComponents.add(s.getComponent());
-          } else {
-            replyCallbackAction = replyCallbackAction.addComponents(ActionRow.of(itemComponents));
-            itemComponents.clear();
-          }
-          if (!itemComponents.isEmpty()) {
-            replyCallbackAction = replyCallbackAction.addComponents(ActionRow.of(itemComponents));
-          }
-        }
-      }
-      if (replyCallbackAction != null) {
-        replyCallbackAction.queue();
-      } else {
-        MessageCreateAction messageCreateAction = event.getMessageChannel().sendMessage(tempMessage);
         if (!subActions.isEmpty()) {
           ArrayList<ItemComponent> itemComponents = new ArrayList<>();
           for (SubAction s : subActions) {
+            assert replyCallbackAction != null;
             if (!s.isNextRow()) {
               itemComponents.add(s.getComponent());
             } else {
-              messageCreateAction = messageCreateAction.addComponents(ActionRow.of(itemComponents));
+              replyCallbackAction = replyCallbackAction.addComponents(ActionRow.of(itemComponents));
               itemComponents.clear();
             }
             if (!itemComponents.isEmpty()) {
-              messageCreateAction = messageCreateAction.addComponents(ActionRow.of(itemComponents));
+              replyCallbackAction = replyCallbackAction.addComponents(ActionRow.of(itemComponents));
             }
           }
         }
-        messageCreateAction.queue();
+        if (replyCallbackAction != null) {
+          replyCallbackAction.queue();
+        } else {
+          MessageCreateAction messageCreateAction = genericInteractionCreateEvent.getMessageChannel().sendMessage(tempMessage);
+          if (!subActions.isEmpty()) {
+            ArrayList<ItemComponent> itemComponents = new ArrayList<>();
+            for (SubAction s : subActions) {
+              if (!s.isNextRow()) {
+                itemComponents.add(s.getComponent());
+              } else {
+                messageCreateAction = messageCreateAction.addComponents(ActionRow.of(itemComponents));
+                itemComponents.clear();
+              }
+              if (!itemComponents.isEmpty()) {
+                messageCreateAction = messageCreateAction.addComponents(ActionRow.of(itemComponents));
+              }
+            }
+          }
+          messageCreateAction.queue();
+        }
       }
     }
   }
 
   @Override
-  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
+  public void runWithPlaceholders(GenericEvent event, StringSubstitutor str, TempData tempData) {
     tempMessage = str.replace(message);
     run(event, tempData);
   }

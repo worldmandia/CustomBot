@@ -2,9 +2,14 @@ package ua.mani123.discord.action.actions;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.List;
+import net.dv8tion.jda.api.entities.Mentions;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.EntitySelectInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.Action;
 import ua.mani123.discord.action.ActionUtils;
@@ -32,23 +37,42 @@ public class TEMP_DATA_REMOVE implements Action {
   }
 
   @Override
-  public void run(GenericInteractionCreateEvent event, TempData tempData) {
-    tempData.getUserSnowflakes().removeAll(ActionUtils.getAllUsers(event, focusedUserOptionIds, voiceChannels, members));
-    voiceChannels.forEach(s -> ActionUtils.getVoiceChannelsByNameOrId(event, s, false).forEach(tempData.getVoiceChannels()::remove));
-    textChannels.forEach(s -> ActionUtils.getTextChannelsByNameOrId(event, s, false).forEach(tempData.getTextChannels()::remove));
-    roles.forEach(s -> ActionUtils.getRolesByNameOrId(event, s, false).forEach(tempData.getRoles()::remove));
-    if (allowAddInteractionUser) {
-      tempData.getUserSnowflakes().remove(event.getInteraction().getUser());
-    }
-    if (event instanceof SlashCommandInteractionEvent slashCommandInteractionEvent) {
-      for (String optionId: focusedStringOptionIds) {
-        tempData.getContentData().put(optionId, Objects.requireNonNull(slashCommandInteractionEvent.getOption(optionId)).getAsString());
+  public void run(GenericEvent event, TempData tempData) {
+    if (event instanceof GenericInteractionCreateEvent genericInteractionCreateEvent) {
+      tempData.getUserSnowflakes().removeAll(ActionUtils.getAllUsers(genericInteractionCreateEvent, focusedUserOptionIds, voiceChannels, members));
+      voiceChannels.forEach(s -> ActionUtils.getVoiceChannelsByNameOrId(genericInteractionCreateEvent, s, false).forEach(tempData.getVoiceChannels()::remove));
+      textChannels.forEach(s -> ActionUtils.getTextChannelsByNameOrId(genericInteractionCreateEvent, s, false).forEach(tempData.getTextChannels()::remove));
+      roles.forEach(s -> ActionUtils.getRolesByNameOrId(genericInteractionCreateEvent, s, false).forEach(tempData.getRoles()::remove));
+      if (allowAddInteractionUser) {
+        tempData.getUserSnowflakes().remove(genericInteractionCreateEvent.getInteraction().getUser());
       }
     }
+    //if (event instanceof SlashCommandInteractionEvent slashCommandInteractionEventd) {
+    //  for (String optionId: focusedStringOptionIds) {
+    //    tempData.getContentData().put(optionId, Objects.requireNonNull(slashCommandInteractionEvent.getOption(optionId)).getAsString());
+    //  }
+    //}
+    if (event instanceof StringSelectInteractionEvent stringSelectInteractionEvent) {
+      List<String> strings = stringSelectInteractionEvent.getValues();
+      for (int i = 0; i < strings.size(); i++) {
+        tempData.getContentData().put(stringSelectInteractionEvent.getComponentId() + "-" + i, strings.get(i));
+      }
+    }
+    if (event instanceof EntitySelectInteractionEvent entitySelectInteractionEvent) {
+      Mentions mentions = entitySelectInteractionEvent.getMentions();
+      mentions.getRoles().forEach(tempData.getRoles()::remove);
+      mentions.getMembers().forEach(tempData.getUserSnowflakes()::remove);
+      mentions.getChannels().forEach(guildChannel -> {
+        if (guildChannel instanceof TextChannel textChannel) tempData.getTextChannels().remove(textChannel);
+        else if (guildChannel instanceof VoiceChannel voiceChannel) tempData.getVoiceChannels().remove(voiceChannel);
+      });
+    }
+
+
   }
 
   @Override
-  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
+  public void runWithPlaceholders(GenericEvent event, StringSubstitutor str, TempData tempData) {
     run(event, tempData);
   }
 

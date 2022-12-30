@@ -1,7 +1,7 @@
 package ua.mani123.discord.action;
 
 import java.util.ArrayList;
-import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
+import net.dv8tion.jda.api.events.GenericEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.filter.Filter;
 
@@ -15,7 +15,7 @@ public interface Action {
    * @param event event for run method
    * @param tempData Temporary data created when the event is fired
    */
-  void run(GenericInteractionCreateEvent event, TempData tempData);
+  void run(GenericEvent event, TempData tempData);
 
   /**
    * Run action with placeholders, for add your own placeholders use Utils::getPlaceholders.put
@@ -24,7 +24,7 @@ public interface Action {
    * @param tempData Temporary data created when the event is fired
    * @param str   StringSubstitutor with placeholders map
    */
-  default void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
+  default void runWithPlaceholders(GenericEvent event, StringSubstitutor str, TempData tempData) {
     this.run(event, tempData);
   }
 
