@@ -14,27 +14,27 @@ public class reloadCommand {
   public static void use(List<String> parts) {
     if (parts.size() > 1) {
       switch (parts.get(1)) {
-        case "commands" -> {
+        case "interactions" -> {
           configUtils.updateInteractions();
           InteractionUtils.initInteractions();
-          CBot.getLog().info("commandInteraction reloaded");
+          CBot.getLog().info("Interactions reloaded");
           return;
         }
         case "actions" -> {
           configUtils.updateActions();
           ActionUtils.init(configUtils.getActions());
-          CBot.getLog().info("actions reloaded");
+          CBot.getLog().info("Actions reloaded");
           return;
         }
         case "addons" -> {
           for (Map.Entry<String, AddonData> addon : AddonUtils.getAddonMap().entrySet()) {
             addon.getValue().getAddon().reload();
           }
-          CBot.getLog().info("addons reloaded");
+          CBot.getLog().info("Addons reloaded");
           return;
         }
       }
     }
-    CBot.getLog().info("Usage: reload [actions, commands, addons]");
+    CBot.getLog().info("Usage: reload [actions, interactions, addons]");
   }
 }
