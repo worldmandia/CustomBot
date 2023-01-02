@@ -14,9 +14,9 @@ name = "mute"
 description = "mute selected user"
 optionIds = ["users1"]
 
-[command.option]
+[interaction.option]
 
-[command.option.users1]
+[interaction.option.users1]
 name = "listofusers"
 description = "List of users"
 type = "user"
@@ -30,9 +30,9 @@ name = "unmute"
 description = "unmute selected user"
 optionIds = ["users"]
 
-[command.option]
+[interaction.option]
 
-[command.option.users]
+[interaction.option.users]
 name = "listofusers"
 description = "List of users"
 type = "user"
