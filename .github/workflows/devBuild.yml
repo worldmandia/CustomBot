@@ -1,8 +1,8 @@
-name: Build
+name: devBuild
 on:
   push:
     branches:
-      - master
+      - dev
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
@@ -41,5 +41,5 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: CustomBot-master-${{ steps.vars.outputs.sha_short }}
+          name: CustomBot-dev-${{ steps.vars.outputs.sha_short }}
           path: build/libs/*
