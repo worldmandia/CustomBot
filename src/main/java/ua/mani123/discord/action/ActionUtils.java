@@ -76,17 +76,17 @@ public class ActionUtils {
   public static HashSet<UserSnowflake> getMembersOrUsers(GenericInteractionCreateEvent event, ArrayList<String> users) {
     if (!users.isEmpty()) {
       HashSet<UserSnowflake> members = new HashSet<>();
-      users.forEach(s -> {
+      users.forEach(user -> {
         try {
-          members.add(Objects.requireNonNull(event.getGuild()).getMemberById(s));
+          members.add(Objects.requireNonNull(event.getGuild()).getMemberById(user));
         } catch (NumberFormatException numberFormatException) {
-          members.add(Objects.requireNonNull(event.getGuild()).getMemberByTag(s));
+          members.add(Objects.requireNonNull(event.getGuild()).getMemberByTag(user));
         } catch (NullPointerException nullPointerException) {
-          CBot.getLog().info("User: " + s + " not found in guild");
+          CBot.getLog().info("User: " + user + " not found in guild");
           try {
-            members.add(event.getUser().getJDA().getUserById(s));
+            members.add(event.getUser().getJDA().getUserById(user));
           } catch (NumberFormatException numberFormatException) {
-            members.add(event.getUser().getJDA().getUserByTag(s));
+            members.add(event.getUser().getJDA().getUserByTag(user));
           }
         }
       });
