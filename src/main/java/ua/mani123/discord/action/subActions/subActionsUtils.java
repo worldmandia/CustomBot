@@ -2,6 +2,9 @@ package ua.mani123.discord.action.subActions;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.ItemComponent;
+import net.dv8tion.jda.api.interactions.components.LayoutComponent;
 import ua.mani123.discord.action.subActions.SActions.ADD_BUTTON;
 import ua.mani123.discord.action.subActions.SActions.ADD_SELECT_MENU;
 
@@ -23,4 +26,22 @@ public class subActionsUtils {
     }
     return subActions;
   }
+
+  public static ArrayList<LayoutComponent> getRows(ArrayList<SubAction> subActions) {
+    ArrayList<LayoutComponent> actionRows = new ArrayList<>();
+    if (!subActions.isEmpty()) {
+      ArrayList<ArrayList<ItemComponent>> itemComponent = new ArrayList<>(5);
+      subActions.forEach(subAction -> {
+        if (subAction.row() <= 4) {
+          if (subAction.row() <= itemComponent.size()) {
+            itemComponent.add(subAction.row(), new ArrayList<>());
+          }
+          itemComponent.get(subAction.row()).add(subAction.getComponent());
+        }
+      });
+      itemComponent.forEach(row -> actionRows.add(ActionRow.of(row)));
+    }
+    return actionRows;
+  }
+
 }

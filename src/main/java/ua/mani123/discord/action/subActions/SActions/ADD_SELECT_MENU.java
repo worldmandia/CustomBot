@@ -16,13 +16,13 @@ public class ADD_SELECT_MENU implements SubAction {
   ArrayList<String> EntityTypes;
   String MenuType;
   ItemComponent itemComponent;
-  boolean nextRow;
+  int row;
 
 
   public ADD_SELECT_MENU(CommentedConfig config) {
     this.id = config.getOrElse("id", null);
     this.MenuType = config.getOrElse("MenuType", "STRING");
-    this.nextRow = config.getOrElse("next-row", false);
+    this.row = config.getOrElse("next-row", 0);
     this.EntityTypes = config.getOrElse("EntityTypes", new ArrayList<>(List.of("ROLE", "USER", "CHANNEL")));
     if (MenuType.equalsIgnoreCase("STRING")) {
       ArrayList<CommentedConfig> options = config.getOrElse("option", new ArrayList<>());
@@ -67,7 +67,7 @@ public class ADD_SELECT_MENU implements SubAction {
   }
 
   @Override
-  public boolean isNextRow() {
-    return nextRow;
+  public int row() {
+    return this.row;
   }
 }

@@ -6,8 +6,8 @@ public interface SubAction {
 
   ItemComponent getComponent();
 
-  default boolean isNextRow() {
-    return false;
+  default int row() {
+    return 0;
   }
 
 }

@@ -15,13 +15,13 @@ public class ADD_BUTTON implements SubAction {
   Emoji emoji;
   Long emojiId;
   String emojiString;
-  boolean nextRow;
+  int row;
   ButtonStyle buttonStyle;
 
   public ADD_BUTTON(CommentedConfig config) {
     this.id = config.getOrElse("id", null);
     this.label = config.getOrElse("label", "");
-    this.nextRow = config.getOrElse("next-row", false);
+    this.row = config.getOrElse("row", 0);
     this.buttonStyle = ButtonStyle.valueOf(config.getOrElse("button-style", "SECONDARY").toUpperCase());
     this.emojiString = config.getOrElse("emoji", "");
     this.emojiId = config.getOrElse("emoji-id", 0L);
@@ -39,8 +39,8 @@ public class ADD_BUTTON implements SubAction {
   }
 
   @Override
-  public boolean isNextRow() {
-    return nextRow;
+  public int row() {
+    return this.row;
   }
 
   @Override
