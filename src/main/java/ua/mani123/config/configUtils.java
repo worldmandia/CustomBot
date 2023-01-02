@@ -14,49 +14,44 @@ import ua.mani123.discord.discordUtils;
 public class configUtils {
 
   private static CConfig config;
-  private static CConfig commandInteraction;
-  private static CConfig buttonInteraction;
+  private static HashMap<String, CConfig> interactions;
   private static Map<String, JDA> DiscordBotsData;
   private static Map<String, CConfig> actions;
 
-  public static CommentedFileConfig initResourceCfg(String file, ClassLoader classLoader) {
+  public static CommentedFileConfig initFile(String file, ClassLoader classLoader) {
     CommentedFileConfig config = CommentedFileConfig.builder(file).onFileNotFound(FileNotFoundAction.copyData(
         Objects.requireNonNull(classLoader.getResource(file)))).build();
     config.load();
     return config;
   }
 
-  public static CommentedFileConfig initCfg(String file, String path, ClassLoader classLoader) {
-    File folder = new File(path);
-    if (!folder.exists()) {
-      if (folder.mkdirs()) {
-        initCfg(file, path, classLoader);
-      }
-    } else {
-      String rPath = path + file;
-      CommentedFileConfig config = CommentedFileConfig.builder(rPath).onFileNotFound(FileNotFoundAction.copyData(
-          Objects.requireNonNull(classLoader.getResource(rPath)))).build();
-      config.load();
-      return config;
+  public static HashMap<String, CConfig> initResourcesFolder(String folder) {
+    HashMap<String, CConfig> configs = new HashMap<>();
+    File folderFile = new File(folder);
+    if (folderFile.mkdirs()) {
+      // Copy default cfgs
+      //
+      //try {
+      //  URL url = classLoader.getResource(folderFile.getPath());
+      //  File newFolderFile = new File(url.getPath());
+      //  CBot.getLog().info(String.valueOf(newFolderFile.isDirectory()));
+      //  CBot.getLog().info(newFolderFile.listFiles().toString());
+      //  File[] listOfFiles = newFolderFile.listFiles();
+      //  for (File file : listOfFiles) {
+      //    if (file.isFile()) {
+      //      InputStream is = classLoader.getResourceAsStream("/" + folder + file.getName());
+      //      Files.copy(is, Paths.get(folder + file.getName()), StandardCopyOption.REPLACE_EXISTING);
+      //    }
+      //  }
+      //} catch (Exception e) {
+      //  CBot.getLog().warn(e.toString());
+      //}
     }
-    return null;
-  }
-
-
-  public static Map<String, CConfig> initFolderCfg(String path) {
-    Map<String, CConfig> configs = new HashMap<>();
-    File folder = new File(path);
-    if (folder.exists() && folder.isDirectory()) {
-      for (File file : Objects.requireNonNull(folder.listFiles())) {
-        if (!file.getName().startsWith("_") && file.getName().endsWith(".toml")) {
-          CommentedFileConfig cfg = CommentedFileConfig.builder(file).build();
-          cfg.load();
-          configs.put(file.getName().replace(".toml", ""), new CConfig(cfg));
-        }
-      }
-    } else {
-      if (folder.mkdirs()) {
-        initFolderCfg(path);
+    for (File file : Objects.requireNonNull(folderFile.listFiles())) {
+      if (!file.getName().startsWith("_") && file.getName().endsWith(".toml")) {
+        CommentedFileConfig cfg = CommentedFileConfig.builder(file).build();
+        cfg.load();
+        configs.put(file.getName().replace(".toml", ""), new CConfig(cfg));
       }
     }
     return configs;
@@ -65,35 +60,28 @@ public class configUtils {
   public static void init() {
     updateConfig();
     DiscordBotsData = discordUtils.initBots(getConfig());
+    updateInteractions();
     updateActions();
-    updateCommandInteractions();
-    updateButtonInteraction();
   }
 
   public static void updateConfig() {
-    config = new CConfig(configUtils.initResourceCfg("config.toml", CBot.class.getClassLoader()));
+    config = new CConfig(configUtils.initFile("config.toml", CBot.class.getClassLoader()));
   }
 
-  public static void updateButtonInteraction() {
-    buttonInteraction = new CConfig(configUtils.initCfg("buttonInteraction.toml", "interactions/", CBot.class.getClassLoader()));
+  public static void updateInteractions() {
+    interactions = initResourcesFolder("interactions");
   }
 
   public static void updateActions() {
-    actions = configUtils.initFolderCfg("actions/");
+    actions = initResourcesFolder("interactions");
   }
 
-  public static void updateCommandInteractions() {
-    commandInteraction = new CConfig(configUtils.initCfg("commandInteraction.toml", "interactions/", CBot.class.getClassLoader()));
-  }
-
-  public static void saveAll() {
+  public static void disableAll() {
     AddonUtils.getAddonMap().forEach((key, value) -> value.getAddon().disable());
+    // Save all
     config.getFileCfg().save();
-    commandInteraction.getFileCfg().save();
-    buttonInteraction.getFileCfg().save();
-    for (Map.Entry<String, CConfig> cfg : actions.entrySet()) {
-      cfg.getValue().getFileCfg().save();
-    }
+    actions.forEach((s, cConfig) -> cConfig.getFileCfg().save());
+    interactions.forEach((s, cConfig) -> cConfig.getFileCfg().save());
     CBot.getLog().info("Saving configs");
   }
 
@@ -101,12 +89,8 @@ public class configUtils {
     return config;
   }
 
-  public static CConfig getCommandInteraction() {
-    return commandInteraction;
-  }
-
-  public static CConfig getButtonInteraction() {
-    return buttonInteraction;
+  public static HashMap<String, CConfig> getInteractions() {
+    return interactions;
   }
 
   public static Map<String, JDA> getDiscordBotsData() {

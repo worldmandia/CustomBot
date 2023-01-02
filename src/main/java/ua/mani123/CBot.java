@@ -16,11 +16,10 @@ public class CBot {
     getLog().info("Starting CustomBot");
     configUtils.init();
     ActionUtils.init(configUtils.getActions());
-    InteractionUtils.initCmd(configUtils.getCommandInteraction().getList("command"));
-    InteractionUtils.initButton(configUtils.getButtonInteraction().getList("button"));
+    InteractionUtils.initInteractions();
     AddonUtils.loadAddons("addons");
     AddonUtils.enableAddons(AddonUtils.getAddonMap());
-    Runtime.getRuntime().addShutdownHook(new Thread(configUtils::saveAll, "Shutdown-thread"));
+    Runtime.getRuntime().addShutdownHook(new Thread(configUtils::disableAll, "Shutdown-thread"));
     getLog().info("Done!");
     initConsole();
   }

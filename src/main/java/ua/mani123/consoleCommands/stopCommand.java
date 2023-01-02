@@ -16,7 +16,7 @@ public class stopCommand {
         }
         return;
       } else if (parts.get(1).equals("all")) {
-        configUtils.saveAll();
+        configUtils.disableAll();
         consoleUtils.isStopped = true;
         System.exit(0);
         return;

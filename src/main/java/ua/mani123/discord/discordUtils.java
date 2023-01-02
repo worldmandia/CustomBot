@@ -12,16 +12,16 @@ import ua.mani123.config.CConfig;
 import ua.mani123.discord.event.CustomEvents.CustomButtonInteractionEvent;
 import ua.mani123.discord.event.CustomEvents.CustomCommandAutoCompleteInteraction;
 import ua.mani123.discord.event.CustomEvents.CustomSelectMenuInteraction;
+import ua.mani123.discord.event.CustomEvents.CustomSlashCommandInteraction;
 import ua.mani123.discord.event.CustomEvents.GuildEvent;
 import ua.mani123.discord.event.CustomEvents.ReadyBot;
-import ua.mani123.discord.event.CustomEvents.CustomSlashCommandInteraction;
 
 public class discordUtils {
 
   public static Map<String, JDA> initBots(CConfig cfg) {
     Map<String, JDA> bots = new HashMap<>();
     List<CommentedConfig> discordBotConfigs = cfg.getFileCfg().getOrElse("discord-bot", new ArrayList<>());
-    for (CommentedConfig config : discordBotConfigs) {
+    discordBotConfigs.forEach(config -> {
       String token = config.get("token");
       if (token != null) {
         try {
@@ -49,7 +49,7 @@ public class discordUtils {
           CBot.getLog().warn("You get error: " + e.getMessage());
         }
       }
-    }
+    });
     return bots;
   }
 

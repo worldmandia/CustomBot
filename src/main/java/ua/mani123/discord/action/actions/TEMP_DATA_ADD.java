@@ -42,17 +42,15 @@ public class TEMP_DATA_ADD implements Action {
     this.updateDefaultPlaceholders = config.getOrElse("updateDefaultPlaceholders", false);
   }
 
-  public static void addDefaultPlaceholders(GenericEvent event, TempData tempData) {
-    if (event instanceof GenericInteractionCreateEvent genericInteractionCreateEvent) {
-      tempData.getPlaceholders().put("interaction-user", genericInteractionCreateEvent.getUser().getName());
-      tempData.getPlaceholders().put("interaction-user-mentioned", genericInteractionCreateEvent.getUser().getAsMention());
-      tempData.getPlaceholders().put("interaction-user-as-tag", genericInteractionCreateEvent.getUser().getAsTag());
-      tempData.getPlaceholders().put("guild-name", Objects.requireNonNull(genericInteractionCreateEvent.getGuild()).getName());
-      tempData.getPlaceholders().put("guild-owner-mentioned", Objects.requireNonNull(genericInteractionCreateEvent.getGuild().getOwner()).getAsMention());
-      tempData.getPlaceholders().put("guild-owner-nickname", genericInteractionCreateEvent.getGuild().getOwner().getNickname());
-      tempData.getPlaceholders().put("channel-mentioned", Objects.requireNonNull(genericInteractionCreateEvent.getChannel()).getAsMention());
-      tempData.getPlaceholders().put("channel-type", genericInteractionCreateEvent.getChannelType().toString());
-    }
+  public static void addDefaultPlaceholders(GenericInteractionCreateEvent event, TempData tempData) {
+    tempData.getPlaceholders().put("interaction-user", event.getUser().getName());
+    tempData.getPlaceholders().put("interaction-user-mentioned", event.getUser().getAsMention());
+    tempData.getPlaceholders().put("interaction-user-as-tag", event.getUser().getAsTag());
+    tempData.getPlaceholders().put("guild-name", Objects.requireNonNull(event.getGuild()).getName());
+    tempData.getPlaceholders().put("guild-owner-mentioned", Objects.requireNonNull(event.getGuild().getOwner()).getAsMention());
+    tempData.getPlaceholders().put("guild-owner-nickname", event.getGuild().getOwner().getNickname());
+    tempData.getPlaceholders().put("channel-mentioned", Objects.requireNonNull(event.getChannel()).getAsMention());
+    tempData.getPlaceholders().put("channel-type", event.getChannelType().toString());
   }
 
   @Override
@@ -65,34 +63,33 @@ public class TEMP_DATA_ADD implements Action {
       if (allowAddInteractionUser) {
         tempData.getUserSnowflakes().add(genericInteractionCreateEvent.getInteraction().getUser());
       }
-    }
-    if (event instanceof SlashCommandInteractionEvent slashCommandInteractionEvent) {
-      for (String optionId : focusedStringOptionIds) {
-        tempData.getContentData().put(optionId, Objects.requireNonNull(slashCommandInteractionEvent.getOption(optionId)).getAsString());
+
+      if (event instanceof SlashCommandInteractionEvent slashCommandInteractionEvent) {
+        for (String optionId : focusedStringOptionIds) {
+          tempData.getContentData().put(optionId, Objects.requireNonNull(slashCommandInteractionEvent.getOption(optionId)).getAsString());
+        }
       }
-    }
-    if (event instanceof StringSelectInteractionEvent stringSelectInteractionEvent) {
-      List<String> strings = stringSelectInteractionEvent.getValues();
-      for (int i = 0; i < strings.size(); i++) {
-        tempData.getContentData().put(stringSelectInteractionEvent.getComponentId() + "-" + i, strings.get(i));
+      if (event instanceof StringSelectInteractionEvent stringSelectInteractionEvent) {
+        List<String> strings = stringSelectInteractionEvent.getValues();
+        for (int i = 0; i < strings.size(); i++) {
+          tempData.getContentData().put(stringSelectInteractionEvent.getComponentId() + "-" + i, strings.get(i));
+        }
       }
-    }
-    if (event instanceof EntitySelectInteractionEvent entitySelectInteractionEvent) {
-      Mentions mentions = entitySelectInteractionEvent.getMentions();
-      tempData.getRoles().addAll(mentions.getRoles());
-      tempData.getUserSnowflakes().addAll(mentions.getMembers());
-      mentions.getChannels().forEach(guildChannel -> {
-        if (guildChannel instanceof TextChannel textChannel) tempData.getTextChannels().add(textChannel);
-        else if (guildChannel instanceof VoiceChannel voiceChannel) tempData.getVoiceChannels().add(voiceChannel);
-      });
-    }
-
-
-
-    // Placeholders feature
-
-    if (updateDefaultPlaceholders) {
-      addDefaultPlaceholders(event, tempData);
+      if (event instanceof EntitySelectInteractionEvent entitySelectInteractionEvent) {
+        Mentions mentions = entitySelectInteractionEvent.getMentions();
+        tempData.getRoles().addAll(mentions.getRoles());
+        tempData.getUserSnowflakes().addAll(mentions.getMembers());
+        mentions.getChannels().forEach(guildChannel -> {
+          if (guildChannel instanceof TextChannel textChannel) {
+            tempData.getTextChannels().add(textChannel);
+          } else if (guildChannel instanceof VoiceChannel voiceChannel) {
+            tempData.getVoiceChannels().add(voiceChannel);
+          }
+        });
+      }
+      if (updateDefaultPlaceholders) {
+        addDefaultPlaceholders(genericInteractionCreateEvent, tempData);
+      }
     }
     if (contentDataAddToPlaceholders && !tempData.getContentData().isEmpty()) {
       tempData.getPlaceholders().putAll(tempData.getContentData());

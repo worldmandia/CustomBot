@@ -15,8 +15,8 @@ public class reloadCommand {
     if (parts.size() > 1) {
       switch (parts.get(1)) {
         case "commands" -> {
-          configUtils.updateCommandInteractions();
-          InteractionUtils.initCmd(configUtils.getCommandInteraction().getList("interaction"));
+          configUtils.updateInteractions();
+          InteractionUtils.initInteractions();
           CBot.getLog().info("commandInteraction reloaded");
           return;
         }

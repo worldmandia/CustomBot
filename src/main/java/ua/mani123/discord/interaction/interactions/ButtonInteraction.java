@@ -4,9 +4,9 @@ import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
 import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
-import ua.mani123.discord.interaction.interaction;
+import ua.mani123.discord.interaction.Interaction;
 
-public class ButtonInteraction implements interaction {
+public class ButtonInteraction implements Interaction {
 
   private final String id;
   private final ArrayList<String> actionIds;
