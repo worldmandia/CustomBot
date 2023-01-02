@@ -4,7 +4,6 @@ import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.requests.restaction.AuditableRestAction;
@@ -34,21 +33,19 @@ public class UNBAN_USER implements Action {
   @Override
   public void run(GenericEvent event, TempData tempData) {
     if (event instanceof GenericInteractionCreateEvent genericInteractionCreateEvent) {
-      for (UserSnowflake member : tempData.getUserSnowflakes()) {
-        Objects.requireNonNull(genericInteractionCreateEvent.getGuild()).retrieveBan(member).queue(
-            (success) -> genericInteractionCreateEvent.getGuild().unban(success.getUser()).queue(), (error) -> {
-              if (banIfUnbanned) {
-                AuditableRestAction<Void> auditableRestAction = genericInteractionCreateEvent.getGuild()
-                    .ban(member, deleteBannedUserMessagesDuringTime, TimeUnit.valueOf(deleteBannedUserMessagesTimeType));
-                if (reason != null) {
-                  auditableRestAction.reason(reason).queue();
-                } else {
-                  auditableRestAction.queue();
-                }
+      tempData.getUserSnowflakes().forEach(userSnowflake -> Objects.requireNonNull(genericInteractionCreateEvent.getGuild()).retrieveBan(userSnowflake).queue(
+          (success) -> genericInteractionCreateEvent.getGuild().unban(success.getUser()).queue(), (error) -> {
+            if (banIfUnbanned) {
+              AuditableRestAction<Void> auditableRestAction = genericInteractionCreateEvent.getGuild()
+                  .ban(userSnowflake, deleteBannedUserMessagesDuringTime, TimeUnit.valueOf(deleteBannedUserMessagesTimeType));
+              if (reason != null) {
+                auditableRestAction.reason(reason).queue();
+              } else {
+                auditableRestAction.queue();
               }
             }
-        );
-      }
+          }
+      ));
     }
   }
 
