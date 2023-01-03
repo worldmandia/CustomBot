@@ -32,7 +32,7 @@ public class configUtils {
 
   static {
     try {
-      fileSystem = FileSystems.newFileSystem(Objects.requireNonNull(CBot.class.getResource("")).toURI(), new HashMap<String, String>());
+      fileSystem = FileSystems.newFileSystem(Objects.requireNonNull(CBot.class.getResource("")).toURI(), Map.<String, String>of());
     } catch (IOException | URISyntaxException e) {
       throw new RuntimeException(e);
     }
