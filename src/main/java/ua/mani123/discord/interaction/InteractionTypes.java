@@ -2,7 +2,8 @@ package ua.mani123.discord.interaction;
 
 public enum InteractionTypes {
   COMMAND,
-  SELECT_MENU,
+  STRING_SELECT_MENU,
+  ENTITY_SELECT_MENU,
   CONTEXT_MENU,
   MODALS,
   SCHEDULED,
