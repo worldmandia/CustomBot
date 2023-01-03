@@ -3,6 +3,17 @@ package ua.mani123.config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.file.FileNotFoundAction;
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -17,39 +28,50 @@ public class configUtils {
   private static HashMap<String, CConfig> interactions;
   private static Map<String, JDA> DiscordBotsData;
   private static Map<String, CConfig> actions;
+  private static final FileSystem fileSystem;
+
+  static {
+    try {
+      fileSystem = FileSystems.newFileSystem(Objects.requireNonNull(CBot.class.getResource("")).toURI(), new HashMap<String, String>());
+    } catch (IOException | URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   public static CommentedFileConfig initFile(String file, ClassLoader classLoader) {
-    CommentedFileConfig config = CommentedFileConfig.builder(file).onFileNotFound(FileNotFoundAction.copyData(
+    CommentedFileConfig config = CommentedFileConfig.builder(file).autosave().onFileNotFound(FileNotFoundAction.copyData(
         Objects.requireNonNull(classLoader.getResource(file)))).build();
     config.load();
     return config;
   }
 
-  public static HashMap<String, CConfig> initResourcesFolder(String folder) {
-    HashMap<String, CConfig> configs = new HashMap<>();
+  public static HashMap<String, CConfig> initResourcesFolder(String folder, FileSystem thisFileSystem) {
     File folderFile = new File(folder);
     if (folderFile.mkdirs()) {
-      // Copy default cfgs
-      //
-      //try {
-      //  URL url = classLoader.getResource(folderFile.getPath());
-      //  File newFolderFile = new File(url.getPath());
-      //  CBot.getLog().info(String.valueOf(newFolderFile.isDirectory()));
-      //  CBot.getLog().info(newFolderFile.listFiles().toString());
-      //  File[] listOfFiles = newFolderFile.listFiles();
-      //  for (File file : listOfFiles) {
-      //    if (file.isFile()) {
-      //      InputStream is = classLoader.getResourceAsStream("/" + folder + file.getName());
-      //      Files.copy(is, Paths.get(folder + file.getName()), StandardCopyOption.REPLACE_EXISTING);
-      //    }
-      //  }
-      //} catch (Exception e) {
-      //  CBot.getLog().warn(e.toString());
-      //}
+      try {
+        Path jarPath = thisFileSystem.getPath(folder);
+        Files.walkFileTree(jarPath, new SimpleFileVisitor<>() {
+          @Override
+          public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+            Path currentTarget = Path.of(folder).resolve(jarPath.relativize(dir).toString());
+            Files.createDirectories(currentTarget);
+            return FileVisitResult.CONTINUE;
+          }
+
+          @Override
+          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            Files.copy(file, Path.of(folder).resolve(jarPath.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
+            return FileVisitResult.CONTINUE;
+          }
+        });
+      } catch (Exception e) {
+        CBot.getLog().warn(Arrays.toString(e.getStackTrace()));
+      }
     }
+    HashMap<String, CConfig> configs = new HashMap<>();
     for (File file : Objects.requireNonNull(folderFile.listFiles())) {
       if (!file.getName().startsWith("_") && file.getName().endsWith(".toml")) {
-        CommentedFileConfig cfg = CommentedFileConfig.builder(file).build();
+        CommentedFileConfig cfg = CommentedFileConfig.builder(file).autosave().build();
         cfg.load();
         configs.put(file.getName().replace(".toml", ""), new CConfig(cfg));
       }
@@ -69,20 +91,21 @@ public class configUtils {
   }
 
   public static void updateInteractions() {
-    interactions = initResourcesFolder("interactions");
+    interactions = initResourcesFolder("interactions", fileSystem);
   }
 
   public static void updateActions() {
-    actions = initResourcesFolder("interactions");
+    actions = initResourcesFolder("actions", fileSystem);
   }
 
   public static void disableAll() {
+    CBot.getLog().info("Disable all");
     AddonUtils.getAddonMap().forEach((key, value) -> value.getAddon().disable());
-    // Save all
-    config.getFileCfg().save();
-    actions.forEach((s, cConfig) -> cConfig.getFileCfg().save());
-    interactions.forEach((s, cConfig) -> cConfig.getFileCfg().save());
-    CBot.getLog().info("Saving configs");
+    // Save all (Not need)
+    //config.getFileCfg().save();
+    //actions.forEach((s, cConfig) -> cConfig.getFileCfg().save());
+    //interactions.forEach((s, cConfig) -> cConfig.getFileCfg().save());
+    CBot.getLog().info("Offline!");
   }
 
   public static CConfig getConfig() {
