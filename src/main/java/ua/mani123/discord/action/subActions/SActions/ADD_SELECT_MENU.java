@@ -23,7 +23,7 @@ public class ADD_SELECT_MENU implements SubAction {
   public ADD_SELECT_MENU(CommentedConfig config) {
     this.id = config.getOrElse("id", null);
     this.MenuType = config.getOrElse("MenuType", "STRING");
-    this.row = config.getOrElse("next-row", 0);
+    this.row = config.getOrElse("row", 0);
     this.EntityTypes = config.getOrElse("EntityTypes", new ArrayList<>(List.of("ROLE", "USER")));
     if (MenuType.equalsIgnoreCase("STRING")) {
       ArrayList<CommentedConfig> options = config.getOrElse("option", new ArrayList<>());

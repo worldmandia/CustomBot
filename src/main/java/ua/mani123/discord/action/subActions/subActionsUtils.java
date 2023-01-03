@@ -35,7 +35,7 @@ public class subActionsUtils {
     if (!subActions.isEmpty()) {
       ArrayList<ArrayList<ItemComponent>> itemComponent = new ArrayList<>(5);
       subActions.forEach(subAction -> {
-        if (subAction.row() <= 4) {
+        if (subAction.row() <= 4 || subAction.row() > -1) {
           if (subAction.row() <= itemComponent.size()) {
             itemComponent.add(subAction.row(), new ArrayList<>());
           }
