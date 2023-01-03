@@ -22,6 +22,11 @@ Bot manager aimed at full customization
 - [Java 17+](https://adoptium.net/temurin/releases/)
 - [**Discord bot token** with slash commands support](https://discord.com/developers/applications)
 
+## Downloads
+
+- Stable (Recommended): [Polymart](https://polymart.org/resource/custombot.3248), [BuiltByBit](https://builtbybit.com/resources/custombot.26348/updates)
+- Dev (Not Recommended): [GitHub](https://github.com/mani1232/CustomBot/actions) (Open latest run and download)
+
 ## Supported Versions
 
 Versions with :white_check_mark: are supported
