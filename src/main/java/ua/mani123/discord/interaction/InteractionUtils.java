@@ -1,37 +1,42 @@
 package ua.mani123.discord.interaction;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import ua.mani123.config.configUtils;
 import ua.mani123.discord.interaction.interactions.ButtonInteraction;
 import ua.mani123.discord.interaction.interactions.CommandInteraction;
+import ua.mani123.discord.interaction.interactions.EntityMenuInteraction;
+import ua.mani123.discord.interaction.interactions.ModalInteraction;
+import ua.mani123.discord.interaction.interactions.StringMenuInteraction;
 
 public class InteractionUtils {
 
-  static Map<String, CommandInteraction> commands = new HashMap<>();
-  static Map<String, ButtonInteraction> buttons = new HashMap<>();
+  static HashMap<InteractionTypes, HashSet<Interaction>> interactions = new HashMap<>();
 
-  public static void initCmd(List<CommentedConfig> config) {
-    for (CommentedConfig cfg : config) {
-      CommandInteraction commandInteraction = new CommandInteraction(cfg);
-      commands.put(commandInteraction.getName(), commandInteraction);
-    }
+  public static void initInteractions() {
+
+    configUtils.getInteractions().forEach((s, cConfig) -> {
+      interactions.put(InteractionTypes.BUTTON, new HashSet<>());
+      interactions.put(InteractionTypes.COMMAND, new HashSet<>());
+      ArrayList<CommentedConfig> commentedConfigs = cConfig.getFileCfg().get("interaction");
+      commentedConfigs.forEach(config -> {
+        String type = config.get("type");
+        if (type != null) {
+          switch (InteractionTypes.valueOf(type.trim().toUpperCase())) {
+            case COMMAND -> interactions.get(InteractionTypes.COMMAND).add(new CommandInteraction(config));
+            case BUTTON -> interactions.get(InteractionTypes.BUTTON).add(new ButtonInteraction(config));
+            case MODALS -> interactions.get(InteractionTypes.MODALS).add(new ModalInteraction(config));
+            case STRING_SELECT_MENU -> interactions.get(InteractionTypes.STRING_SELECT_MENU).add(new StringMenuInteraction(config));
+            case ENTITY_SELECT_MENU -> interactions.get(InteractionTypes.ENTITY_SELECT_MENU).add(new EntityMenuInteraction(config));
+          }
+        }
+      });
+    });
   }
 
-  public static void initButton(List<CommentedConfig> config) {
-    for (CommentedConfig cfg : config) {
-      ButtonInteraction buttonInteraction = new ButtonInteraction(cfg);
-      buttons.put(buttonInteraction.getId(), buttonInteraction);
-    }
-  }
-
-
-  public static Map<String, ButtonInteraction> getButtons() {
-    return buttons;
-  }
-
-  public static Map<String, CommandInteraction> getCommands() {
-    return commands;
+  public static HashMap<InteractionTypes, HashSet<Interaction>> getInteractions() {
+    return interactions;
   }
 }

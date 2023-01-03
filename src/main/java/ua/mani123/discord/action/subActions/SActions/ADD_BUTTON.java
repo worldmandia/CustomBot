@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.subActions.SubAction;
 
 public class ADD_BUTTON implements SubAction {
@@ -15,13 +16,13 @@ public class ADD_BUTTON implements SubAction {
   Emoji emoji;
   Long emojiId;
   String emojiString;
-  boolean nextRow;
+  int row;
   ButtonStyle buttonStyle;
 
   public ADD_BUTTON(CommentedConfig config) {
     this.id = config.getOrElse("id", null);
     this.label = config.getOrElse("label", "");
-    this.nextRow = config.getOrElse("next-row", false);
+    this.row = config.getOrElse("row", 0);
     this.buttonStyle = ButtonStyle.valueOf(config.getOrElse("button-style", "SECONDARY").toUpperCase());
     this.emojiString = config.getOrElse("emoji", "");
     this.emojiId = config.getOrElse("emoji-id", 0L);
@@ -39,12 +40,12 @@ public class ADD_BUTTON implements SubAction {
   }
 
   @Override
-  public boolean isNextRow() {
-    return nextRow;
+  public int row() {
+    return this.row;
   }
 
   @Override
-  public ItemComponent getComponent() {
+  public ItemComponent getComponent(TempData tempData) {
     return this.itemComponent;
   }
 }

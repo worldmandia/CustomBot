@@ -29,7 +29,7 @@ Versions with :white_check_mark: are supported
 | Version   | Supported          |
 |-----------|--------------------|
 | latest    | :white_check_mark: |
-| < 0.2.6.0 | :x:                |
+| < 0.3.0.0 | :x:                |
 
 ## Other good java bots
 

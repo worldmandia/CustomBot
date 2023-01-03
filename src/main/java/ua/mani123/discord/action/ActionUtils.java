@@ -24,6 +24,7 @@ import ua.mani123.discord.action.actions.BAN_USER;
 import ua.mani123.discord.action.actions.DEAFEN_USER;
 import ua.mani123.discord.action.actions.MUTE_USER;
 import ua.mani123.discord.action.actions.REMOVE_MEMBER_ROLE;
+import ua.mani123.discord.action.actions.REPLY_MODAL;
 import ua.mani123.discord.action.actions.SEND_EMBED;
 import ua.mani123.discord.action.actions.SEND_MESSAGE;
 import ua.mani123.discord.action.actions.TEMP_DATA_ADD;
@@ -61,6 +62,7 @@ public class ActionUtils {
         case "UNBAN_USER" -> actionMap.get(key).add(new UNBAN_USER(cfg));
         case "ADD_MEMBER_ROLE" -> actionMap.get(key).add(new ADD_MEMBER_ROLE(cfg));
         case "REMOVE_MEMBER_ROLE" -> actionMap.get(key).add(new REMOVE_MEMBER_ROLE(cfg));
+        case "REPLY_MODAL" -> actionMap.get(key).add(new REPLY_MODAL(cfg));
         default -> {
           for (Map.Entry<String, AddonData> addons : AddonUtils.getAddonMap().entrySet()) {
             Action action = addons.getValue().getAddon().addCustomAction(type, key, cfg);
@@ -76,17 +78,17 @@ public class ActionUtils {
   public static HashSet<UserSnowflake> getMembersOrUsers(GenericInteractionCreateEvent event, ArrayList<String> users) {
     if (!users.isEmpty()) {
       HashSet<UserSnowflake> members = new HashSet<>();
-      users.forEach(s -> {
+      users.forEach(user -> {
         try {
-          members.add(Objects.requireNonNull(event.getGuild()).getMemberById(s));
+          members.add(Objects.requireNonNull(event.getGuild()).getMemberById(user));
         } catch (NumberFormatException numberFormatException) {
-          members.add(Objects.requireNonNull(event.getGuild()).getMemberByTag(s));
+          members.add(Objects.requireNonNull(event.getGuild()).getMemberByTag(user));
         } catch (NullPointerException nullPointerException) {
-          CBot.getLog().info("User: " + s + " not found in guild");
+          CBot.getLog().info("User: " + user + " not found in guild");
           try {
-            members.add(event.getUser().getJDA().getUserById(s));
+            members.add(event.getUser().getJDA().getUserById(user));
           } catch (NumberFormatException numberFormatException) {
-            members.add(event.getUser().getJDA().getUserByTag(s));
+            members.add(event.getUser().getJDA().getUserByTag(user));
           }
         }
       });

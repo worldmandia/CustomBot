@@ -3,6 +3,17 @@ package ua.mani123.config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.file.FileNotFoundAction;
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -14,49 +25,55 @@ import ua.mani123.discord.discordUtils;
 public class configUtils {
 
   private static CConfig config;
-  private static CConfig commandInteraction;
-  private static CConfig buttonInteraction;
+  private static HashMap<String, CConfig> interactions;
   private static Map<String, JDA> DiscordBotsData;
   private static Map<String, CConfig> actions;
+  private static final FileSystem fileSystem;
 
-  public static CommentedFileConfig initResourceCfg(String file, ClassLoader classLoader) {
-    CommentedFileConfig config = CommentedFileConfig.builder(file).onFileNotFound(FileNotFoundAction.copyData(
+  static {
+    try {
+      fileSystem = FileSystems.newFileSystem(Objects.requireNonNull(CBot.class.getResource("")).toURI(), new HashMap<String, String>());
+    } catch (IOException | URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static CommentedFileConfig initFile(String file, ClassLoader classLoader) {
+    CommentedFileConfig config = CommentedFileConfig.builder(file).autosave().onFileNotFound(FileNotFoundAction.copyData(
         Objects.requireNonNull(classLoader.getResource(file)))).build();
     config.load();
     return config;
   }
 
-  public static CommentedFileConfig initCfg(String file, String path, ClassLoader classLoader) {
-    File folder = new File(path);
-    if (!folder.exists()) {
-      if (folder.mkdirs()) {
-        initCfg(file, path, classLoader);
+  public static HashMap<String, CConfig> initResourcesFolder(String folder, FileSystem thisFileSystem) {
+    File folderFile = new File(folder);
+    if (folderFile.mkdirs()) {
+      try {
+        Path jarPath = thisFileSystem.getPath(folder);
+        Files.walkFileTree(jarPath, new SimpleFileVisitor<>() {
+          @Override
+          public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+            Path currentTarget = Path.of(folder).resolve(jarPath.relativize(dir).toString());
+            Files.createDirectories(currentTarget);
+            return FileVisitResult.CONTINUE;
+          }
+
+          @Override
+          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            Files.copy(file, Path.of(folder).resolve(jarPath.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
+            return FileVisitResult.CONTINUE;
+          }
+        });
+      } catch (Exception e) {
+        CBot.getLog().warn(Arrays.toString(e.getStackTrace()));
       }
-    } else {
-      String rPath = path + file;
-      CommentedFileConfig config = CommentedFileConfig.builder(rPath).onFileNotFound(FileNotFoundAction.copyData(
-          Objects.requireNonNull(classLoader.getResource(rPath)))).build();
-      config.load();
-      return config;
     }
-    return null;
-  }
-
-
-  public static Map<String, CConfig> initFolderCfg(String path) {
-    Map<String, CConfig> configs = new HashMap<>();
-    File folder = new File(path);
-    if (folder.exists() && folder.isDirectory()) {
-      for (File file : Objects.requireNonNull(folder.listFiles())) {
-        if (!file.getName().startsWith("_") && file.getName().endsWith(".toml")) {
-          CommentedFileConfig cfg = CommentedFileConfig.builder(file).build();
-          cfg.load();
-          configs.put(file.getName().replace(".toml", ""), new CConfig(cfg));
-        }
-      }
-    } else {
-      if (folder.mkdirs()) {
-        initFolderCfg(path);
+    HashMap<String, CConfig> configs = new HashMap<>();
+    for (File file : Objects.requireNonNull(folderFile.listFiles())) {
+      if (!file.getName().startsWith("_") && file.getName().endsWith(".toml")) {
+        CommentedFileConfig cfg = CommentedFileConfig.builder(file).autosave().build();
+        cfg.load();
+        configs.put(file.getName().replace(".toml", ""), new CConfig(cfg));
       }
     }
     return configs;
@@ -65,48 +82,38 @@ public class configUtils {
   public static void init() {
     updateConfig();
     DiscordBotsData = discordUtils.initBots(getConfig());
+    updateInteractions();
     updateActions();
-    updateCommandInteractions();
-    updateButtonInteraction();
   }
 
   public static void updateConfig() {
-    config = new CConfig(configUtils.initResourceCfg("config.toml", CBot.class.getClassLoader()));
+    config = new CConfig(configUtils.initFile("config.toml", CBot.class.getClassLoader()));
   }
 
-  public static void updateButtonInteraction() {
-    buttonInteraction = new CConfig(configUtils.initCfg("buttonInteraction.toml", "interactions/", CBot.class.getClassLoader()));
+  public static void updateInteractions() {
+    interactions = initResourcesFolder("interactions", fileSystem);
   }
 
   public static void updateActions() {
-    actions = configUtils.initFolderCfg("actions/");
+    actions = initResourcesFolder("actions", fileSystem);
   }
 
-  public static void updateCommandInteractions() {
-    commandInteraction = new CConfig(configUtils.initCfg("commandInteraction.toml", "interactions/", CBot.class.getClassLoader()));
-  }
-
-  public static void saveAll() {
+  public static void disableAll() {
+    CBot.getLog().info("Disable all");
     AddonUtils.getAddonMap().forEach((key, value) -> value.getAddon().disable());
-    config.getFileCfg().save();
-    commandInteraction.getFileCfg().save();
-    buttonInteraction.getFileCfg().save();
-    for (Map.Entry<String, CConfig> cfg : actions.entrySet()) {
-      cfg.getValue().getFileCfg().save();
-    }
-    CBot.getLog().info("Saving configs");
+    // Save all (Not need)
+    //config.getFileCfg().save();
+    //actions.forEach((s, cConfig) -> cConfig.getFileCfg().save());
+    //interactions.forEach((s, cConfig) -> cConfig.getFileCfg().save());
+    CBot.getLog().info("Offline!");
   }
 
   public static CConfig getConfig() {
     return config;
   }
 
-  public static CConfig getCommandInteraction() {
-    return commandInteraction;
-  }
-
-  public static CConfig getButtonInteraction() {
-    return buttonInteraction;
+  public static HashMap<String, CConfig> getInteractions() {
+    return interactions;
   }
 
   public static Map<String, JDA> getDiscordBotsData() {

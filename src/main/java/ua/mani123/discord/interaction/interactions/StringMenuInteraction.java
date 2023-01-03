@@ -6,14 +6,14 @@ import ua.mani123.discord.action.filter.Filter;
 import ua.mani123.discord.action.filter.filterUtils;
 import ua.mani123.discord.interaction.Interaction;
 
-public class ButtonInteraction implements Interaction {
+public class StringMenuInteraction implements Interaction {
 
   private final String id;
   private final ArrayList<String> actionIds;
   private final ArrayList<String> filterIds;
   private final ArrayList<Filter> filters;
 
-  public ButtonInteraction(CommentedConfig config) {
+  public StringMenuInteraction(CommentedConfig config) {
     this.id = config.getOrElse("id", "");
     this.actionIds = config.getOrElse("actionsIds", new ArrayList<>());
     this.filterIds = config.getOrElse("filtersIds", new ArrayList<>());
@@ -35,4 +35,5 @@ public class ButtonInteraction implements Interaction {
   public ArrayList<String> getFilterIds() {
     return filterIds;
   }
+
 }

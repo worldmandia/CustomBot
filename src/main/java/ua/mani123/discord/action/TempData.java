@@ -16,6 +16,8 @@ public class TempData {
   HashSet<Role> roles = new HashSet<>();
   HashMap<String, String> contentData = new HashMap<>();
 
+  HashMap<String, String> placeholders = new HashMap<>();
+
   public Set<UserSnowflake> getUserSnowflakes() {
     return userSnowflakes;
   }
@@ -34,5 +36,9 @@ public class TempData {
 
   public HashMap<String, String> getContentData() {
     return contentData;
+  }
+
+  public HashMap<String, String> getPlaceholders() {
+    return placeholders;
   }
 }

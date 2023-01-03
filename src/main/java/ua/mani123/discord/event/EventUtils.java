@@ -12,7 +12,7 @@ import ua.mani123.discord.action.filter.filterUtils;
 public class EventUtils {
 
   public static void runActions(ArrayList<String> actionIds, GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData){
-    if (actionIds != null) {
+    if (!actionIds.isEmpty()) {
       for (String actionId : actionIds) {
         if (ActionUtils.getActionMap().containsKey(actionId)) {
           ArrayList<Action> actionArrayList = ActionUtils.getActionMap().get(actionId);

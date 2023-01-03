@@ -4,8 +4,7 @@ import com.electronwill.nightconfig.core.CommentedConfig;
 import java.util.ArrayList;
 import java.util.Objects;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.Action;
@@ -28,21 +27,24 @@ public class REMOVE_MEMBER_ROLE implements Action {
   }
 
   @Override
-  public void run(GenericInteractionCreateEvent event, TempData tempData) {
-    for (UserSnowflake userSnowflake : tempData.getUserSnowflakes()) {
-      Member member = Objects.requireNonNull(event.getGuild()).getMember(userSnowflake);
-      for (Role role : tempData.getRoles()) {
-          if (!member.getRoles().contains(role)) {
-            Objects.requireNonNull(event.getGuild()).removeRoleFromMember(member, role).reason(reason).queue();
-          } else if (addIfNot) {
-            Objects.requireNonNull(event.getGuild()).addRoleToMember(member, role).reason(reason).queue();
-          }
+  public void run(GenericEvent event, TempData tempData) {
+    if (event instanceof GenericInteractionCreateEvent genericInteractionCreateEvent) {
+      tempData.getUserSnowflakes().forEach(userSnowflake -> {
+        if (userSnowflake instanceof Member member) {
+          tempData.getRoles().forEach(role -> {
+            if (!member.getRoles().contains(role)) {
+              Objects.requireNonNull(genericInteractionCreateEvent.getGuild()).removeRoleFromMember(member, role).reason(reason).queue();
+            } else if (addIfNot) {
+              Objects.requireNonNull(genericInteractionCreateEvent.getGuild()).addRoleToMember(member, role).reason(reason).queue();
+            }
+          });
         }
+      });
     }
   }
 
   @Override
-  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
+  public void runWithPlaceholders(GenericEvent event, StringSubstitutor str, TempData tempData) {
     run(event, tempData);
   }
 

@@ -9,18 +9,20 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import ua.mani123.CBot;
 import ua.mani123.config.CConfig;
-import ua.mani123.discord.event.CButtonInteractionEvent;
-import ua.mani123.discord.event.CommandAutoCompleteInteraction;
-import ua.mani123.discord.event.GuildEvent;
-import ua.mani123.discord.event.ReadyBot;
-import ua.mani123.discord.event.SlashCommandInteraction;
+import ua.mani123.discord.event.CustomEvents.CustomButtonInteractionEvent;
+import ua.mani123.discord.event.CustomEvents.CustomCommandAutoCompleteInteraction;
+import ua.mani123.discord.event.CustomEvents.CustomModalInteraction;
+import ua.mani123.discord.event.CustomEvents.CustomSelectMenuInteraction;
+import ua.mani123.discord.event.CustomEvents.CustomSlashCommandInteraction;
+import ua.mani123.discord.event.CustomEvents.GuildEvent;
+import ua.mani123.discord.event.CustomEvents.ReadyBot;
 
 public class discordUtils {
 
   public static Map<String, JDA> initBots(CConfig cfg) {
     Map<String, JDA> bots = new HashMap<>();
     List<CommentedConfig> discordBotConfigs = cfg.getFileCfg().getOrElse("discord-bot", new ArrayList<>());
-    for (CommentedConfig config : discordBotConfigs) {
+    discordBotConfigs.forEach(config -> {
       String token = config.get("token");
       if (token != null) {
         try {
@@ -29,23 +31,29 @@ public class discordUtils {
           config.set("id", id);
           jda.addEventListener(new ReadyBot());
           if (config.getOrElse("enable-command-events", true)) {
-            jda.addEventListener(new SlashCommandInteraction());
+            jda.addEventListener(new CustomSlashCommandInteraction());
           }
           if (config.getOrElse("enable-autocomplete-command-events", true)) {
-            jda.addEventListener(new CommandAutoCompleteInteraction());
+            jda.addEventListener(new CustomCommandAutoCompleteInteraction());
           }
           if (config.getOrElse("enable-guild-events", true)) {
             jda.addEventListener(new GuildEvent());
           }
           if (config.getOrElse("enable-button-events", true)) {
-            jda.addEventListener(new CButtonInteractionEvent());
+            jda.addEventListener(new CustomButtonInteractionEvent());
+          }
+          if (config.getOrElse("enable-menu-events", true)) {
+            jda.addEventListener(new CustomSelectMenuInteraction());
+          }
+          if (config.getOrElse("enable-modal-events", true)) {
+            jda.addEventListener(new CustomModalInteraction());
           }
           bots.put(id, jda);
         } catch (Exception e) {
           CBot.getLog().warn("You get error: " + e.getMessage());
         }
       }
-    }
+    });
     return bots;
   }
 

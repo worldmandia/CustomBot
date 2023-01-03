@@ -1,12 +1,13 @@
 # Files starting with '_' will not be loaded
 [[action]]
-type = "random_type"
-message = "Any message"
-[[filter]]
-type = "ROLE"
-list = [
-    "role"
-]
-[[sub-action]]
-type = "random_type"
-id = "Another id"
+type = "TEMP_DATA_ADD"
+focusedUserOptionIds = ["listofusers"]
+[[action]]
+type = "MUTE_USER"
+[[action]]
+type = "DEAFEN_USER"
+[[action]]
+type = "SEND_EMBED"
+title = "Success"
+description = "You success unmuted user"
+ephemeral = true

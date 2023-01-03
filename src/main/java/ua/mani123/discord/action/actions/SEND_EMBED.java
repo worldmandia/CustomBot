@@ -5,13 +5,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
-import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.GenericComponentInteractionCreateEvent;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.ItemComponent;
-import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
-import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
+import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import org.apache.commons.text.StringSubstitutor;
 import ua.mani123.discord.action.Action;
 import ua.mani123.discord.action.ActionUtils;
@@ -45,56 +41,21 @@ public class SEND_EMBED implements Action {
   }
 
   @Override
-  public void run(GenericInteractionCreateEvent event, TempData tempData) {
+  public void run(GenericEvent event, TempData tempData) {
     if (messageEmbed == null) {
       messageEmbed = new EmbedBuilder().setTitle(title).setDescription(description).setColor(color).build();
     }
-    if (ephemeral) {
-      ReplyCallbackAction replyCallbackAction = null;
-      if (event instanceof GenericCommandInteractionEvent commandInteractionEvent) {
-        replyCallbackAction = commandInteractionEvent.replyEmbeds(messageEmbed);
-      } else if (event instanceof GenericComponentInteractionCreateEvent componentInteractionCreateEvent) {
-        replyCallbackAction = componentInteractionCreateEvent.replyEmbeds(messageEmbed);
+    if (event instanceof GenericInteractionCreateEvent genericInteractionCreateEvent) {
+      if (genericInteractionCreateEvent instanceof IReplyCallback iReplyCallback) {
+        iReplyCallback.replyEmbeds(messageEmbed).setEphemeral(ephemeral).addComponents(subActionsUtils.getRows(subActions, tempData)).queue();
+      } else {
+        genericInteractionCreateEvent.getMessageChannel().sendMessageEmbeds(messageEmbed).addComponents(subActionsUtils.getRows(subActions, tempData)).queue();
       }
-      if (!subActions.isEmpty()) {
-        ArrayList<ItemComponent> itemComponents = new ArrayList<>();
-        for (SubAction s : subActions) {
-          assert replyCallbackAction != null;
-          if (!s.isNextRow()) {
-            itemComponents.add(s.getComponent());
-          } else {
-            replyCallbackAction = replyCallbackAction.addComponents(ActionRow.of(itemComponents));
-            itemComponents.clear();
-          }
-          if (!itemComponents.isEmpty()) {
-            replyCallbackAction = replyCallbackAction.addComponents(ActionRow.of(itemComponents));
-          }
-        }
-      }
-      assert replyCallbackAction != null;
-      replyCallbackAction.setEphemeral(ephemeral).queue();
-    } else {
-      MessageCreateAction messageCreateAction = event.getMessageChannel().sendMessageEmbeds(messageEmbed);
-      if (!subActions.isEmpty()) {
-        ArrayList<ItemComponent> itemComponents = new ArrayList<>();
-        for (SubAction s : subActions) {
-          if (!s.isNextRow()) {
-            itemComponents.add(s.getComponent());
-          } else {
-            messageCreateAction = messageCreateAction.addComponents(ActionRow.of(itemComponents));
-            itemComponents.clear();
-          }
-          if (!itemComponents.isEmpty()) {
-            messageCreateAction = messageCreateAction.addComponents(ActionRow.of(itemComponents));
-          }
-        }
-      }
-      messageCreateAction.queue();
     }
   }
 
   @Override
-  public void runWithPlaceholders(GenericInteractionCreateEvent event, StringSubstitutor str, TempData tempData) {
+  public void runWithPlaceholders(GenericEvent event, StringSubstitutor str, TempData tempData) {
     messageEmbed = new EmbedBuilder().setTitle(str.replace(title)).setDescription(str.replace(description)).setColor(color).build();
     run(event, tempData);
   }
