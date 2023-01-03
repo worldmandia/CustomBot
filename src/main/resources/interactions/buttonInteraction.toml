@@ -1,5 +1,0 @@
-# Configure command interactions
-[[interaction]]
-type = "button"
-id = ""
-actionsIds = [""]
