@@ -47,9 +47,9 @@ public class SEND_EMBED implements Action {
     }
     if (event instanceof GenericInteractionCreateEvent genericInteractionCreateEvent) {
       if (genericInteractionCreateEvent instanceof IReplyCallback iReplyCallback) {
-        iReplyCallback.replyEmbeds(messageEmbed).setEphemeral(ephemeral).addComponents(subActionsUtils.getRows(subActions)).queue();
+        iReplyCallback.replyEmbeds(messageEmbed).setEphemeral(ephemeral).addComponents(subActionsUtils.getRows(subActions, tempData)).queue();
       } else {
-        genericInteractionCreateEvent.getMessageChannel().sendMessageEmbeds(messageEmbed).addComponents(subActionsUtils.getRows(subActions)).queue();
+        genericInteractionCreateEvent.getMessageChannel().sendMessageEmbeds(messageEmbed).addComponents(subActionsUtils.getRows(subActions, tempData)).queue();
       }
     }
   }

@@ -11,6 +11,7 @@ import ua.mani123.CBot;
 import ua.mani123.config.CConfig;
 import ua.mani123.discord.event.CustomEvents.CustomButtonInteractionEvent;
 import ua.mani123.discord.event.CustomEvents.CustomCommandAutoCompleteInteraction;
+import ua.mani123.discord.event.CustomEvents.CustomModalInteraction;
 import ua.mani123.discord.event.CustomEvents.CustomSelectMenuInteraction;
 import ua.mani123.discord.event.CustomEvents.CustomSlashCommandInteraction;
 import ua.mani123.discord.event.CustomEvents.GuildEvent;
@@ -43,6 +44,9 @@ public class discordUtils {
           }
           if (config.getOrElse("enable-menu-events", true)) {
             jda.addEventListener(new CustomSelectMenuInteraction());
+          }
+          if (config.getOrElse("enable-modal-events", true)) {
+            jda.addEventListener(new CustomModalInteraction());
           }
           bots.put(id, jda);
         } catch (Exception e) {

@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.subActions.SubAction;
 
 public class ADD_BUTTON implements SubAction {
@@ -44,7 +45,7 @@ public class ADD_BUTTON implements SubAction {
   }
 
   @Override
-  public ItemComponent getComponent() {
+  public ItemComponent getComponent(TempData tempData) {
     return this.itemComponent;
   }
 }

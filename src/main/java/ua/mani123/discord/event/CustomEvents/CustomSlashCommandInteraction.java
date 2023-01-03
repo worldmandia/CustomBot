@@ -19,9 +19,8 @@ public class CustomSlashCommandInteraction extends ListenerAdapter {
       if (interaction instanceof CommandInteraction commandInteraction) {
         if (event.getName().equals(commandInteraction.getName())){
           TempData tempData = new TempData();
-          StringSubstitutor str = new StringSubstitutor(tempData.getPlaceholders());
-          if (filterUtils.filterCheck(commandInteraction.getFilters(), event, str, tempData)) {
-            EventUtils.runActions(commandInteraction.getActionIds(), event, str, tempData);
+          if (filterUtils.filterCheck(commandInteraction.getFilters(), event, new StringSubstitutor(tempData.getPlaceholders()), tempData)) {
+            EventUtils.runActions(commandInteraction.getActionIds(), event, new StringSubstitutor(tempData.getPlaceholders()), tempData);
           }
         }
       }

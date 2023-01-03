@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.interactions.components.ItemComponent;
 import net.dv8tion.jda.api.interactions.components.selections.EntitySelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
+import ua.mani123.discord.action.TempData;
 import ua.mani123.discord.action.subActions.SubAction;
 
 public class ADD_SELECT_MENU implements SubAction {
@@ -23,7 +24,7 @@ public class ADD_SELECT_MENU implements SubAction {
     this.id = config.getOrElse("id", null);
     this.MenuType = config.getOrElse("MenuType", "STRING");
     this.row = config.getOrElse("next-row", 0);
-    this.EntityTypes = config.getOrElse("EntityTypes", new ArrayList<>(List.of("ROLE", "USER", "CHANNEL")));
+    this.EntityTypes = config.getOrElse("EntityTypes", new ArrayList<>(List.of("ROLE", "USER")));
     if (MenuType.equalsIgnoreCase("STRING")) {
       ArrayList<CommentedConfig> options = config.getOrElse("option", new ArrayList<>());
       ArrayList<SelectOption> selectOptions = new ArrayList<>();
@@ -62,7 +63,7 @@ public class ADD_SELECT_MENU implements SubAction {
 
 
   @Override
-  public ItemComponent getComponent() {
+  public ItemComponent getComponent(TempData tempData) {
     return this.itemComponent;
   }
 

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import ua.mani123.config.configUtils;
 import ua.mani123.discord.interaction.interactions.ButtonInteraction;
 import ua.mani123.discord.interaction.interactions.CommandInteraction;
+import ua.mani123.discord.interaction.interactions.ModalInteraction;
 
 public class InteractionUtils {
 
@@ -24,6 +25,7 @@ public class InteractionUtils {
           switch (InteractionTypes.valueOf(type.trim().toUpperCase())) {
             case COMMAND -> interactions.get(InteractionTypes.COMMAND).add(new CommandInteraction(config));
             case BUTTON -> interactions.get(InteractionTypes.BUTTON).add(new ButtonInteraction(config));
+            case MODALS -> interactions.get(InteractionTypes.MODALS).add(new ModalInteraction(config));
           }
         }
       });

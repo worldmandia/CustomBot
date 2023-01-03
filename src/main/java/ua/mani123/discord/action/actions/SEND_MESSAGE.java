@@ -39,9 +39,9 @@ public class SEND_MESSAGE implements Action {
         tempMessage = message;
       }
       if (genericInteractionCreateEvent instanceof IReplyCallback iReplyCallback) {
-        iReplyCallback.reply(tempMessage).setEphemeral(ephemeral).addComponents(subActionsUtils.getRows(subActions)).queue();
+        iReplyCallback.reply(tempMessage).setEphemeral(ephemeral).addComponents(subActionsUtils.getRows(subActions, tempData)).queue();
       } else {
-        genericInteractionCreateEvent.getMessageChannel().sendMessage(tempMessage).addComponents(subActionsUtils.getRows(subActions)).queue();
+        genericInteractionCreateEvent.getMessageChannel().sendMessage(tempMessage).addComponents(subActionsUtils.getRows(subActions, tempData)).queue();
       }
     }
   }
