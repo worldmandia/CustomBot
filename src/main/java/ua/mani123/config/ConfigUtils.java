@@ -33,7 +33,7 @@ public class ConfigUtils {
         this.filePath = filePath;
     }
 
-    public <T extends ConfigDefaults> T loadFileConfig(T fileObject) {
+    public <T extends ConfigDefaults> T loadFileConfig(T fileObject, boolean updateFile) {
         File file = new File(filePath);
         try {
             if (file.createNewFile()) {
@@ -44,7 +44,11 @@ public class ConfigUtils {
                 this.commentedConfig = commentedConfig;
             } else {
                 commentedConfig = CommentedFileConfig.of(file);
-                tomlParser.parse(file, commentedConfig, ParsingMode.ADD, FileNotFoundAction.THROW_ERROR);
+                if (updateFile) {
+                    objectConverter.toConfig(fileObject, commentedConfig);
+                }
+                tomlParser.parse(file, commentedConfig, ParsingMode.MERGE, FileNotFoundAction.THROW_ERROR);
+                commentedConfig.save();
                 try {
                     objectConverter.toObject(commentedConfig, fileObject);
                 } catch (InvalidValueException e) {

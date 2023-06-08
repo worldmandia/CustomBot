@@ -24,7 +24,7 @@ public class DiscordUtils {
     ArrayList<ShardManager> discordBots = new ArrayList<>();
 
     public DiscordUtils init(String defaultFolder) {
-        botConfig = new ConfigUtils(defaultFolder + "/BotConfig.toml").loadFileConfig(new BotConfig());
+        botConfig = new ConfigUtils(defaultFolder + "/BotConfig.toml").loadFileConfig(new BotConfig(), false);
         return this;
     }
 
