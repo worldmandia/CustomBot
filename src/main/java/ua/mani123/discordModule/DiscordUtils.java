@@ -35,7 +35,7 @@ public class DiscordUtils {
                 discordBots.add(shardManager);
                 discordBot.setBotId(shardManager.getShards().get(0).getSelfUser().getId());
             } catch (InvalidTokenException ignored) {
-                logger.error(String.format(CustomBot.getLang().getFiledLoadDiscordBot(), discordBot.getBotId(), discordBot.getBotToken()));
+                logger.error(String.format(CustomBot.getLang().getFailedLoadDiscordBot(), discordBot.getBotId(), discordBot.getBotToken()));
             }
         });
         botConfig.getUtils().updateConfig(botConfig);

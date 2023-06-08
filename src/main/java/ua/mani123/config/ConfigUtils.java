@@ -53,7 +53,7 @@ public class ConfigUtils {
                     objectConverter.toObject(commentedConfig, fileObject);
                 } catch (InvalidValueException e) {
                     if (CustomBot.getLang() != null) {
-                        logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), file.getName()));
+                        logger.error(String.format(CustomBot.getLang().getFailedLoadFile(), file.getName()));
                     } else {
                         logger.error(String.format("Filed load file: %s", file.getName()));
                     }
@@ -72,7 +72,7 @@ public class ConfigUtils {
             commentedConfig.save();
         } catch (Exception e) {
             if (CustomBot.getLang() != null) {
-                logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), commentedConfig.getFile().getName()));
+                logger.error(String.format(CustomBot.getLang().getFailedLoadFile(), commentedConfig.getFile().getName()));
             } else {
                 logger.error(String.format("Filed load file: %s", commentedConfig.getFile().getName()));
             }
@@ -90,7 +90,7 @@ public class ConfigUtils {
             objectConverter.toObject(commentedConfig, fileObject);
         } catch (InvalidValueException e) {
             if (CustomBot.getLang() != null) {
-                logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), file.getName()));
+                logger.error(String.format(CustomBot.getLang().getFailedLoadFile(), file.getName()));
             } else {
                 logger.error(String.format("Filed load file: %s", file.getName()));
             }

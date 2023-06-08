@@ -15,15 +15,15 @@ public class GlobalLang extends ConfigDefaults {
     @Path("Discord_Module_Init")
     @SpecNotNull
     String discordModuleInit = "Start init discord module";
-    @Path("Filed_Load_File")
+    @Path("Failed_Load_File")
     @SpecNotNull
-    String filedLoadFile = "Filed load file: %s";
+    String failedLoadFile = "Failed load file: %s";
     @Path("Enabled_Discord_Bots")
     @SpecNotNull
     String enabledDiscordBot = "Enabled discord bots: %s";
-    @Path("Filed_Load_Discord_Bot")
+    @Path("Failed_Load_Discord_Bot")
     @SpecNotNull
-    String filedLoadDiscordBot = "Filed load discord bot %s with token %s";
+    String failedLoadDiscordBot = "Failed load discord bot %s with token %s";
     @Path("CustomBotDisabled")
     @SpecNotNull
     String customBotDisabled = "CustomBot disabled";
