@@ -1,6 +1,7 @@
 package ua.mani123;
 
 import lombok.Getter;
+import net.dv8tion.jda.api.sharding.ShardManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.mani123.config.ConfigUtils;
@@ -14,8 +15,10 @@ public class CustomBot {
 
     private static Settings settings;
     private static GlobalLang lang;
+    private static DiscordUtils discordUtils;
     public static void main(String[] args) {
         enable();
+        Runtime.getRuntime().addShutdownHook(new Thread(CustomBot::disable));
     }
 
     public static void enable() {
@@ -23,12 +26,13 @@ public class CustomBot {
         lang = new ConfigUtils(settings.getDefaultConfigFolder() + "/global_lang.toml").loadFileConfig(new GlobalLang());
         if (settings.isEnableDiscordBotModule()) {
             logger.info(lang.getDiscordModuleInit());
-            DiscordUtils discordUtils = new DiscordUtils().init(settings.getDefaultConfigFolder()).enableBots();
+            discordUtils = new DiscordUtils().init(settings.getDefaultConfigFolder()).enableBots();
         }
     }
 
     public static void disable() {
-
+        discordUtils.getDiscordBots().forEach(ShardManager::shutdown);
+        logger.info(lang.getCustomBotDisabled());
     }
 
     public static Settings getSettings() {

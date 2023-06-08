@@ -24,6 +24,9 @@ public class GlobalLang extends ConfigDefaults {
     @Path("Filed_Load_Discord_Bot")
     @SpecNotNull
     String filedLoadDiscordBot = "Filed load discord bot %s with token %s";
+    @Path("CustomBotDisabled")
+    @SpecNotNull
+    String customBotDisabled = "CustomBot disabled";
 
     @Override
     public void addDefaults() {
