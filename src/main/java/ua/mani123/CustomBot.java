@@ -20,10 +20,10 @@ public class CustomBot {
 
     public static void enable() {
         settings = new ConfigUtils().loadFileConfig("settings.toml", new Settings());
-        lang = new ConfigUtils().loadFileConfig("global_lang.toml", new GlobalLang());
+        lang = new ConfigUtils().loadFileConfig(settings.getDefaultConfigFolder() + "/global_lang.toml", new GlobalLang());
         if (settings.isEnableDiscordBotModule()) {
             logger.info(lang.getDiscordModuleInit());
-            DiscordUtils discordUtils = new DiscordUtils().init(settings.getDefaultConfigFolder());
+            DiscordUtils discordUtils = new DiscordUtils().init(settings.getDefaultConfigFolder()).enableBots();
         }
     }
 

@@ -3,6 +3,7 @@ package ua.mani123.config.Objects;
 import com.electronwill.nightconfig.core.conversion.Path;
 import com.electronwill.nightconfig.core.conversion.SpecNotNull;
 import lombok.*;
+import ua.mani123.config.ConfigUtils;
 
 import java.util.ArrayList;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 @Getter
 @Setter
 @AllArgsConstructor
-public class BotConfig extends ConfigWithDefaults {
+public class BotConfig extends ConfigDefaults {
 
     @Path("DiscordBot")
     @SpecNotNull
@@ -18,9 +19,9 @@ public class BotConfig extends ConfigWithDefaults {
 
     @Override
     public void addDefaults() {
-        discordBots.add(new DiscordBot(0, "TOKEN_CHANGE_IT_1"));
-        discordBots.add(new DiscordBot(1, "TOKEN_CHANGE_IT_2"));
-        discordBots.add(new DiscordBot(2, "TOKEN_CHANGE_IT_3"));
+        discordBots.add(new DiscordBot("0", "TOKEN_CHANGE_IT_1"));
+        discordBots.add(new DiscordBot("1", "TOKEN_CHANGE_IT_2"));
+        discordBots.add(new DiscordBot("2", "TOKEN_CHANGE_IT_3"));
     }
 
     @AllArgsConstructor
@@ -31,10 +32,20 @@ public class BotConfig extends ConfigWithDefaults {
     public static class DiscordBot {
         @SpecNotNull
         @Path("BotId")
-        int botId = 0;
+        String botId = "0";
         @SpecNotNull
         @Path("BotToken")
         String botToken = "NOT_SET";
+    }
+
+    @Override
+    public ConfigUtils getUtils() {
+        return this.configUtils;
+    }
+
+    @Override
+    public void setUtils(ConfigUtils configUtils) {
+        this.configUtils = configUtils;
     }
 
 }

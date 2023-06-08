@@ -13,7 +13,7 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.mani123.CustomBot;
-import ua.mani123.config.Objects.ConfigWithDefaults;
+import ua.mani123.config.Objects.ConfigDefaults;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +27,9 @@ public class ConfigUtils {
     private final static ObjectConverter objectConverter = new ObjectConverter();
     private final static ConfigParser<CommentedConfig> tomlParser = TomlFormat.instance().createParser();
     private final static ConfigWriter tomlWriter = TomlFormat.instance().createWriter();
-    private CommentedConfig commentedConfig;
+    private CommentedFileConfig commentedConfig;
 
-    public <T extends ConfigWithDefaults> T loadFileConfig(String filePath, T fileObject) {
+    public <T extends ConfigDefaults> T loadFileConfig(String filePath, T fileObject) {
         File file = new File(filePath);
         try {
             if (file.createNewFile()) {
@@ -39,7 +39,7 @@ public class ConfigUtils {
                 commentedConfig.save();
                 this.commentedConfig = commentedConfig;
             } else {
-                commentedConfig = CommentedConfig.inMemory();
+                commentedConfig = CommentedFileConfig.of(file);
                 tomlParser.parse(file, commentedConfig, ParsingMode.ADD, FileNotFoundAction.THROW_ERROR);
                 try {
                     objectConverter.toObject(commentedConfig, fileObject);
@@ -50,19 +50,29 @@ public class ConfigUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        fileObject.setUtils(this);
         return fileObject;
     }
 
-    public <T extends ConfigWithDefaults> T loadFileConfig(String filePath, String resourceFilePath, T fileObject) {
+    public <T extends ConfigDefaults> void updateConfig(T fileObject) {
+        try {
+            objectConverter.toConfig(fileObject, commentedConfig);
+            commentedConfig.save();
+        } catch (Exception e) {
+            logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), commentedConfig.getFile().getName()));
+        }
+    }
+
+    public <T extends ConfigDefaults> T loadFileConfig(String filePath, String resourceFilePath, T fileObject) {
         File file = new File(filePath);
-        commentedConfig = CommentedConfig.inMemory();
+        commentedConfig = CommentedFileConfig.of(file);
         tomlParser.parse(file, commentedConfig, ParsingMode.ADD, FileNotFoundAction.copyResource(resourceFilePath));
         try {
             objectConverter.toObject(commentedConfig, fileObject);
         } catch (InvalidValueException e) {
             logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), file.getName()));
         }
-
+        fileObject.setUtils(this);
         return fileObject;
     }
 

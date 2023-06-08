@@ -4,10 +4,11 @@ import com.electronwill.nightconfig.core.conversion.Path;
 import com.electronwill.nightconfig.core.conversion.SpecNotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ua.mani123.config.ConfigUtils;
 
 @Getter
 @NoArgsConstructor
-public class Settings extends ConfigWithDefaults {
+public class Settings extends ConfigDefaults {
 
     @Path("Enable_Discord_Bot_Module")
     @SpecNotNull
@@ -22,5 +23,15 @@ public class Settings extends ConfigWithDefaults {
     @Override
     public void addDefaults() {
 
+    }
+
+    @Override
+    public ConfigUtils getUtils() {
+        return this.configUtils;
+    }
+
+    @Override
+    public void setUtils(ConfigUtils configUtils) {
+        this.configUtils = configUtils;
     }
 }
