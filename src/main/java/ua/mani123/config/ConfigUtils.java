@@ -1,42 +1,66 @@
 package ua.mani123.config;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
+import com.electronwill.nightconfig.core.conversion.InvalidValueException;
 import com.electronwill.nightconfig.core.conversion.ObjectConverter;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.file.FileNotFoundAction;
+import com.electronwill.nightconfig.core.io.ConfigParser;
+import com.electronwill.nightconfig.core.io.ConfigWriter;
+import com.electronwill.nightconfig.core.io.ParsingMode;
+import com.electronwill.nightconfig.toml.TomlFormat;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.mani123.config.Objects.ConfigWithDefaults;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Getter
 public class ConfigUtils {
 
-    ObjectConverter objectConverter = new ObjectConverter();
+    private final static Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
 
-    public <T extends ConfigWithDefaults> T loadFileConfig(String configPath, T configObject) {
-        File file = new File(configPath);
+    private final static ObjectConverter objectConverter = new ObjectConverter();
+    private final static ConfigParser<CommentedConfig> tomlParser = TomlFormat.instance().createParser();
+    private final static ConfigWriter tomlWriter = TomlFormat.instance().createWriter();
+
+    public <T extends ConfigWithDefaults> T loadFileConfig(String filePath, T fileObject) {
+        File file = new File(filePath);
         try {
             if (file.createNewFile()) {
-                CommentedFileConfig commentedConfig = CommentedFileConfig.builder(file).build();
-                configObject.addDefaults();
-                objectConverter.toConfig(configObject, commentedConfig);
+                CommentedFileConfig commentedConfig = CommentedFileConfig.builder(file).charset(StandardCharsets.UTF_8).build();
+                fileObject.addDefaults();
+                objectConverter.toConfig(fileObject, commentedConfig);
                 commentedConfig.save();
             } else {
-                CommentedFileConfig commentedConfig = CommentedFileConfig.builder(file).build();
-                objectConverter.toObject(commentedConfig, configObject);
+                CommentedConfig commentedConfig = CommentedConfig.inMemory();
+                tomlParser.parse(file, commentedConfig, ParsingMode.ADD, FileNotFoundAction.THROW_ERROR);
+                try {
+                    objectConverter.toObject(commentedConfig, fileObject);
+                } catch (InvalidValueException e) {
+                    logger.error("Filed read config: " + file.getName());
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return configObject;
+        return fileObject;
     }
 
-    public <T extends ConfigWithDefaults> T loadFileConfig(String configPath, String resourceFileName, T configObject) {
-        CommentedConfig commentedConfig = CommentedFileConfig.builder(new File(configPath)).defaultResource(resourceFileName).autosave().build();
-        objectConverter.toObject(commentedConfig, configObject);
+    public <T extends ConfigWithDefaults> T loadFileConfig(String filePath, String resourceFilePath, T fileObject) {
+        File file = new File(filePath);
+        CommentedConfig commentedConfig = CommentedConfig.inMemory();
+        tomlParser.parse(file, commentedConfig, ParsingMode.ADD, FileNotFoundAction.copyResource(resourceFilePath));
+        try {
+            objectConverter.toObject(commentedConfig, fileObject);
+        } catch (InvalidValueException e) {
+            logger.error("Filed read config: " + file.getName());
+        }
 
-        return configObject;
+        return fileObject;
     }
 
 }

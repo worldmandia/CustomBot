@@ -5,7 +5,6 @@ import com.electronwill.nightconfig.core.conversion.SpecNotNull;
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -15,13 +14,13 @@ public class BotConfig extends ConfigWithDefaults {
 
     @Path("DiscordBot")
     @SpecNotNull
-    List<DiscordBot> discordBots = new ArrayList<>();
+    ArrayList<DiscordBot> discordBots = new ArrayList<>();
 
     @Override
     public void addDefaults() {
-        discordBots.add(new DiscordBot(0L, "TOKEN_CHANGE_IT_1"));
-        discordBots.add(new DiscordBot(1L, "TOKEN_CHANGE_IT_2"));
-        discordBots.add(new DiscordBot(2L, "TOKEN_CHANGE_IT_3"));
+        discordBots.add(new DiscordBot(0, "TOKEN_CHANGE_IT_1"));
+        discordBots.add(new DiscordBot(1, "TOKEN_CHANGE_IT_2"));
+        discordBots.add(new DiscordBot(2, "TOKEN_CHANGE_IT_3"));
     }
 
     @AllArgsConstructor
@@ -32,7 +31,7 @@ public class BotConfig extends ConfigWithDefaults {
     public static class DiscordBot {
         @SpecNotNull
         @Path("BotId")
-        Long botId = 0L;
+        int botId = 0;
         @SpecNotNull
         @Path("BotToken")
         String botToken = "NOT_SET";

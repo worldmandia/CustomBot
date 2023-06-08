@@ -2,6 +2,8 @@ package ua.mani123.discordModule;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.mani123.config.ConfigUtils;
 import ua.mani123.config.Objects.BotConfig;
 
@@ -9,13 +11,15 @@ import ua.mani123.config.Objects.BotConfig;
 @NoArgsConstructor
 public class DiscordUtils {
 
+    private final static Logger logger = LoggerFactory.getLogger(DiscordUtils.class);
+
     BotConfig botConfig;
     BotConfig botConfigResource;
 
     public DiscordUtils init(String defaultFolder) {
         botConfig = new ConfigUtils().loadFileConfig(defaultFolder + "/botConfig.toml", new BotConfig());
-        botConfigResource = new ConfigUtils().loadFileConfig(defaultFolder + "/botConfig.toml", "botConfig.toml", new BotConfig());
-        botConfigResource.getDiscordBots().forEach(discordBot -> System.out.println(discordBot.toString()));
+        //botConfigResource = new ConfigUtils().loadFileConfig(defaultFolder + "/botConfig.toml", "botConfig.toml", new BotConfig());
+        //botConfigResource.getDiscordBots().forEach(discordBot -> System.out.println(discordBot.toString()));
         return this;
     }
 

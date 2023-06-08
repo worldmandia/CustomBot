@@ -6,6 +6,8 @@ build/
 
 ### IntelliJ IDEA ###
 test/
+logs/
+settings.toml
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
