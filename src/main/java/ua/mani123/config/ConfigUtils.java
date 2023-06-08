@@ -13,7 +13,6 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.mani123.CustomBot;
-import ua.mani123.config.Objects.ConfigDefaults;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,12 +27,17 @@ public class ConfigUtils {
     private final static ConfigParser<CommentedConfig> tomlParser = TomlFormat.instance().createParser();
     private final static ConfigWriter tomlWriter = TomlFormat.instance().createWriter();
     private CommentedFileConfig commentedConfig;
+    private final String filePath;
 
-    public <T extends ConfigDefaults> T loadFileConfig(String filePath, T fileObject) {
+    public ConfigUtils(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public <T extends ConfigDefaults> T loadFileConfig(T fileObject) {
         File file = new File(filePath);
         try {
             if (file.createNewFile()) {
-                CommentedFileConfig commentedConfig = CommentedFileConfig.builder(file).charset(StandardCharsets.UTF_8).build();
+                CommentedFileConfig commentedConfig = CommentedFileConfig.builder(file).charset(StandardCharsets.UTF_8).onFileNotFound(FileNotFoundAction.CREATE_EMPTY).build();
                 fileObject.addDefaults();
                 objectConverter.toConfig(fileObject, commentedConfig);
                 commentedConfig.save();
@@ -44,7 +48,11 @@ public class ConfigUtils {
                 try {
                     objectConverter.toObject(commentedConfig, fileObject);
                 } catch (InvalidValueException e) {
-                    logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), file.getName()));
+                    if (CustomBot.getLang() != null) {
+                        logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), file.getName()));
+                    } else {
+                        logger.error(String.format("Filed load file: %s", file.getName()));
+                    }
                 }
             }
         } catch (IOException e) {
@@ -59,18 +67,26 @@ public class ConfigUtils {
             objectConverter.toConfig(fileObject, commentedConfig);
             commentedConfig.save();
         } catch (Exception e) {
-            logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), commentedConfig.getFile().getName()));
+            if (CustomBot.getLang() != null) {
+                logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), commentedConfig.getFile().getName()));
+            } else {
+                logger.error(String.format("Filed load file: %s", commentedConfig.getFile().getName()));
+            }
         }
     }
 
-    public <T extends ConfigDefaults> T loadFileConfig(String filePath, String resourceFilePath, T fileObject) {
+    public <T extends ConfigDefaults> T loadFileConfig(String resourceFilePath, T fileObject) {
         File file = new File(filePath);
         commentedConfig = CommentedFileConfig.of(file);
         tomlParser.parse(file, commentedConfig, ParsingMode.ADD, FileNotFoundAction.copyResource(resourceFilePath));
         try {
             objectConverter.toObject(commentedConfig, fileObject);
         } catch (InvalidValueException e) {
-            logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), file.getName()));
+            if (CustomBot.getLang() != null) {
+                logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), file.getName()));
+            } else {
+                logger.error(String.format("Filed load file: %s", file.getName()));
+            }
         }
         fileObject.setUtils(this);
         return fileObject;

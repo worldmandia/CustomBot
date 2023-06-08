@@ -4,9 +4,12 @@ import com.electronwill.nightconfig.core.conversion.Path;
 import com.electronwill.nightconfig.core.conversion.SpecNotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import ua.mani123.config.ConfigDefaults;
 import ua.mani123.config.ConfigUtils;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class Settings extends ConfigDefaults {
 

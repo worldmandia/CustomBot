@@ -1,10 +1,8 @@
-package ua.mani123.config.Objects;
-
-import ua.mani123.config.ConfigUtils;
+package ua.mani123.config;
 
 public abstract class ConfigDefaults {
 
-    ConfigUtils configUtils;
+    protected ConfigUtils configUtils;
 
     public abstract void addDefaults();
     public abstract ConfigUtils getUtils();

@@ -3,6 +3,7 @@ package ua.mani123.config.Objects;
 import com.electronwill.nightconfig.core.conversion.Path;
 import com.electronwill.nightconfig.core.conversion.SpecNotNull;
 import lombok.*;
+import ua.mani123.config.ConfigDefaults;
 import ua.mani123.config.ConfigUtils;
 
 import java.util.ArrayList;
@@ -47,5 +48,10 @@ public class BotConfig extends ConfigDefaults {
     public void setUtils(ConfigUtils configUtils) {
         this.configUtils = configUtils;
     }
+
+    public void setDiscordBots(ArrayList<DiscordBot> discordBots) {
+        this.discordBots = discordBots;
+    }
+
 
 }
