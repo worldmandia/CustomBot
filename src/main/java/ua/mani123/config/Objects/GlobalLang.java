@@ -7,17 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class Settings extends ConfigWithDefaults {
-
-    @Path("Enable_Discord_Bot_Module")
+public class GlobalLang extends ConfigWithDefaults {
+    @Path("Discord_Module_Init")
     @SpecNotNull
-    boolean enableDiscordBotModule = true;
-    @Path("Enable_Addons")
+    String discordModuleInit = "Start init discord module";
+    @Path("Filed_Load_File")
     @SpecNotNull
-    boolean enableAddons = true;
-    @Path("Configs_Folder")
-    @SpecNotNull
-    String defaultConfigFolder = "test";
+    String filedLoadFile = "Filed load file: %s";
 
     @Override
     public void addDefaults() {

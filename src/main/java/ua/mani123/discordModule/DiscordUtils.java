@@ -17,9 +17,7 @@ public class DiscordUtils {
     BotConfig botConfigResource;
 
     public DiscordUtils init(String defaultFolder) {
-        botConfig = new ConfigUtils().loadFileConfig(defaultFolder + "/botConfig.toml", new BotConfig());
-        //botConfigResource = new ConfigUtils().loadFileConfig(defaultFolder + "/botConfig.toml", "botConfig.toml", new BotConfig());
-        //botConfigResource.getDiscordBots().forEach(discordBot -> System.out.println(discordBot.toString()));
+        botConfig = new ConfigUtils().loadFileConfig(defaultFolder + "/BotConfig.toml", new BotConfig());
         return this;
     }
 

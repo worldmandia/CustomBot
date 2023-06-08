@@ -12,6 +12,7 @@ import com.electronwill.nightconfig.toml.TomlFormat;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.mani123.CustomBot;
 import ua.mani123.config.Objects.ConfigWithDefaults;
 
 import java.io.File;
@@ -26,6 +27,7 @@ public class ConfigUtils {
     private final static ObjectConverter objectConverter = new ObjectConverter();
     private final static ConfigParser<CommentedConfig> tomlParser = TomlFormat.instance().createParser();
     private final static ConfigWriter tomlWriter = TomlFormat.instance().createWriter();
+    private CommentedConfig commentedConfig;
 
     public <T extends ConfigWithDefaults> T loadFileConfig(String filePath, T fileObject) {
         File file = new File(filePath);
@@ -35,13 +37,14 @@ public class ConfigUtils {
                 fileObject.addDefaults();
                 objectConverter.toConfig(fileObject, commentedConfig);
                 commentedConfig.save();
+                this.commentedConfig = commentedConfig;
             } else {
-                CommentedConfig commentedConfig = CommentedConfig.inMemory();
+                commentedConfig = CommentedConfig.inMemory();
                 tomlParser.parse(file, commentedConfig, ParsingMode.ADD, FileNotFoundAction.THROW_ERROR);
                 try {
                     objectConverter.toObject(commentedConfig, fileObject);
                 } catch (InvalidValueException e) {
-                    logger.error("Filed read config: " + file.getName());
+                    logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), file.getName()));
                 }
             }
         } catch (IOException e) {
@@ -52,12 +55,12 @@ public class ConfigUtils {
 
     public <T extends ConfigWithDefaults> T loadFileConfig(String filePath, String resourceFilePath, T fileObject) {
         File file = new File(filePath);
-        CommentedConfig commentedConfig = CommentedConfig.inMemory();
+        commentedConfig = CommentedConfig.inMemory();
         tomlParser.parse(file, commentedConfig, ParsingMode.ADD, FileNotFoundAction.copyResource(resourceFilePath));
         try {
             objectConverter.toObject(commentedConfig, fileObject);
         } catch (InvalidValueException e) {
-            logger.error("Filed read config: " + file.getName());
+            logger.error(String.format(CustomBot.getLang().getFiledLoadFile(), file.getName()));
         }
 
         return fileObject;
