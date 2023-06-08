@@ -5,6 +5,7 @@ import com.electronwill.nightconfig.core.conversion.SpecNotNull;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -14,7 +15,7 @@ public class BotConfig extends ConfigWithDefaults {
 
     @Path("DiscordBot")
     @SpecNotNull
-    ArrayList<DiscordBot> discordBots = new ArrayList<>();
+    List<DiscordBot> discordBots = new ArrayList<>();
 
     @Override
     public void addDefaults() {
@@ -29,8 +30,12 @@ public class BotConfig extends ConfigWithDefaults {
     @Setter
     @ToString
     public static class DiscordBot {
-        Long botId;
-        String botToken;
+        @SpecNotNull
+        @Path("BotId")
+        Long botId = 0L;
+        @SpecNotNull
+        @Path("BotToken")
+        String botToken = "NOT_SET";
     }
 
 }

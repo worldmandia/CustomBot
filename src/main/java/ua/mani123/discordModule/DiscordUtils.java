@@ -10,10 +10,12 @@ import ua.mani123.config.Objects.BotConfig;
 public class DiscordUtils {
 
     BotConfig botConfig;
+    BotConfig botConfigResource;
 
     public DiscordUtils init(String defaultFolder) {
         botConfig = new ConfigUtils().loadFileConfig(defaultFolder + "/botConfig.toml", new BotConfig());
-        botConfig.getDiscordBots().forEach(discordBot -> System.out.println(discordBot.toString()));
+        botConfigResource = new ConfigUtils().loadFileConfig(defaultFolder + "/botConfig.toml", "botConfig.toml", new BotConfig());
+        botConfigResource.getDiscordBots().forEach(discordBot -> System.out.println(discordBot.toString()));
         return this;
     }
 

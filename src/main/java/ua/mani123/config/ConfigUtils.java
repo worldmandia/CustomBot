@@ -18,16 +18,24 @@ public class ConfigUtils {
         File file = new File(configPath);
         try {
             if (file.createNewFile()) {
-                CommentedConfig commentedConfig = CommentedFileConfig.builder(file).autosave().build();
+                CommentedFileConfig commentedConfig = CommentedFileConfig.builder(file).build();
                 configObject.addDefaults();
                 objectConverter.toConfig(configObject, commentedConfig);
+                commentedConfig.save();
             } else {
-                CommentedConfig commentedConfig = CommentedFileConfig.builder(file).autosave().build();
+                CommentedFileConfig commentedConfig = CommentedFileConfig.builder(file).build();
                 objectConverter.toObject(commentedConfig, configObject);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return configObject;
+    }
+
+    public <T extends ConfigWithDefaults> T loadFileConfig(String configPath, String resourceFileName, T configObject) {
+        CommentedConfig commentedConfig = CommentedFileConfig.builder(new File(configPath)).defaultResource(resourceFileName).autosave().build();
+        objectConverter.toObject(commentedConfig, configObject);
+
         return configObject;
     }
 
