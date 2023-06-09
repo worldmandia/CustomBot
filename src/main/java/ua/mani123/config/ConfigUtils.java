@@ -32,16 +32,16 @@ public class ConfigUtils {
     private final static ConfigParser<CommentedConfig> tomlParser = TomlFormat.instance().createParser();
     private final static ConfigWriter tomlWriter = TomlFormat.instance().createWriter();
     private final ArrayList<CommentedFileConfig> commentedConfigs = new ArrayList<>();
-    private final String path;
+    private final Path path;
 
     public ConfigUtils(String path) {
-        this.path = path;
+        this.path = Paths.get(path);
     }
 
     public <T extends ConfigDefaults> T loadAsFileConfig(T fileObject, boolean mergeFile) {
         fileObject.setUtils(this);
         try {
-            File file = new File(path);
+            File file = new File(path.toUri());
             if (file.createNewFile()) {
                 CommentedFileConfig commentedConfig = CommentedFileConfig.builder(file).charset(StandardCharsets.UTF_8).onFileNotFound(FileNotFoundAction.CREATE_EMPTY).build();
                 fileObject.addDefaults();
@@ -67,7 +67,7 @@ public class ConfigUtils {
     public <T extends ConfigDefaults> T loadAsFolder(T fileObject) {
         fileObject.setUtils(this);
 
-        Path directory = Paths.get(path);
+        Path directory = Paths.get(path.toUri());
         try {
             if (!Files.exists(directory)) {
                 Files.createDirectories(directory);
@@ -106,7 +106,7 @@ public class ConfigUtils {
 
     public <T extends ConfigDefaults> T loadAsFileConfig(String resourceFilePath, T fileObject, boolean mergeFile) {
         fileObject.setUtils(this);
-        File file = new File(path);
+        File file = new File(path.toUri());
         CommentedFileConfig commentedFileConfig = CommentedFileConfig.of(file);
         commentedConfigs.add(commentedFileConfig);
         if (mergeFile) {
