@@ -68,24 +68,25 @@ public class ConfigUtils {
         fileObject.setUtils(this);
 
         Path directory = Paths.get(path);
-        if (!Files.exists(directory)) {
-            try {
+        try {
+            if (!Files.exists(directory)) {
                 Files.createDirectories(directory);
-                try (Stream<Path> pathStream = Files.walk(directory)) {
-                    pathStream.filter(Files::isRegularFile)
-                            .filter(path -> path.toString().toLowerCase().endsWith(".toml"))
-                            .forEach(file -> {
-                                CommentedFileConfig config = CommentedFileConfig.of(file);
-                                config.load();
-                                commentedConfigs.add(config);
-                            });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
+            try (Stream<Path> pathStream = Files.walk(directory)) {
+                pathStream.filter(Files::isRegularFile)
+                        .filter(path -> path.toString().toLowerCase().endsWith(".toml"))
+                        .forEach(file -> {
+                            CommentedFileConfig config = CommentedFileConfig.of(file);
+                            config.load();
+                            commentedConfigs.add(config);
+                        });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
 
         return fileObject;
     }
