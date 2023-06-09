@@ -25,8 +25,8 @@ public class SEND_MESSAGE extends DiscordConfigs.Action {
 
     @Override
     public void run(GenericEvent event) {
-        if (message == null) {
-            getLogger().error(getId() + "cant send null message");
+        if (!message.equals("")) {
+            getLogger().error(getId() + "cant send empty message");
             return;
         }
         if (event instanceof IReplyCallback replyCallback && reply) {

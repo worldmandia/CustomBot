@@ -64,15 +64,15 @@ public class DiscordUtils extends EnableLogger {
                     case "SEND_EMBED" -> discordConfigs.getActions().add(new SEND_EMBED(
                             type,
                             id,
-                            commentedConfig.getOrElse("url", null),
-                            commentedConfig.getOrElse("title", null),
-                            commentedConfig.getOrElse("description", null),
-                            commentedConfig.getOrElse("timestamp", null),
-                            commentedConfig.getOrElse("color", null),
-                            commentedConfig.getOrElse("thumbnail", null),
-                            commentedConfig.getOrElse("author", null),
-                            commentedConfig.getOrElse("footer", null),
-                            commentedConfig.getOrElse("image", null),
+                            commentedConfig.getOrElse("url", ""),
+                            commentedConfig.getOrElse("title", ""),
+                            commentedConfig.getOrElse("description", ""),
+                            commentedConfig.getOrElse("timestamp", ""),
+                            commentedConfig.getOrElse("color", ""),
+                            commentedConfig.getOrElse("thumbnail", ""),
+                            commentedConfig.getOrElse("author", ""),
+                            commentedConfig.getOrElse("footer", ""),
+                            commentedConfig.getOrElse("image", ""),
                             new ArrayList<>(),
                             commentedConfig.getOrElse("reply", false),
                             commentedConfig.getOrElse("ephemeral", false)
@@ -81,7 +81,7 @@ public class DiscordUtils extends EnableLogger {
                     case "SEND_MESSAGE" -> discordConfigs.getActions().add(new SEND_MESSAGE(
                             type,
                             id,
-                            commentedConfig.getOrElse("message", null),
+                            commentedConfig.getOrElse("message", ""),
                             commentedConfig.getOrElse("reply", false),
                             commentedConfig.getOrElse("ephemeral", false)
                     ));
