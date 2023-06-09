@@ -14,6 +14,7 @@ import ua.mani123.discordModule.actions.SEND_EMBED;
 import ua.mani123.discordModule.actions.SEND_MESSAGE;
 import ua.mani123.discordModule.filters.DISCORD_BOT;
 import ua.mani123.discordModule.filters.ROLE;
+import ua.mani123.discordModule.filters.USER;
 import ua.mani123.discordModule.interaction.COMMAND_INTERACTION;
 import ua.mani123.listeners.GenericListener;
 import ua.mani123.listeners.ReadyListener;
@@ -116,6 +117,12 @@ public class DiscordUtils extends EnableLogger {
                             commentedConfig.getOrElse("roles", new ArrayList<>()),
                             commentedConfig.getOrElse("whitelist", false),
                             commentedConfig.getOrElse("containsALL", false)
+                    ));
+                    case "USER" -> discordConfigs.getFilters().add(new USER(
+                            type,
+                            id,
+                            commentedConfig.getOrElse("users", new ArrayList<>()),
+                            commentedConfig.getOrElse("whitelist", false)
                     ));
                     default -> logger.error(String.format(CustomBot.getLang().getErrorLoadFilters(), id));
                 }
