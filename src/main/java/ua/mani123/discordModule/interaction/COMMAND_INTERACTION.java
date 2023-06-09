@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import ua.mani123.config.Objects.DiscordConfigs;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
 @Setter
@@ -37,12 +38,23 @@ public class COMMAND_INTERACTION extends DiscordConfigs.Interaction {
     @Override
     public void run(GenericEvent event) {
         if (event instanceof SlashCommandInteraction) {
-            orders.stream().filter(order -> {
-                if (order instanceof DiscordConfigs.Filter filter) return filter.canNext(event);
-                else return true;
-            }).forEach(order -> {
-                if (order instanceof DiscordConfigs.Action action) action.run(event);
-            });
+            AtomicBoolean orderExecuted = new AtomicBoolean(true);
+
+            orders.stream()
+                    .filter(order -> {
+                        if (order instanceof DiscordConfigs.Filter filter) {
+                            boolean canNext = filter.canNext(event);
+                            orderExecuted.set(canNext);
+                            return true;
+                        }
+                        return orderExecuted.get();
+                    })
+                    .filter(order -> order instanceof DiscordConfigs.Action && orderExecuted.get())
+                    .map(order -> (DiscordConfigs.Action) order)
+                    .forEach(action -> {
+                        action.run(event);
+                        orderExecuted.set(true);
+                    });
         }
 
     }

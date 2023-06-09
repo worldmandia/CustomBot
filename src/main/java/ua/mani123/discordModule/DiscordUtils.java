@@ -96,11 +96,15 @@ public class DiscordUtils extends EnableLogger {
                 final String type = commentedConfig.getOrElse("type", "").toUpperCase();
                 final String id = commentedConfig.getOrElse("id", "not_set");
                 final ArrayList<String> denyActionsIds = commentedConfig.getOrElse("denyActionsIds", new ArrayList<>());
-                final ArrayList<DiscordConfigs.Action> denyActions = new ArrayList<>();
+
+                final ArrayList<DiscordConfigs.Order> denyOrders = new ArrayList<>();
+                final ArrayList<DiscordConfigs.Order> allOrders = new ArrayList<>();
+                allOrders.addAll(discordConfigs.getActions());
+                allOrders.addAll(discordConfigs.getFilters());
                 try {
-                    denyActionsIds.forEach(denyActionsId -> discordConfigs.getActions().stream().filter(action -> denyActionsId.equals(action.getId())).findFirst().orElseThrow());
+                    denyActionsIds.forEach(actionId -> denyOrders.add(allOrders.stream().filter(order -> order.getId().equals(actionId)).findFirst().orElseThrow()));
                 } catch (NoSuchElementException ignored) {
-                    logger.error(String.format(CustomBot.getLang().getErrorLoadActionInFilter(), id));
+                    logger.error(String.format(CustomBot.getLang().getErrorLoadActionInInteraction(), id));
                 }
 
                 switch (type) {
@@ -109,7 +113,7 @@ public class DiscordUtils extends EnableLogger {
                             id,
                             commentedConfig.getOrElse("discordBotIds", new ArrayList<>()),
                             commentedConfig.getOrElse("whitelist", false),
-                            denyActions
+                            denyOrders
                     ));
                     case "ROLE" -> discordConfigs.getFilters().add(new ROLE(
                             type,
