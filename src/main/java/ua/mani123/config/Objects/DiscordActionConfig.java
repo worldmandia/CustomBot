@@ -33,6 +33,7 @@ public class DiscordActionConfig extends ConfigDefaults {
     public abstract static class Action {
         String type;
         String id;
+        public abstract void run();
     }
 
     @Getter
@@ -41,5 +42,6 @@ public class DiscordActionConfig extends ConfigDefaults {
     public abstract static class Filter {
         String type;
         String id;
+        public abstract boolean canNext();
     }
 }
