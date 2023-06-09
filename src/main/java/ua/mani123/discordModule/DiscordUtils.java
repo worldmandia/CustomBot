@@ -11,6 +11,8 @@ import ua.mani123.CustomBot;
 import ua.mani123.config.ConfigUtils;
 import ua.mani123.config.Objects.BotConfig;
 import ua.mani123.config.Objects.DiscordActionConfig;
+import ua.mani123.discordModule.actions.SEND_EMBED;
+import ua.mani123.discordModule.filters.DISCORD_BOT;
 
 import java.util.ArrayList;
 
@@ -47,6 +49,24 @@ public class DiscordUtils {
     }
 
     public DiscordUtils loadDiscordActions() {
+        discordActionConfig.getActionConfigs().forEach(commentedConfig -> {
+            final String type = commentedConfig.getOrElse("type", "").toUpperCase();
+            final String id = commentedConfig.getOrElse("id", "");
+            switch (type) {
+                case "SEND_EMBED" -> discordActionConfig.getActions().add(new SEND_EMBED(type, id));
+                default -> logger.error(String.format(CustomBot.getLang().getErrorLoadActions(), id));
+            }
+        });
+        logger.info(String.format(CustomBot.getLang().getLoadedActions(), discordActionConfig.getActions().size()));
+        discordActionConfig.getFilterConfigs().forEach(commentedConfig -> {
+            final String type = commentedConfig.getOrElse("type", "").toUpperCase();
+            final String id = commentedConfig.getOrElse("id", "");
+            switch (type) {
+                case "DISCORD_BOT" -> discordActionConfig.getFilters().add(new DISCORD_BOT(type, id));
+                default -> logger.error(String.format(CustomBot.getLang().getErrorLoadFilters(), id));
+            }
+        });
+        logger.info(String.format(CustomBot.getLang().getLoadedFilters(), discordActionConfig.getFilters().size()));
 
         return this;
     }

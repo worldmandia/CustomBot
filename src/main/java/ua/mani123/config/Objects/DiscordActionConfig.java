@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ua.mani123.config.ConfigDefaults;
 
 import java.util.ArrayList;
@@ -17,9 +15,6 @@ import java.util.ArrayList;
 @Setter
 @NoArgsConstructor
 public class DiscordActionConfig extends ConfigDefaults {
-
-    @IgnoreValue
-    private final static Logger logger = LoggerFactory.getLogger(DiscordActionConfig.class);
 
     @Path("Action")
     ArrayList<CommentedConfig> actionConfigs = new ArrayList<>();

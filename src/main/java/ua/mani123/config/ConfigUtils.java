@@ -70,6 +70,7 @@ public class ConfigUtils {
 
         Path directory = Paths.get(path.toUri());
         AtomicInteger counter = new AtomicInteger(0);
+        CommentedConfig config = CommentedConfig.inMemory();
         try {
             if (!Files.exists(directory)) {
                 Files.createDirectories(directory);
@@ -79,13 +80,15 @@ public class ConfigUtils {
                         .filter(path -> path.toString().toLowerCase().endsWith(".toml"))
                         .forEach(file -> {
                             counter.addAndGet(1);
-                            CommentedFileConfig config = CommentedFileConfig.of(file);
-                            config.load();
-                            commentedConfigs.add(config);
+                            CommentedFileConfig fileConfig = CommentedFileConfig.of(file);
+                            fileConfig.load();
+                            tomlParser.parse(file, config, ParsingMode.MERGE, FileNotFoundAction.THROW_ERROR);
+                            commentedConfigs.add(fileConfig);
                         });
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            objectConverter.toObject(config, fileObject);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

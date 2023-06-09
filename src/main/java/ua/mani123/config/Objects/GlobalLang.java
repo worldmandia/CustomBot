@@ -29,4 +29,17 @@ public class GlobalLang extends ConfigDefaults {
     @Path("LoadedFilesFromDirectory")
     @SpecNotNull
     String loadedFilesFromDirectory = "Loaded %s files from %s";
+    @Path("LoadedActions")
+    @SpecNotNull
+    String loadedActions = "Loaded %s actions";
+    @Path("LoadedFilters")
+    @SpecNotNull
+    String loadedFilters = "Loaded %s filters";
+
+    @Path("ErrorLoadActions")
+    @SpecNotNull
+    String errorLoadActions = "Failed load action with id: %s";
+    @Path("ErrorLoadFilters")
+    @SpecNotNull
+    String errorLoadFilters = "Failed load filter with id: %s";
 }

@@ -26,7 +26,7 @@ public class CustomBot {
         lang = new ConfigUtils(settings.getDefaultConfigFolder() + "/global_lang.toml").loadAsFileConfig(new GlobalLang(), true);
         if (settings.isEnableDiscordBotModule()) {
             logger.info(lang.getDiscordModuleInit());
-            discordUtils = new DiscordUtils().init(settings.getDefaultConfigFolder()).enableBots();
+            discordUtils = new DiscordUtils().init(settings.getDefaultConfigFolder()).enableBots().loadDiscordActions();
         }
     }
 
