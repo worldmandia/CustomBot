@@ -43,4 +43,8 @@ public class CustomBot {
     public static GlobalLang getLang() {
         return lang;
     }
+
+    public static DiscordUtils getDiscordUtils() {
+        return discordUtils;
+    }
 }

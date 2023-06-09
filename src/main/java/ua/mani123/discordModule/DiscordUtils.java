@@ -133,13 +133,13 @@ public class DiscordUtils extends EnableLogger {
 
     public DiscordUtils registerListeners(Settings settings) {
         if (settings.isRegisterReadyEvents()) {
-            discordBots.forEach(shardManager -> shardManager.addEventListener(new ReadyListener(this)));
+            discordBots.forEach(shardManager -> shardManager.addEventListener(new ReadyListener()));
         }
         if (settings.isRegisterAllEvents()) {
-            discordBots.forEach(shardManager -> shardManager.addEventListener(new GenericListener(this)));
+            discordBots.forEach(shardManager -> shardManager.addEventListener(new GenericListener()));
         } else {
             if (settings.isRegisterSlashCommandEvents()) {
-                discordBots.forEach(shardManager -> shardManager.addEventListener(new SlashCommandInteractionListener(this)));
+                discordBots.forEach(shardManager -> shardManager.addEventListener(new SlashCommandInteractionListener()));
             }
         }
 

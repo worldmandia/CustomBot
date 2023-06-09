@@ -2,9 +2,9 @@ package ua.mani123.discordModule.interaction;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import ua.mani123.config.Objects.DiscordConfigs;
-import ua.mani123.listeners.SlashCommandInteractionListener;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,7 @@ public class COMMAND_INTERACTION extends DiscordConfigs.Interaction {
 
     @Override
     public void run(GenericEvent event) {
-        if (event instanceof SlashCommandInteractionListener) {
+        if (event instanceof SlashCommandInteraction) {
             orders.stream().filter(order -> {
                 if (order instanceof DiscordConfigs.Filter filter) return filter.canNext(event);
                 else return true;
