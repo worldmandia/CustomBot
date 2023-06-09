@@ -38,25 +38,32 @@ public class DiscordConfigs extends ConfigDefaults {
 
     @Getter
     @Setter
-    @AllArgsConstructor
     public abstract static class Action extends Order {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+        public Action(String type, String id) {
+            super(type, id);
+        }
+
         public abstract void run(GenericEvent event);
     }
 
     @Getter
     @Setter
-    @AllArgsConstructor
     public abstract static class Filter extends Order {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
         private final ArrayList<Action> denyActions = new ArrayList<>();
+
+        public Filter(String type, String id) {
+            super(type, id);
+        }
+
         public abstract boolean canNext(GenericEvent event);
     }
 
     @Getter
     @Setter
     @AllArgsConstructor
-    @NoArgsConstructor
     public abstract static class Interaction {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
         String type;
@@ -67,6 +74,7 @@ public class DiscordConfigs extends ConfigDefaults {
 
     @Getter
     @Setter
+    @AllArgsConstructor
     public abstract static class Order {
         String type;
         String id;
