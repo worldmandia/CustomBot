@@ -23,12 +23,17 @@ public class DiscordConfigs extends ConfigDefaults {
     ArrayList<CommentedConfig> actionConfigs = new ArrayList<>();
     @Path("Filter")
     ArrayList<CommentedConfig> filterConfigs = new ArrayList<>();
+    @Path("Interaction")
+    ArrayList<CommentedConfig> interactionConfigs = new ArrayList<>();
 
     @IgnoreValue
     ArrayList<Action> actions = new ArrayList<>();
 
     @IgnoreValue
     ArrayList<Filter> filters = new ArrayList<>();
+
+    @IgnoreValue
+    ArrayList<Interaction> interactions = new ArrayList<>();
 
     @Getter
     @Setter
@@ -48,5 +53,15 @@ public class DiscordConfigs extends ConfigDefaults {
         String type;
         String id;
         public abstract boolean canNext(GenericEvent event);
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public abstract static class Interaction {
+        private final Logger logger = LoggerFactory.getLogger(this.getClass());
+        String type;
+        String id;
+        public void init() {}
     }
 }

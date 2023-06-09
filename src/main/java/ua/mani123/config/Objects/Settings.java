@@ -21,7 +21,7 @@ public class Settings extends ConfigDefaults {
     @Path("Configs_Folder")
     @SpecNotNull
     String defaultConfigFolder = "test";
-    @Path("Actions_Folder")
+    @Path("Discord_Configs")
     @SpecNotNull
-    String defaultActionsFolder = "actions";
+    String defaultDiscordConfigFolder = "discordConfigs";
 }
