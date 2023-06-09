@@ -96,7 +96,7 @@ public class DiscordUtils {
             logger.info(String.format(CustomBot.getLang().getLoadedFilters(), discordConfigs.getFilters().size()));
         }
 
-        if (discordConfigs.getInteractions() != null) {
+        if (discordConfigs.getInteractionConfigs() != null) {
             discordConfigs.getInteractionConfigs().forEach(commentedConfig -> {
                 final String type = commentedConfig.getOrElse("type", "").toUpperCase();
                 final String id = commentedConfig.getOrElse("id", "not_set");
