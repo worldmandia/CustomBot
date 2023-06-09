@@ -7,7 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.dv8tion.jda.api.events.GenericEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.mani123.config.ConfigDefaults;
+import ua.mani123.discordModule.DiscordUtils;
 
 import java.util.ArrayList;
 
@@ -31,17 +35,19 @@ public class DiscordActionConfig extends ConfigDefaults {
     @Setter
     @AllArgsConstructor
     public abstract static class Action {
+        private final Logger logger = LoggerFactory.getLogger(this.getClass());
         String type;
         String id;
-        public abstract void run();
+        public abstract void run(GenericEvent event);
     }
 
     @Getter
     @Setter
     @AllArgsConstructor
     public abstract static class Filter {
+        private final Logger logger = LoggerFactory.getLogger(this.getClass());
         String type;
         String id;
-        public abstract boolean canNext();
+        public abstract boolean canNext(GenericEvent event);
     }
 }

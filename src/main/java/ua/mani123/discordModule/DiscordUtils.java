@@ -53,7 +53,23 @@ public class DiscordUtils {
             final String type = commentedConfig.getOrElse("type", "").toUpperCase();
             final String id = commentedConfig.getOrElse("id", "");
             switch (type) {
-                case "SEND_EMBED" -> discordActionConfig.getActions().add(new SEND_EMBED(type, id));
+                case "SEND_EMBED" -> discordActionConfig.getActions().add(new SEND_EMBED(
+                        type,
+                        id,
+                        commentedConfig.getOrElse("url", ""),
+                        commentedConfig.getOrElse("title", ""),
+                        commentedConfig.getOrElse("description", ""),
+                        commentedConfig.getOrElse("timestamp", ""),
+                        commentedConfig.getOrElse("color", ""),
+                        commentedConfig.getOrElse("thumbnail", ""),
+                        commentedConfig.getOrElse("author", ""),
+                        commentedConfig.getOrElse("footer", ""),
+                        commentedConfig.getOrElse("image", ""),
+                        new ArrayList<>(),
+                        commentedConfig.getOrElse("reply", false),
+                        commentedConfig.getOrElse("ephemeral", false)
+
+                ));
                 default -> logger.error(String.format(CustomBot.getLang().getErrorLoadActions(), id));
             }
         });
@@ -62,7 +78,12 @@ public class DiscordUtils {
             final String type = commentedConfig.getOrElse("type", "").toUpperCase();
             final String id = commentedConfig.getOrElse("id", "");
             switch (type) {
-                case "DISCORD_BOT" -> discordActionConfig.getFilters().add(new DISCORD_BOT(type, id));
+                case "DISCORD_BOT" -> discordActionConfig.getFilters().add(new DISCORD_BOT(
+                        type,
+                        id,
+                        commentedConfig.getOrElse("discordBotIds", new ArrayList<>()),
+                        commentedConfig.getOrElse("whitelist", false)
+                ));
                 default -> logger.error(String.format(CustomBot.getLang().getErrorLoadFilters(), id));
             }
         });
