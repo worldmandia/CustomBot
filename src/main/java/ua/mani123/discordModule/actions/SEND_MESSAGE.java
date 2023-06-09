@@ -25,16 +25,20 @@ public class SEND_MESSAGE extends DiscordConfigs.Action {
 
     @Override
     public void run(GenericEvent event) {
+        if (message == null) {
+            getLogger().error(getId() + "cant send null message");
+            return;
+        }
         if (event instanceof IReplyCallback replyCallback && reply) {
             replyCallback.reply(message).setEphemeral(ephemeral).queue();
         } else if (event instanceof Interaction interaction) {
             if (interaction.getChannel() instanceof TextChannel textChannel) {
                 textChannel.sendMessage(message).queue();
             } else {
-                getLogger().error("SEND_MESSAGE cant send message to non TextChannel");
+                getLogger().error(getId() + " cant send message to non TextChannel");
             }
         } else {
-            getLogger().error("SEND_MESSAGE cant reply or send message");
+            getLogger().error(getId() + " cant reply or send message");
         }
     }
 }

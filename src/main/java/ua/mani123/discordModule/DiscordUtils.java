@@ -11,6 +11,7 @@ import ua.mani123.config.Objects.BotConfig;
 import ua.mani123.config.Objects.DiscordConfigs;
 import ua.mani123.config.Objects.Settings;
 import ua.mani123.discordModule.actions.SEND_EMBED;
+import ua.mani123.discordModule.actions.SEND_MESSAGE;
 import ua.mani123.discordModule.filters.DISCORD_BOT;
 import ua.mani123.discordModule.interaction.COMMAND_INTERACTION;
 import ua.mani123.listeners.GenericListener;
@@ -61,19 +62,26 @@ public class DiscordUtils extends EnableLogger {
                     case "SEND_EMBED" -> discordConfigs.getActions().add(new SEND_EMBED(
                             type,
                             id,
-                            commentedConfig.getOrElse("url", ""),
-                            commentedConfig.getOrElse("title", ""),
-                            commentedConfig.getOrElse("description", ""),
-                            commentedConfig.getOrElse("timestamp", ""),
-                            commentedConfig.getOrElse("color", ""),
-                            commentedConfig.getOrElse("thumbnail", ""),
-                            commentedConfig.getOrElse("author", ""),
-                            commentedConfig.getOrElse("footer", ""),
-                            commentedConfig.getOrElse("image", ""),
+                            commentedConfig.getOrElse("url", null),
+                            commentedConfig.getOrElse("title", null),
+                            commentedConfig.getOrElse("description", null),
+                            commentedConfig.getOrElse("timestamp", null),
+                            commentedConfig.getOrElse("color", null),
+                            commentedConfig.getOrElse("thumbnail", null),
+                            commentedConfig.getOrElse("author", null),
+                            commentedConfig.getOrElse("footer", null),
+                            commentedConfig.getOrElse("image", null),
                             new ArrayList<>(),
                             commentedConfig.getOrElse("reply", false),
                             commentedConfig.getOrElse("ephemeral", false)
 
+                    ));
+                    case "SEND_MESSAGE" -> discordConfigs.getActions().add(new SEND_MESSAGE(
+                            type,
+                            id,
+                            commentedConfig.getOrElse("message", null),
+                            commentedConfig.getOrElse("reply", false),
+                            commentedConfig.getOrElse("ephemeral", false)
                     ));
                     default -> logger.error(String.format(CustomBot.getLang().getErrorLoadActions(), id));
                 }

@@ -24,7 +24,7 @@ public class SEND_EMBED extends DiscordConfigs.Action {
     private String url;
     private String title;
     private String description;
-    private TemporalAccessor timestamp;
+    private String timestamp;
     private String color;
     private String thumbnail;
     private String author;
@@ -39,22 +39,22 @@ public class SEND_EMBED extends DiscordConfigs.Action {
         this.url = url;
         this.title = title;
         this.description = description;
-        this.timestamp = timestamp.equalsIgnoreCase("NOW") ? Instant.now() : parseTimeStamp(timestamp);
+        this.timestamp = timestamp;
         this.color = color;
         this.thumbnail = thumbnail;
         this.author = author;
         this.footer = footer;
         this.image = image;
         EmbedBuilder embedBuilder = new EmbedBuilder();
-        if (!url.equals("")) embedBuilder.setUrl(this.url);
-        if (!title.equals("")) embedBuilder.setTitle(this.title);
-        if (!description.equals("")) embedBuilder.setDescription(this.description);
-        if (!timestamp.equals("")) embedBuilder.setTimestamp(this.timestamp);
-        if (!color.equals("")) embedBuilder.setColor(Color.decode(this.color));
-        if (!thumbnail.equals("")) embedBuilder.setThumbnail(this.thumbnail);
-        if (!author.equals("")) embedBuilder.setAuthor(this.author);
-        if (!footer.equals("")) embedBuilder.setFooter(this.footer);
-        if (!image.equals("")) embedBuilder.setImage(this.image);
+        if (url != null) embedBuilder.setUrl(this.url);
+        if (title != null) embedBuilder.setTitle(this.title);
+        if (description != null) embedBuilder.setDescription(this.description);
+        if (timestamp != null) embedBuilder.setTimestamp(timestamp.equalsIgnoreCase("NOW") ? Instant.now() : parseTimeStamp(timestamp));
+        if (color != null) embedBuilder.setColor(Color.decode(this.color));
+        if (thumbnail != null) embedBuilder.setThumbnail(this.thumbnail);
+        if (author != null) embedBuilder.setAuthor(this.author);
+        if (footer != null) embedBuilder.setFooter(this.footer);
+        if (image != null) embedBuilder.setImage(this.image);
         this.messageEmbed = embedBuilder.build();
         this.reply = reply;
         this.ephemeral = ephemeral;
@@ -69,18 +69,18 @@ public class SEND_EMBED extends DiscordConfigs.Action {
             if (interaction.getChannel() instanceof TextChannel textChannel) {
                 textChannel.sendMessageEmbeds(messageEmbed).queue();
             } else {
-                getLogger().error("SEND_EMBED cant send message to non TextChannel");
+                getLogger().error(getId() + " cant send message to non TextChannel");
             }
         } else {
-            getLogger().error("SEND_EMBED cant reply or send message");
+            getLogger().error(getId() + " cant reply or send message");
         }
     }
 
     public TemporalAccessor parseTimeStamp(String s) {
-        if (!s.equals("")) {
+        if (s != null) {
             return DateTimeFormatter.ISO_LOCAL_DATE.parse(s);
         } else {
-            return null;
+            return Instant.now();
         }
     }
 }
