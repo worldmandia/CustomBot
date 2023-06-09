@@ -1,11 +1,11 @@
 package ua.mani123.discordModule.filters;
 
 import net.dv8tion.jda.api.events.GenericEvent;
-import ua.mani123.config.Objects.DiscordActionConfig;
+import ua.mani123.config.Objects.DiscordConfigs;
 
 import java.util.ArrayList;
 
-public class DISCORD_BOT extends DiscordActionConfig.Filter {
+public class DISCORD_BOT extends DiscordConfigs.Filter {
 
     private final ArrayList<String> discordBotIds;
     private final boolean whitelist;

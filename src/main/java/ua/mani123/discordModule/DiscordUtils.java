@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import ua.mani123.CustomBot;
 import ua.mani123.config.ConfigUtils;
 import ua.mani123.config.Objects.BotConfig;
-import ua.mani123.config.Objects.DiscordActionConfig;
+import ua.mani123.config.Objects.DiscordConfigs;
 import ua.mani123.discordModule.actions.SEND_EMBED;
 import ua.mani123.discordModule.filters.DISCORD_BOT;
 
@@ -23,13 +23,13 @@ public class DiscordUtils {
     private final static Logger logger = LoggerFactory.getLogger(DiscordUtils.class);
 
     BotConfig botConfig;
-    DiscordActionConfig discordActionConfig;
+    DiscordConfigs discordConfigs;
 
     ArrayList<ShardManager> discordBots = new ArrayList<>();
 
     public DiscordUtils init(String defaultFolder) {
         botConfig = new ConfigUtils(defaultFolder + "/BotConfig.toml").loadAsFileConfig(new BotConfig(), false);
-        discordActionConfig = new ConfigUtils(defaultFolder + "/" + CustomBot.getSettings().getDefaultActionsFolder()).loadAsFolder(new DiscordActionConfig());
+        discordConfigs = new ConfigUtils(defaultFolder + "/" + CustomBot.getSettings().getDefaultActionsFolder()).loadAsFolder(new DiscordConfigs());
         return this;
     }
 
@@ -49,11 +49,11 @@ public class DiscordUtils {
     }
 
     public DiscordUtils loadDiscordActions() {
-        discordActionConfig.getActionConfigs().forEach(commentedConfig -> {
+        discordConfigs.getActionConfigs().forEach(commentedConfig -> {
             final String type = commentedConfig.getOrElse("type", "").toUpperCase();
             final String id = commentedConfig.getOrElse("id", "");
             switch (type) {
-                case "SEND_EMBED" -> discordActionConfig.getActions().add(new SEND_EMBED(
+                case "SEND_EMBED" -> discordConfigs.getActions().add(new SEND_EMBED(
                         type,
                         id,
                         commentedConfig.getOrElse("url", ""),
@@ -73,12 +73,12 @@ public class DiscordUtils {
                 default -> logger.error(String.format(CustomBot.getLang().getErrorLoadActions(), id));
             }
         });
-        logger.info(String.format(CustomBot.getLang().getLoadedActions(), discordActionConfig.getActions().size()));
-        discordActionConfig.getFilterConfigs().forEach(commentedConfig -> {
+        logger.info(String.format(CustomBot.getLang().getLoadedActions(), discordConfigs.getActions().size()));
+        discordConfigs.getFilterConfigs().forEach(commentedConfig -> {
             final String type = commentedConfig.getOrElse("type", "").toUpperCase();
             final String id = commentedConfig.getOrElse("id", "");
             switch (type) {
-                case "DISCORD_BOT" -> discordActionConfig.getFilters().add(new DISCORD_BOT(
+                case "DISCORD_BOT" -> discordConfigs.getFilters().add(new DISCORD_BOT(
                         type,
                         id,
                         commentedConfig.getOrElse("discordBotIds", new ArrayList<>()),
@@ -87,7 +87,7 @@ public class DiscordUtils {
                 default -> logger.error(String.format(CustomBot.getLang().getErrorLoadFilters(), id));
             }
         });
-        logger.info(String.format(CustomBot.getLang().getLoadedFilters(), discordActionConfig.getFilters().size()));
+        logger.info(String.format(CustomBot.getLang().getLoadedFilters(), discordConfigs.getFilters().size()));
 
         return this;
     }

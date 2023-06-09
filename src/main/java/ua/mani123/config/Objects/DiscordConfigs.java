@@ -11,14 +11,13 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.mani123.config.ConfigDefaults;
-import ua.mani123.discordModule.DiscordUtils;
 
 import java.util.ArrayList;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class DiscordActionConfig extends ConfigDefaults {
+public class DiscordConfigs extends ConfigDefaults {
 
     @Path("Action")
     ArrayList<CommentedConfig> actionConfigs = new ArrayList<>();

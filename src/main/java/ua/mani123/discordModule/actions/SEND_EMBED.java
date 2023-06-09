@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.interactions.Interaction;
 import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
-import ua.mani123.config.Objects.DiscordActionConfig;
+import ua.mani123.config.Objects.DiscordConfigs;
 
 import java.awt.*;
 import java.time.Instant;
@@ -16,7 +16,7 @@ import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
 @Getter
-public class SEND_EMBED extends DiscordActionConfig.Action {
+public class SEND_EMBED extends DiscordConfigs.Action {
 
     private final MessageEmbed messageEmbed;
     private final String url;
