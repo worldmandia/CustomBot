@@ -33,7 +33,8 @@ public class SEND_EMBED extends DiscordConfigs.Action {
     private final List<MessageEmbed.Field> fields;
 
     public SEND_EMBED(String type, String id, String url, String title, String description, String timestamp, String color, String thumbnail, String author, String footer, String image, List<MessageEmbed.Field> fields, boolean reply, boolean ephemeral) {
-        super(type, id);
+        this.setId(id);
+        this.setType(type);
         this.url = url;
         this.title = title;
         this.description = description;

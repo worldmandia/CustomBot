@@ -24,4 +24,13 @@ public class Settings extends ConfigDefaults {
     @Path("Discord_Configs")
     @SpecNotNull
     String defaultDiscordConfigFolder = "discordConfigs";
+    @Path("Register_All_Events")
+    @SpecNotNull
+    boolean registerAllEvents = true;
+    @Path("Register_SlashCommand_Event")
+    @SpecNotNull
+    boolean registerSlashCommandEvents = false;
+    @Path("Register_Ready_Event")
+    @SpecNotNull
+    boolean registerReadyEvents = true;
 }

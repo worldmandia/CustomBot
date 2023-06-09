@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.GenericEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,20 +39,16 @@ public class DiscordConfigs extends ConfigDefaults {
     @Getter
     @Setter
     @AllArgsConstructor
-    public abstract static class Action {
+    public abstract static class Action extends Order {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
-        String type;
-        String id;
         public abstract void run(GenericEvent event);
     }
 
     @Getter
     @Setter
     @AllArgsConstructor
-    public abstract static class Filter {
+    public abstract static class Filter extends Order {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
-        String type;
-        String id;
         public abstract boolean canNext(GenericEvent event);
     }
 
@@ -62,6 +59,14 @@ public class DiscordConfigs extends ConfigDefaults {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
         String type;
         String id;
-        public void init() {}
+        public void init(JDA jda) {}
+        public abstract void run(GenericEvent event);
+    }
+
+    @Getter
+    @Setter
+    public abstract static class Order {
+        String type;
+        String id;
     }
 }

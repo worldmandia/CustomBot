@@ -11,7 +11,8 @@ import ua.mani123.discordModule.DiscordUtils;
 
 @Getter
 public class CustomBot {
-    private final static Logger logger = LoggerFactory.getLogger(DiscordUtils.class);
+
+    private final static Logger logger = LoggerFactory.getLogger(CustomBot.class);
 
     private static Settings settings;
     private static GlobalLang lang;
@@ -26,7 +27,7 @@ public class CustomBot {
         lang = new ConfigUtils(settings.getDefaultConfigFolder() + "/global_lang.toml").loadAsFileConfig(new GlobalLang(), true);
         if (settings.isEnableDiscordBotModule()) {
             logger.info(lang.getDiscordModuleInit());
-            discordUtils = new DiscordUtils().init(settings.getDefaultConfigFolder()).enableBots().loadDiscordActions();
+            discordUtils = new DiscordUtils().init(settings.getDefaultConfigFolder()).enableBots().loadDiscordActions().registerListeners(settings);
         }
     }
 

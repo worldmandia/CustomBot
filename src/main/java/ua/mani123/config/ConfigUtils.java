@@ -10,9 +10,8 @@ import com.electronwill.nightconfig.core.io.ConfigWriter;
 import com.electronwill.nightconfig.core.io.ParsingMode;
 import com.electronwill.nightconfig.toml.TomlFormat;
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ua.mani123.CustomBot;
+import ua.mani123.EnableLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,9 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @Getter
-public class ConfigUtils {
-
-    private final static Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
+public class ConfigUtils extends EnableLogger {
 
     private final static ObjectConverter objectConverter = new ObjectConverter();
     private final static ConfigParser<CommentedConfig> tomlParser = TomlFormat.instance().createParser();
