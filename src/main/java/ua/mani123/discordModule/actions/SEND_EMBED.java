@@ -38,7 +38,7 @@ public class SEND_EMBED extends DiscordConfigs.Action {
         this.url = url;
         this.title = title;
         this.description = description;
-        this.timestamp = timestamp.equalsIgnoreCase("NOW") ? Instant.now() : DateTimeFormatter.ISO_LOCAL_DATE.parse(timestamp);
+        this.timestamp = timestamp.equalsIgnoreCase("NOW") ? Instant.now() : parseTimeStamp(timestamp);
         this.color = color;
         this.thumbnail = thumbnail;
         this.author = author;
@@ -72,6 +72,14 @@ public class SEND_EMBED extends DiscordConfigs.Action {
             }
         } else {
             getLogger().error("SEND_EMBED cant reply or send message");
+        }
+    }
+
+    public TemporalAccessor parseTimeStamp(String s) {
+        if (!s.equals("")) {
+            return DateTimeFormatter.ISO_LOCAL_DATE.parse(s);
+        } else {
+            return null;
         }
     }
 }

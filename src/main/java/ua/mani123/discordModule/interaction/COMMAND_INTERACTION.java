@@ -2,6 +2,7 @@ package ua.mani123.discordModule.interaction;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import ua.mani123.config.Objects.DiscordConfigs;
 import ua.mani123.listeners.SlashCommandInteractionListener;
 
@@ -21,7 +22,8 @@ public class COMMAND_INTERACTION extends DiscordConfigs.Interaction {
 
     @Override
     public void init(JDA jda) {
-        jda.getGuilds().stream().filter(guild -> allowedGuilds.contains(guild.getId())).forEach(guild -> guild.upsertCommand(getId().toLowerCase(), commandDescription).queue());
+        jda.updateCommands().addCommands(Commands.slash(getId().toLowerCase(), commandDescription)).queue();
+        //jda.getGuilds().stream().filter(guild -> allowedGuilds.contains(guild.getId())).forEach(guild -> guild.upsertCommand(getId().toLowerCase(), commandDescription).queue());
     }
 
     @Override
