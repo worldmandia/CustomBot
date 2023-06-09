@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ua.mani123.config.ConfigDefaults;
-import ua.mani123.config.ConfigUtils;
 
 @Getter
 @Setter
@@ -27,19 +26,7 @@ public class GlobalLang extends ConfigDefaults {
     @Path("CustomBotDisabled")
     @SpecNotNull
     String customBotDisabled = "CustomBot disabled";
-
-    @Override
-    public void addDefaults() {
-
-    }
-
-    @Override
-    public ConfigUtils getUtils() {
-        return this.configUtils;
-    }
-
-    @Override
-    public void setUtils(ConfigUtils configUtils) {
-        this.configUtils = configUtils;
-    }
+    @Path("LoadedFilesFromDirectory")
+    @SpecNotNull
+    String loadedFilesFromDirectory = "Loaded %s files from %s";
 }

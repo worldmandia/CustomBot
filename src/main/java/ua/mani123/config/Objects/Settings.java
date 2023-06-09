@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ua.mani123.config.ConfigDefaults;
-import ua.mani123.config.ConfigUtils;
 
 @Getter
 @Setter
@@ -22,19 +21,7 @@ public class Settings extends ConfigDefaults {
     @Path("Configs_Folder")
     @SpecNotNull
     String defaultConfigFolder = "test";
-
-    @Override
-    public void addDefaults() {
-
-    }
-
-    @Override
-    public ConfigUtils getUtils() {
-        return this.configUtils;
-    }
-
-    @Override
-    public void setUtils(ConfigUtils configUtils) {
-        this.configUtils = configUtils;
-    }
+    @Path("Actions_Folder")
+    @SpecNotNull
+    String defaultActionsFolder = "actions";
 }

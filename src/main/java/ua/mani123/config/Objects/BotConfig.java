@@ -4,7 +4,6 @@ import com.electronwill.nightconfig.core.conversion.Path;
 import com.electronwill.nightconfig.core.conversion.SpecNotNull;
 import lombok.*;
 import ua.mani123.config.ConfigDefaults;
-import ua.mani123.config.ConfigUtils;
 
 import java.util.ArrayList;
 
@@ -25,11 +24,10 @@ public class BotConfig extends ConfigDefaults {
         discordBots.add(new DiscordBot("2", "TOKEN_CHANGE_IT_3"));
     }
 
-    @AllArgsConstructor
     @NoArgsConstructor
     @Getter
     @Setter
-    @ToString
+    @AllArgsConstructor
     public static class DiscordBot {
         @SpecNotNull
         @Path("BotId")
@@ -38,20 +36,4 @@ public class BotConfig extends ConfigDefaults {
         @Path("BotToken")
         String botToken = "NOT_SET";
     }
-
-    @Override
-    public ConfigUtils getUtils() {
-        return this.configUtils;
-    }
-
-    @Override
-    public void setUtils(ConfigUtils configUtils) {
-        this.configUtils = configUtils;
-    }
-
-    public void setDiscordBots(ArrayList<DiscordBot> discordBots) {
-        this.discordBots = discordBots;
-    }
-
-
 }

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import ua.mani123.CustomBot;
 import ua.mani123.config.ConfigUtils;
 import ua.mani123.config.Objects.BotConfig;
+import ua.mani123.config.Objects.DiscordActionConfig;
 
 import java.util.ArrayList;
 
@@ -20,11 +21,13 @@ public class DiscordUtils {
     private final static Logger logger = LoggerFactory.getLogger(DiscordUtils.class);
 
     BotConfig botConfig;
+    DiscordActionConfig discordActionConfig;
 
     ArrayList<ShardManager> discordBots = new ArrayList<>();
 
     public DiscordUtils init(String defaultFolder) {
         botConfig = new ConfigUtils(defaultFolder + "/BotConfig.toml").loadAsFileConfig(new BotConfig(), false);
+        discordActionConfig = new ConfigUtils(defaultFolder + "/" + CustomBot.getSettings().getDefaultActionsFolder()).loadAsFolder(new DiscordActionConfig());
         return this;
     }
 
@@ -40,6 +43,11 @@ public class DiscordUtils {
         });
         botConfig.getUtils().updateConfig(botConfig, 0);
         logger.info(String.format(CustomBot.getLang().getEnabledDiscordBot(), discordBots.size()));
+        return this;
+    }
+
+    public DiscordUtils loadDiscordActions() {
+
         return this;
     }
 

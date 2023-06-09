@@ -7,8 +7,16 @@ public abstract class ConfigDefaults {
     @IgnoreValue
     protected ConfigUtils configUtils;
 
-    public abstract void addDefaults();
-    public abstract ConfigUtils getUtils();
-    public abstract void setUtils(ConfigUtils configUtils);
+    public void addDefaults() {
+
+    }
+
+    public ConfigUtils getUtils() {
+        return configUtils;
+    }
+
+    public void setUtils(ConfigUtils configUtils) {
+        this.configUtils = configUtils;
+    }
 
 }

@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 @Getter
@@ -68,6 +69,7 @@ public class ConfigUtils {
         fileObject.setUtils(this);
 
         Path directory = Paths.get(path.toUri());
+        AtomicInteger counter = new AtomicInteger(0);
         try {
             if (!Files.exists(directory)) {
                 Files.createDirectories(directory);
@@ -76,6 +78,7 @@ public class ConfigUtils {
                 pathStream.filter(Files::isRegularFile)
                         .filter(path -> path.toString().toLowerCase().endsWith(".toml"))
                         .forEach(file -> {
+                            counter.addAndGet(1);
                             CommentedFileConfig config = CommentedFileConfig.of(file);
                             config.load();
                             commentedConfigs.add(config);
@@ -87,6 +90,7 @@ public class ConfigUtils {
             throw new RuntimeException(e);
         }
 
+        logger.info(String.format(CustomBot.getLang().getLoadedFilesFromDirectory(), counter.get(), path));
 
         return fileObject;
     }
