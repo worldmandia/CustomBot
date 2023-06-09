@@ -24,7 +24,7 @@ public class DiscordUtils {
     ArrayList<ShardManager> discordBots = new ArrayList<>();
 
     public DiscordUtils init(String defaultFolder) {
-        botConfig = new ConfigUtils(defaultFolder + "/BotConfig.toml").loadFileConfig(new BotConfig(), false);
+        botConfig = new ConfigUtils(defaultFolder + "/BotConfig.toml").loadAsFileConfig(new BotConfig(), false);
         return this;
     }
 
@@ -38,7 +38,7 @@ public class DiscordUtils {
                 logger.error(String.format(CustomBot.getLang().getFailedLoadDiscordBot(), discordBot.getBotId(), discordBot.getBotToken()));
             }
         });
-        botConfig.getUtils().updateConfig(botConfig);
+        botConfig.getUtils().updateConfig(botConfig, 0);
         logger.info(String.format(CustomBot.getLang().getEnabledDiscordBot(), discordBots.size()));
         return this;
     }

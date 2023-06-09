@@ -17,6 +17,11 @@ import ua.mani123.CustomBot;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.stream.Stream;
 
 @Getter
 public class ConfigUtils {
@@ -26,77 +31,101 @@ public class ConfigUtils {
     private final static ObjectConverter objectConverter = new ObjectConverter();
     private final static ConfigParser<CommentedConfig> tomlParser = TomlFormat.instance().createParser();
     private final static ConfigWriter tomlWriter = TomlFormat.instance().createWriter();
-    private CommentedFileConfig commentedConfig;
-    private final String filePath;
+    private final ArrayList<CommentedFileConfig> commentedConfigs = new ArrayList<>();
+    private final String path;
 
-    public ConfigUtils(String filePath) {
-        this.filePath = filePath;
+    public ConfigUtils(String path) {
+        this.path = path;
     }
 
-    public <T extends ConfigDefaults> T loadFileConfig(T fileObject, boolean mergeFile) {
-        File file = new File(filePath);
+    public <T extends ConfigDefaults> T loadAsFileConfig(T fileObject, boolean mergeFile) {
+        fileObject.setUtils(this);
         try {
+            File file = new File(path);
             if (file.createNewFile()) {
                 CommentedFileConfig commentedConfig = CommentedFileConfig.builder(file).charset(StandardCharsets.UTF_8).onFileNotFound(FileNotFoundAction.CREATE_EMPTY).build();
                 fileObject.addDefaults();
                 objectConverter.toConfig(fileObject, commentedConfig);
                 commentedConfig.save();
-                this.commentedConfig = commentedConfig;
+                this.commentedConfigs.add(commentedConfig);
             } else {
-                commentedConfig = CommentedFileConfig.of(file);
+                CommentedFileConfig commentedFileConfig = CommentedFileConfig.of(file);
+                commentedConfigs.add(commentedFileConfig);
                 if (mergeFile) {
-                    objectConverter.toConfig(fileObject, commentedConfig);
+                    objectConverter.toConfig(fileObject, commentedFileConfig);
                 }
-                tomlParser.parse(file, commentedConfig, ParsingMode.MERGE, FileNotFoundAction.THROW_ERROR);
-                commentedConfig.save();
-                try {
-                    objectConverter.toObject(commentedConfig, fileObject);
-                } catch (InvalidValueException e) {
-                    if (CustomBot.getLang() != null) {
-                        logger.error(String.format(CustomBot.getLang().getFailedLoadFile(), file.getName()));
-                    } else {
-                        logger.error(String.format("Filed load file: %s", file.getName()));
-                    }
-                }
+                tomlParser.parse(file, commentedFileConfig, ParsingMode.MERGE, FileNotFoundAction.THROW_ERROR);
+                commentedFileConfig.save();
+                convertToObject(fileObject, commentedFileConfig);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        fileObject.setUtils(this);
         return fileObject;
     }
 
-    public <T extends ConfigDefaults> void updateConfig(T fileObject) {
+    public <T extends ConfigDefaults> T loadAsFolder(T fileObject) {
+        fileObject.setUtils(this);
+
+        Path directory = Paths.get(path);
+        if (!Files.exists(directory)) {
+            try {
+                Files.createDirectories(directory);
+                try (Stream<Path> pathStream = Files.walk(directory)) {
+                    pathStream.filter(Files::isRegularFile)
+                            .filter(path -> path.toString().toLowerCase().endsWith(".toml"))
+                            .forEach(file -> {
+                                CommentedFileConfig config = CommentedFileConfig.of(file);
+                                config.load();
+                                commentedConfigs.add(config);
+                            });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return fileObject;
+    }
+
+    public <T extends ConfigDefaults> void updateConfig(T fileObject, int configId) {
         try {
-            objectConverter.toConfig(fileObject, commentedConfig);
-            commentedConfig.save();
+            objectConverter.toConfig(fileObject, commentedConfigs.get(configId));
+            commentedConfigs.get(configId).save();
         } catch (Exception e) {
             if (CustomBot.getLang() != null) {
-                logger.error(String.format(CustomBot.getLang().getFailedLoadFile(), commentedConfig.getFile().getName()));
+                logger.error(String.format(CustomBot.getLang().getFailedLoadFile(), commentedConfigs.get(configId).getFile().getName()));
             } else {
-                logger.error(String.format("Filed load file: %s", commentedConfig.getFile().getName()));
+                logger.error(String.format("Filed load file: %s", commentedConfigs.get(configId).getFile().getName()));
             }
         }
     }
 
-    public <T extends ConfigDefaults> T loadFileConfig(String resourceFilePath, T fileObject, boolean mergeFile) {
-        File file = new File(filePath);
-        commentedConfig = CommentedFileConfig.of(file);
+    public <T extends ConfigDefaults> T loadAsFileConfig(String resourceFilePath, T fileObject, boolean mergeFile) {
+        fileObject.setUtils(this);
+        File file = new File(path);
+        CommentedFileConfig commentedFileConfig = CommentedFileConfig.of(file);
+        commentedConfigs.add(commentedFileConfig);
         if (mergeFile) {
-            objectConverter.toConfig(fileObject, commentedConfig);
+            objectConverter.toConfig(fileObject, commentedFileConfig);
         }
-        tomlParser.parse(file, commentedConfig, ParsingMode.MERGE, FileNotFoundAction.copyResource(resourceFilePath));
+        tomlParser.parse(file, commentedFileConfig, ParsingMode.MERGE, FileNotFoundAction.copyResource(resourceFilePath));
+        convertToObject(fileObject, commentedFileConfig);
+        return fileObject;
+    }
+
+    private <T extends ConfigDefaults> void convertToObject(T fileObject, CommentedFileConfig commentedFileConfig) {
         try {
-            objectConverter.toObject(commentedConfig, fileObject);
+            objectConverter.toObject(commentedFileConfig, fileObject);
         } catch (InvalidValueException e) {
             if (CustomBot.getLang() != null) {
-                logger.error(String.format(CustomBot.getLang().getFailedLoadFile(), file.getName()));
+                logger.error(String.format(CustomBot.getLang().getFailedLoadFile(), commentedFileConfig.getFile().getName()));
             } else {
-                logger.error(String.format("Filed load file: %s", file.getName()));
+                logger.error(String.format("Filed load file: %s", commentedFileConfig.getFile().getName()));
             }
         }
-        fileObject.setUtils(this);
-        return fileObject;
     }
 
 }
