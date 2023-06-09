@@ -9,11 +9,12 @@ public class DISCORD_BOT extends DiscordConfigs.Filter {
 
     private final ArrayList<String> discordBotIds;
     private final boolean whitelist;
-    public DISCORD_BOT(String type, String id, ArrayList<String> discordBotIds, boolean whitelist) {
+    public DISCORD_BOT(String type, String id, ArrayList<String> discordBotIds, boolean whitelist, ArrayList<DiscordConfigs.Action> actions) {
         this.setId(id);
         this.setType(type);
         this.discordBotIds = discordBotIds;
         this.whitelist = whitelist;
+        this.getDenyActions().addAll(actions);
     }
 
 

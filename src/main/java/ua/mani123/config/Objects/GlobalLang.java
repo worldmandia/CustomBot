@@ -52,4 +52,7 @@ public class GlobalLang extends ConfigDefaults {
     @Path("ErrorLoadActionInInteraction")
     @SpecNotNull
     String errorLoadActionInInteraction = "Failed load action in interaction: %s";
+    @Path("ErrorLoadActionInFilter")
+    @SpecNotNull
+    String errorLoadActionInFilter = "Failed load deny action in filter: %s";
 }

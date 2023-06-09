@@ -85,12 +85,21 @@ public class DiscordUtils extends EnableLogger {
             discordConfigs.getFilterConfigs().forEach(commentedConfig -> {
                 final String type = commentedConfig.getOrElse("type", "").toUpperCase();
                 final String id = commentedConfig.getOrElse("id", "not_set");
+                final ArrayList<String> denyActionsIds = commentedConfig.getOrElse("denyActionsIds", new ArrayList<>());
+                final ArrayList<DiscordConfigs.Action> denyActions = new ArrayList<>();
+                try {
+                    denyActionsIds.forEach(denyActionsId -> discordConfigs.getActions().stream().filter(action -> denyActionsId.equals(action.getId())).findFirst().orElseThrow());
+                } catch (NoSuchElementException ignored) {
+                    logger.error(String.format(CustomBot.getLang().getErrorLoadActionInFilter(), id));
+                }
+
                 switch (type) {
                     case "DISCORD_BOT" -> discordConfigs.getFilters().add(new DISCORD_BOT(
                             type,
                             id,
                             commentedConfig.getOrElse("discordBotIds", new ArrayList<>()),
-                            commentedConfig.getOrElse("whitelist", false)
+                            commentedConfig.getOrElse("whitelist", false),
+                            denyActions
                     ));
                     default -> logger.error(String.format(CustomBot.getLang().getErrorLoadFilters(), id));
                 }

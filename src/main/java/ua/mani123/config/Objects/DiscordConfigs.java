@@ -49,6 +49,7 @@ public class DiscordConfigs extends ConfigDefaults {
     @AllArgsConstructor
     public abstract static class Filter extends Order {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
+        private final ArrayList<Action> denyActions = new ArrayList<>();
         public abstract boolean canNext(GenericEvent event);
     }
 
