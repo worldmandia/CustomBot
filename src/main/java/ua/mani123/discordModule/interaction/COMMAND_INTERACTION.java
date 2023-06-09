@@ -1,5 +1,8 @@
 package ua.mani123.discordModule.interaction;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
@@ -8,10 +11,13 @@ import ua.mani123.config.Objects.DiscordConfigs;
 
 import java.util.ArrayList;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public class COMMAND_INTERACTION extends DiscordConfigs.Interaction {
-    private final String commandDescription;
-    private final ArrayList<DiscordConfigs.Order> orders;
-    private final ArrayList<String> allowedGuilds;
+    private String commandDescription;
+    private ArrayList<DiscordConfigs.Order> orders;
+    private ArrayList<String> allowedGuilds;
 
     public COMMAND_INTERACTION(String type, String id, String commandDescription, ArrayList<DiscordConfigs.Order> orders, ArrayList<String> allowedGuilds) {
         super(type, id);

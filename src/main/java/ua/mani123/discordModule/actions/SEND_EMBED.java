@@ -1,6 +1,8 @@
 package ua.mani123.discordModule.actions;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -16,21 +18,23 @@ import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
+@Setter
 public class SEND_EMBED extends DiscordConfigs.Action {
 
-    private final MessageEmbed messageEmbed;
-    private final String url;
-    private final String title;
-    private final String description;
-    private final TemporalAccessor timestamp;
-    private final String color;
-    private final String thumbnail;
-    private final String author;
-    private final String footer;
-    private final String image;
-    private final boolean reply;
-    private final boolean ephemeral;
-    private final List<MessageEmbed.Field> fields;
+    private MessageEmbed messageEmbed;
+    private String url;
+    private String title;
+    private String description;
+    private TemporalAccessor timestamp;
+    private String color;
+    private String thumbnail;
+    private String author;
+    private String footer;
+    private String image;
+    private boolean reply;
+    private boolean ephemeral;
+    private List<MessageEmbed.Field> fields;
 
     public SEND_EMBED(String type, String id, String url, String title, String description, String timestamp, String color, String thumbnail, String author, String footer, String image, List<MessageEmbed.Field> fields, boolean reply, boolean ephemeral) {
         this.setId(id);

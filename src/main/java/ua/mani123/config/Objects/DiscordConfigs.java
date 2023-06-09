@@ -56,11 +56,12 @@ public class DiscordConfigs extends ConfigDefaults {
     @Getter
     @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public abstract static class Interaction {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
         String type;
         String id;
-        public void init(JDA jda) {}
+        public abstract void init(JDA jda);
         public abstract void run(GenericEvent event);
     }
 
