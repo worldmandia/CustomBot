@@ -50,7 +50,7 @@ public class SEND_EMBED extends DiscordConfigs.Action {
         if (!title.equals("")) embedBuilder.setTitle(this.title);
         if (!description.equals("")) embedBuilder.setDescription(this.description);
         if (!timestamp.equals("")) embedBuilder.setTimestamp(timestamp.equalsIgnoreCase("NOW") ? Instant.now() : parseTimeStamp(timestamp));
-        if (!color.equals("")) embedBuilder.setColor(Color.decode(this.color));
+        if (!color.equals("")) embedBuilder.setColor(convertStringToColor(color));
         if (!thumbnail.equals("")) embedBuilder.setThumbnail(this.thumbnail);
         if (!author.equals("")) embedBuilder.setAuthor(this.author);
         if (!footer.equals("")) embedBuilder.setFooter(this.footer);
@@ -73,6 +73,22 @@ public class SEND_EMBED extends DiscordConfigs.Action {
             }
         } else {
             getLogger().error(getId() + " cant reply or send message");
+        }
+    }
+
+    public static Color convertStringToColor(String colorString) {
+        try {
+            if (!colorString.startsWith("#")) {
+                colorString = "#" + colorString;
+            }
+
+            int red = Integer.parseInt(colorString.substring(1, 3), 16);
+            int green = Integer.parseInt(colorString.substring(3, 5), 16);
+            int blue = Integer.parseInt(colorString.substring(5, 7), 16);
+
+            return new Color(red, green, blue);
+        } catch (NumberFormatException | StringIndexOutOfBoundsException ex) {
+            return Color.BLACK;
         }
     }
 
