@@ -1,4 +1,62 @@
 package ua.mani123.discordModule.filters;
 
-public class ROLE {
+import lombok.Getter;
+import lombok.Setter;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.interactions.Interaction;
+import ua.mani123.config.Objects.DiscordConfigs;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+@Getter
+@Setter
+public class ROLE extends DiscordConfigs.Filter {
+
+    private ArrayList<String> roles;
+    private boolean whitelist;
+    private boolean containsALL;
+
+    public ROLE(String type, String id, ArrayList<String> roles, boolean whitelist, boolean containsALL) {
+        super(type, id);
+        this.roles = roles;
+        this.whitelist = whitelist;
+        this.containsALL = containsALL;
+    }
+
+    @Override
+    public boolean canNext(GenericEvent event) {
+        if (event instanceof Interaction interaction) {
+            Member member = interaction.getMember();
+            if (member != null) {
+                ArrayList<Role> guildRoles = new ArrayList<>();
+                for (String roleString : roles) {
+                    Role role = null;
+                    try {
+                        role = member.getGuild().getRoleById(roleString);
+                    } catch (NumberFormatException ignore) {
+                        List<Role> rolesByName = member.getGuild().getRolesByName(roleString, false);
+                        if (!rolesByName.isEmpty()) {
+                            role = rolesByName.get(0);
+                        }
+                    }
+                    if (role != null) {
+                        guildRoles.add(role);
+                    }
+                }
+
+                boolean result = (!containsALL) ?
+                        guildRoles.stream().anyMatch(member.getRoles()::contains) :
+                        new HashSet<>(member.getRoles()).containsAll(guildRoles);
+
+                return whitelist == result;
+            } else {
+                getLogger().info(getId() + " filter can check roles not from guild");
+            }
+        }
+        return false;
+    }
 }

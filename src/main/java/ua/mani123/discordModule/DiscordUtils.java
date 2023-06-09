@@ -13,6 +13,7 @@ import ua.mani123.config.Objects.Settings;
 import ua.mani123.discordModule.actions.SEND_EMBED;
 import ua.mani123.discordModule.actions.SEND_MESSAGE;
 import ua.mani123.discordModule.filters.DISCORD_BOT;
+import ua.mani123.discordModule.filters.ROLE;
 import ua.mani123.discordModule.interaction.COMMAND_INTERACTION;
 import ua.mani123.listeners.GenericListener;
 import ua.mani123.listeners.ReadyListener;
@@ -109,6 +110,13 @@ public class DiscordUtils extends EnableLogger {
                             commentedConfig.getOrElse("whitelist", false),
                             denyActions
                     ));
+                    case "ROLE" -> discordConfigs.getFilters().add(new ROLE(
+                            type,
+                            id,
+                            commentedConfig.getOrElse("roles", new ArrayList<>()),
+                            commentedConfig.getOrElse("whitelist", false),
+                            commentedConfig.getOrElse("containsALL", false)
+                    ));
                     default -> logger.error(String.format(CustomBot.getLang().getErrorLoadFilters(), id));
                 }
             });
@@ -137,7 +145,8 @@ public class DiscordUtils extends EnableLogger {
                             id,
                             commentedConfig.getOrElse("commandDescription", "not_set"),
                             orders,
-                            commentedConfig.getOrElse("allowedGuilds", new ArrayList<>())
+                            commentedConfig.getOrElse("allowedGuilds", new ArrayList<>()),
+                            commentedConfig.getOrElse("guildOnly", false)
                     ));
                     default -> logger.error(String.format(CustomBot.getLang().getErrorLoadInteractions(), id));
                 }

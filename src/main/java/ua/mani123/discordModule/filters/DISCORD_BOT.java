@@ -23,10 +23,6 @@ public class DISCORD_BOT extends DiscordConfigs.Filter {
 
     @Override
     public boolean canNext(GenericEvent event) {
-        if (whitelist) {
-            return discordBotIds.contains(event.getJDA().getSelfUser().getId());
-        } else {
-            return !discordBotIds.contains(event.getJDA().getSelfUser().getId());
-        }
+        return whitelist == discordBotIds.contains(event.getJDA().getSelfUser().getId());
     }
 }

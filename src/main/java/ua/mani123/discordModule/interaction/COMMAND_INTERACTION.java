@@ -16,17 +16,19 @@ public class COMMAND_INTERACTION extends DiscordConfigs.Interaction {
     private String commandDescription;
     private ArrayList<DiscordConfigs.Order> orders;
     private ArrayList<String> allowedGuilds;
+    private boolean guildOnly;
 
-    public COMMAND_INTERACTION(String type, String id, String commandDescription, ArrayList<DiscordConfigs.Order> orders, ArrayList<String> allowedGuilds) {
+    public COMMAND_INTERACTION(String type, String id, String commandDescription, ArrayList<DiscordConfigs.Order> orders, ArrayList<String> allowedGuilds, boolean guildOnly) {
         super(type, id);
         this.commandDescription = commandDescription;
         this.orders = orders;
         this.allowedGuilds = allowedGuilds;
+        this.guildOnly = guildOnly;
     }
 
     @Override
     public void init(JDA jda) {
-        jda.updateCommands().addCommands(Commands.slash(getId().toLowerCase(), commandDescription)).queue();
+        jda.updateCommands().addCommands(Commands.slash(getId().toLowerCase(), commandDescription).setGuildOnly(guildOnly)).queue();
         //jda.getGuilds().stream().filter(guild -> allowedGuilds.contains(guild.getId())).forEach(guild -> guild.upsertCommand(getId().toLowerCase(), commandDescription).queue());
     }
 
