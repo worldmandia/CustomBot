@@ -24,7 +24,7 @@
     </appender>
 
     <!-- Log JDA on Info while others are on Debug -->
-    <logger name="net.dv8tion.jda" level="debug" additivity="false">
+    <logger name="net.dv8tion.jda" level="info" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </logger>
