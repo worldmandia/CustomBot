@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/mani1232/CustomBot/blob/img/CustomBot_Banner.png?raw=true" alt="CustomBot logo"/>
+  <img src="https://github.com/mani1232/CustomBot/blob/master/img/CustomBot_Banner.png?raw=true" alt="CustomBot logo"/>
   <h1>CustomBot</h1>
   <h3>Bot manager aimed at full customization</h3>
 
