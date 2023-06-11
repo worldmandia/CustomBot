@@ -4,10 +4,10 @@
 
 Versions with :white_check_mark: are supported
 
-| Version | Supported          |
-|---------|--------------------|
-| latest  | :white_check_mark: |
-| < 0.1.5 | :x:                |
+| Version   | Supported          |
+|-----------|--------------------|
+| latest    | :white_check_mark: |
+| < 1.0.0.0 | :x:                |
 
 ## Reporting a Vulnerability
 

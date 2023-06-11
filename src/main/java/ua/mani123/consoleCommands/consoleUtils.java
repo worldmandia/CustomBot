@@ -1,10 +1,11 @@
 package ua.mani123.consoleCommands;
 
+import ua.mani123.EnableLogger;
+
 import java.util.List;
 import java.util.Scanner;
-import ua.mani123.CBot;
 
-public class consoleUtils implements Runnable {
+public class consoleUtils extends EnableLogger implements Runnable  {
 
   static boolean isStopped = false;
 
@@ -14,11 +15,11 @@ public class consoleUtils implements Runnable {
       Scanner ins = new Scanner(System.in);
       List<String> parts = List.of(ins.nextLine().split(" "));
       if (parts.get(0).equals("reload")) {
-        reloadCommand.use(parts);
+        new reloadCommand().run(parts);
       } else if (parts.get(0).equals("stop")) {
-        stopCommand.use(parts);
+        new stopCommand().run(parts);
       } else {
-        CBot.getLog().info("Command not found");
+        logger.info("Command not found");
       }
     } while (!isStopped);
   }
