@@ -30,6 +30,7 @@ public class CustomBot {
             logger.info(lang.getDiscordModuleInit());
             discordUtils = new DiscordUtils().init(settings.getDefaultConfigFolder()).enableBots().loadDiscordActions().registerListeners(settings);
         }
+        logger.info("Done!");
         new Thread(new consoleUtils()).start();
     }
 
