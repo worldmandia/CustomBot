@@ -164,7 +164,7 @@ public class DiscordUtils extends EnableLogger {
                     default -> logger.error(String.format(CustomBot.getLang().getErrorLoadInteractions(), id));
                 }
             });
-            logger.info(String.format(CustomBot.getLang().getLoadedInteractions(), discordConfigs.getFilters().size()));
+            logger.info(String.format(CustomBot.getLang().getLoadedInteractions(), discordConfigs.getInteractions().size()));
         }
 
         return this;
