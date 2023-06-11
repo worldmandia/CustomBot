@@ -1,4 +1,4 @@
-package ua.mani123.listeners;
+package ua.mani123.discordModule.listeners;
 
 import ua.mani123.CustomBot;
 import ua.mani123.discordModule.DiscordUtils;

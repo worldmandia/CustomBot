@@ -1,4 +1,4 @@
-package ua.mani123.listeners;
+package ua.mani123.discordModule.listeners;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

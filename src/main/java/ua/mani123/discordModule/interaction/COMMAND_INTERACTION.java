@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import ua.mani123.config.Objects.DiscordConfigs;
 import ua.mani123.discordModule.Utils;
-import ua.mani123.listeners.ReadyListener;
+import ua.mani123.discordModule.listeners.ReadyListener;
 
 import java.util.ArrayList;
 import java.util.List;

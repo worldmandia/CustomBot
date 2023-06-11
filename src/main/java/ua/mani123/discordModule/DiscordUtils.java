@@ -16,9 +16,9 @@ import ua.mani123.discordModule.filters.DISCORD_BOT;
 import ua.mani123.discordModule.filters.ROLE;
 import ua.mani123.discordModule.filters.USER;
 import ua.mani123.discordModule.interaction.COMMAND_INTERACTION;
-import ua.mani123.listeners.GenericListener;
-import ua.mani123.listeners.ReadyListener;
-import ua.mani123.listeners.SlashCommandInteractionListener;
+import ua.mani123.discordModule.listeners.GenericListener;
+import ua.mani123.discordModule.listeners.ReadyListener;
+import ua.mani123.discordModule.listeners.SlashCommandInteractionListener;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
