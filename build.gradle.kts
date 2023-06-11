@@ -33,7 +33,9 @@ dependencies {
 }
 
 tasks.shadowJar {
-    archiveFileName.set("$projectName-$version")
+    dependsOn
+    project.setProperty("mainClassName", "$group.CustomBot")
+    archiveFileName.set("$projectName-$version.jar")
     finalizedBy("buyThePlugins")
 }
 
@@ -43,7 +45,6 @@ tasks.withType<JavaCompile> {
 }
 
 tasks.register("buyThePlugins") {
-    dependsOn
 
     doLast {
         println("If you like the CustomBot, please consider buying it!")
