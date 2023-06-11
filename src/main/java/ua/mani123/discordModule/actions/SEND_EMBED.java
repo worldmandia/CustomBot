@@ -99,4 +99,8 @@ public class SEND_EMBED extends DiscordConfigs.Action {
             return Instant.now();
         }
     }
+
+    public MessageEmbed getMessageEmbed() {
+        return messageEmbed;
+    }
 }

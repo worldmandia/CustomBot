@@ -54,7 +54,6 @@ public class DiscordConfigs extends ConfigDefaults {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
         private ArrayList<Order> denyOrders = new ArrayList<>();
         private int denyOrdersAfterFilter = 0;
-        private boolean denyAllOrdersAfterFilter = false;
 
         public Filter(String type, String id) {
             super(type, id);

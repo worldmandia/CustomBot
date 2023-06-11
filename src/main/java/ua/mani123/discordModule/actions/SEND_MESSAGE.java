@@ -41,4 +41,8 @@ public class SEND_MESSAGE extends DiscordConfigs.Action {
             getLogger().error(getId() + " cant reply or send message");
         }
     }
+
+    public String getMessage() {
+        return message;
+    }
 }

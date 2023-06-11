@@ -14,12 +14,8 @@ public class Utils {
         for (DiscordConfigs.Order order : orders) {
             if (order instanceof DiscordConfigs.Filter filter) {
                 if (!filter.canNext(event)) {
-                    if (filter.isDenyAllOrdersAfterFilter()) {
-                        return;
-                    } else {
-                        canRun = false;
-                        countActions = filter.getDenyOrdersAfterFilter();
-                    }
+                    canRun = false;
+                    countActions = filter.getDenyOrdersAfterFilter();
                 }
             } else if (order instanceof DiscordConfigs.Action action) {
                 if (!canRun) {
