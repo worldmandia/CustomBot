@@ -12,13 +12,14 @@
 ## Features
 
 - **Latest Discord Features** (Thx JDAv5)
-- **Full customization** (Actions, SubActions, Filters)
+- **Full customization** (Actions, DenyActions, Filters, Interactions and much more)
 - **Running multiple bots at the same time**
 - **Well optimized**
 - **TOML config format** (A config file format for humans.)
 
 ### Roadmap
 
+- [TODO](https://github.com/users/mani1232/projects/1)
 - Addons feature
 - Storage data management
 - Can be used for different social networks Discord, Telegram, etc.
