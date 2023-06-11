@@ -52,7 +52,9 @@ public class DiscordConfigs extends ConfigDefaults {
     @Setter
     public abstract static class Filter extends Order {
         private final Logger logger = LoggerFactory.getLogger(this.getClass());
-        private final ArrayList<Order> denyOrders = new ArrayList<>();
+        private ArrayList<Order> denyOrders = new ArrayList<>();
+        private int denyOrdersAfterFilter = 0;
+        private boolean denyAllOrdersAfterFilter = false;
 
         public Filter(String type, String id) {
             super(type, id);

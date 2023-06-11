@@ -157,6 +157,7 @@ public class DiscordUtils extends EnableLogger {
                             commentedConfig.getOrElse("commandDescription", "not_set"),
                             orders,
                             commentedConfig.getOrElse("allowedGuilds", new ArrayList<>()),
+                            commentedConfig.getOrElse("allowedBots", new ArrayList<>()),
                             commentedConfig.getOrElse("guildOnly", false),
                             commentedConfig.getOrElse("nsfw", false)
                     ));

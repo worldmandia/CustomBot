@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.interactions.Interaction;
 import ua.mani123.config.Objects.DiscordConfigs;
+import ua.mani123.discordModule.Utils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -52,9 +53,13 @@ public class ROLE extends DiscordConfigs.Filter {
                         guildRoles.stream().anyMatch(member.getRoles()::contains) :
                         new HashSet<>(member.getRoles()).containsAll(guildRoles);
 
-                return whitelist == result;
+                result = whitelist == result;
+                if (!result) {
+                    Utils.runOrdersWithFilterSystem(event, getDenyOrders());
+                }
+                return result;
             } else {
-                getLogger().info(getId() + " filter can check roles not from guild");
+                getLogger().info(getId() + " filter cant check roles not from guild");
             }
         }
         return false;
