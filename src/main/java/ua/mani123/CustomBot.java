@@ -18,6 +18,7 @@ public class CustomBot {
     private static Settings settings;
     private static GlobalLang lang;
     private static DiscordUtils discordUtils;
+
     public static void main(String[] args) {
         enable();
         Runtime.getRuntime().addShutdownHook(new Thread(CustomBot::disable));

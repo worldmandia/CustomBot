@@ -40,6 +40,10 @@ public class ConfigUtils extends EnableLogger {
         fileObject.setUtils(this);
         try {
             File file = new File(path.toUri());
+            File parent = file.getParentFile();
+            if (parent != null && !parent.exists() && !parent.mkdirs()) {
+                throw new IllegalStateException("Couldn't create dir: " + parent);
+            }
             if (file.createNewFile()) {
                 CommentedFileConfig commentedConfig = CommentedFileConfig.builder(file).charset(StandardCharsets.UTF_8).onFileNotFound(FileNotFoundAction.CREATE_EMPTY).build();
                 fileObject.addDefaults();

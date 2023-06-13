@@ -34,9 +34,23 @@ dependencies {
 
 tasks.shadowJar {
     dependsOn
-    project.setProperty("mainClassName", "$group.CustomBot")
+    manifest {
+        attributes(
+                mapOf(
+                        "Implementation-Title" to projectName,
+                        "Implementation-Version" to version,
+                        "Main-Class" to "ua.mani123.CustomBot"
+                )
+        )
+    }
+    project.setProperty("mainClassName", "ua.mani123.CustomBot")
     archiveFileName.set("$projectName-$version.jar")
     finalizedBy("buyThePlugins")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 tasks.withType<JavaCompile> {
@@ -47,7 +61,7 @@ tasks.withType<JavaCompile> {
 tasks.register("buyThePlugins") {
 
     doLast {
-        println("If you like the CustomBot, please consider buying it!")
+        println("If you like the CustomBot, please consider buying or support it!")
     }
 }
 

@@ -6,14 +6,14 @@ import java.util.List;
 
 public class stopCommand extends EnableLogger {
 
-  public void run(List<String> parts) {
-    if (parts.size() > 1) {
-      if (parts.get(1).equals("all")) {
-        consoleUtils.isStopped = true;
-        System.exit(0);
-        return;
-      }
+    public void run(List<String> parts) {
+        if (parts.size() > 1) {
+            if (parts.get(1).equals("all")) {
+                consoleUtils.isStopped = true;
+                System.exit(0);
+                return;
+            }
+        }
+        logger.info("Usage: stop [all]");
     }
-    logger.info("Usage: stop [all]");
-  }
 }
