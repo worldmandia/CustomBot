@@ -17,12 +17,16 @@ public class ReadyListener extends ListenerAdapter implements DiscordListener {
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         discordUtils.getDiscordConfigs().getInteractions().forEach(interaction -> interaction.init(event.getJDA()));
-        event.getJDA().updateCommands().addCommands(commandsPerBot.get(event.getJDA().getSelfUser().getId())).queue();
-        commandsPerGuild.forEach((s, slashCommandData) -> {
-            Guild guild = event.getJDA().getGuildById(s);
-            if (guild != null && slashCommandData != null) {
-                guild.updateCommands().addCommands(slashCommandData).queue();
-            }
-        });
+        if (!commandsPerBot.isEmpty()) {
+            event.getJDA().updateCommands().addCommands(commandsPerBot.get(event.getJDA().getSelfUser().getId())).queue();
+        }
+        if (!commandsPerGuild.isEmpty()) {
+            commandsPerGuild.forEach((s, slashCommandData) -> {
+                Guild guild = event.getJDA().getGuildById(s);
+                if (guild != null && slashCommandData != null) {
+                    guild.updateCommands().addCommands(slashCommandData).queue();
+                }
+            });
+        }
     }
 }
