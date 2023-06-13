@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.interactions.Interaction;
 import ua.mani123.config.Objects.DiscordConfigs;
+import ua.mani123.discordModule.TempData;
 import ua.mani123.discordModule.Utils;
 
 import java.util.ArrayList;
@@ -24,12 +25,12 @@ public class USER extends DiscordConfigs.Filter {
     }
 
     @Override
-    public boolean canNext(GenericEvent event) {
+    public boolean canNext(GenericEvent event, TempData tempData) {
         boolean answer = false;
         if (event instanceof Interaction interaction) {
             answer = whitelist == users.contains(interaction.getUser().getId());
             if (!answer) {
-                Utils.runOrdersWithFilterSystem(event, getDenyOrders());
+                Utils.runOrdersWithFilterSystem(event, getDenyOrders(), tempData);
             }
             return answer;
         } else {

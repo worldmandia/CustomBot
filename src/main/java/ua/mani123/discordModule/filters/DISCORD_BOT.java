@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.events.GenericEvent;
 import ua.mani123.config.Objects.DiscordConfigs;
+import ua.mani123.discordModule.TempData;
 import ua.mani123.discordModule.Utils;
 
 import java.util.ArrayList;
@@ -23,10 +24,10 @@ public class DISCORD_BOT extends DiscordConfigs.Filter {
 
 
     @Override
-    public boolean canNext(GenericEvent event) {
+    public boolean canNext(GenericEvent event, TempData tempData) {
         boolean answer = whitelist == discordBotIds.contains(event.getJDA().getSelfUser().getId());
         if (!answer) {
-            Utils.runOrdersWithFilterSystem(event, getDenyOrders());
+            Utils.runOrdersWithFilterSystem(event, getDenyOrders(), tempData);
         }
         return answer;
     }

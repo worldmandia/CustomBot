@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.interactions.Interaction;
 import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import ua.mani123.config.Objects.DiscordConfigs;
+import ua.mani123.discordModule.TempData;
 
 import java.awt.*;
 import java.time.Instant;
@@ -62,7 +63,7 @@ public class SEND_EMBED extends DiscordConfigs.Action {
     }
 
     @Override
-    public void run(GenericEvent event) {
+    public void run(GenericEvent event, TempData tempData) {
         if (event instanceof IReplyCallback replyCallback && reply) {
             replyCallback.replyEmbeds(messageEmbed).setEphemeral(ephemeral).queue();
         } else if (event instanceof Interaction interaction) {

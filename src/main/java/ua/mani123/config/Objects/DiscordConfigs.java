@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.mani123.config.ConfigDefaults;
+import ua.mani123.discordModule.TempData;
 
 import java.util.ArrayList;
 
@@ -45,7 +46,7 @@ public class DiscordConfigs extends ConfigDefaults {
             super(type, id);
         }
 
-        public abstract void run(GenericEvent event);
+        public abstract void run(GenericEvent event, TempData tempData);
     }
 
     @Getter
@@ -59,7 +60,7 @@ public class DiscordConfigs extends ConfigDefaults {
             super(type, id);
         }
 
-        public abstract boolean canNext(GenericEvent event);
+        public abstract boolean canNext(GenericEvent event, TempData tempData);
     }
 
     @Getter
@@ -70,7 +71,7 @@ public class DiscordConfigs extends ConfigDefaults {
         String type;
         String id;
         public abstract void init(JDA jda);
-        public abstract void run(GenericEvent event);
+        public abstract void run(GenericEvent event, TempData tempData);
     }
 
     @Getter

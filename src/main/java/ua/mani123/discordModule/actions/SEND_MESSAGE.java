@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.interactions.Interaction;
 import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback;
 import ua.mani123.config.Objects.DiscordConfigs;
+import ua.mani123.discordModule.TempData;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class SEND_MESSAGE extends DiscordConfigs.Action {
     }
 
     @Override
-    public void run(GenericEvent event) {
+    public void run(GenericEvent event, TempData tempData) {
         if (!message.equals("")) {
             getLogger().error(getId() + "cant send empty message");
             return;

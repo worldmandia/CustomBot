@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import ua.mani123.config.Objects.DiscordConfigs;
+import ua.mani123.discordModule.TempData;
 import ua.mani123.discordModule.Utils;
 import ua.mani123.discordModule.listeners.ReadyListener;
 
@@ -59,9 +60,9 @@ public class COMMAND_INTERACTION extends DiscordConfigs.Interaction {
     }
 
     @Override
-    public void run(GenericEvent event) {
+    public void run(GenericEvent event, TempData tempData) {
         if (event instanceof SlashCommandInteraction) {
-            Utils.runOrdersWithFilterSystem(event, orders);
+            Utils.runOrdersWithFilterSystem(event, orders, tempData);
         }
     }
 }
