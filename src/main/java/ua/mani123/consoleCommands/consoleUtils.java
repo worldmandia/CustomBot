@@ -25,7 +25,7 @@ public class consoleUtils extends EnableLogger implements Runnable {
                 }
             } while (!isStopped);
         } catch (NoSuchElementException ignored) {
-            logger.warn("Dont use CTRL+C, use /stop");
+            logger.warn("Dont use CTRL+C, use /stop all");
         }
     }
 }
