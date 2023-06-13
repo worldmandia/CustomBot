@@ -16,10 +16,11 @@ public class USER extends DiscordConfigs.Filter {
     private ArrayList<String> users;
     private boolean whitelist;
 
-    public USER(String type, String id, ArrayList<String> users, boolean whitelist) {
+    public USER(String type, String id, ArrayList<String> users, boolean whitelist, ArrayList<DiscordConfigs.Order> actions) {
         super(type, id);
         this.users = users;
         this.whitelist = whitelist;
+        this.getDenyOrders().addAll(actions);
     }
 
     @Override

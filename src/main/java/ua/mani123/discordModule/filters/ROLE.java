@@ -21,11 +21,12 @@ public class ROLE extends DiscordConfigs.Filter {
     private boolean whitelist;
     private boolean containsALL;
 
-    public ROLE(String type, String id, ArrayList<String> roles, boolean whitelist, boolean containsALL) {
+    public ROLE(String type, String id, ArrayList<String> roles, boolean whitelist, boolean containsALL, ArrayList<DiscordConfigs.Order> actions) {
         super(type, id);
         this.roles = roles;
         this.whitelist = whitelist;
         this.containsALL = containsALL;
+        this.getDenyOrders().addAll(actions);
     }
 
     @Override

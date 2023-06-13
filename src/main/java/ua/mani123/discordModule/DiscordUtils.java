@@ -21,7 +21,6 @@ import ua.mani123.discordModule.listeners.ReadyListener;
 import ua.mani123.discordModule.listeners.SlashCommandInteractionListener;
 
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 
 @Getter
 public class DiscordUtils extends EnableLogger {
@@ -55,6 +54,10 @@ public class DiscordUtils extends EnableLogger {
 
     public DiscordUtils loadDiscordActions() {
         discordConfigs = new ConfigUtils(defaultFolder + "/" + CustomBot.getSettings().getDefaultDiscordConfigFolder()).loadAsFolder(new DiscordConfigs());
+
+        final ArrayList<DiscordConfigs.Order> allOrders = new ArrayList<>();
+        allOrders.addAll(discordConfigs.getActions());
+        allOrders.addAll(discordConfigs.getFilters());
 
         if (discordConfigs.getActionConfigs() != null) {
             discordConfigs.getActionConfigs().forEach(commentedConfig -> {
@@ -97,36 +100,28 @@ public class DiscordUtils extends EnableLogger {
                 final String id = commentedConfig.getOrElse("id", "not_set");
                 final ArrayList<String> denyActionsIds = commentedConfig.getOrElse("denyActionsIds", new ArrayList<>());
 
-                final ArrayList<DiscordConfigs.Order> denyOrders = new ArrayList<>();
-                final ArrayList<DiscordConfigs.Order> allOrders = new ArrayList<>();
-                allOrders.addAll(discordConfigs.getActions());
-                allOrders.addAll(discordConfigs.getFilters());
-                try {
-                    denyActionsIds.forEach(actionId -> denyOrders.add(allOrders.stream().filter(order -> order.getId().equals(actionId)).findFirst().orElseThrow()));
-                } catch (NoSuchElementException ignored) {
-                    logger.error(String.format(CustomBot.getLang().getErrorLoadActionInInteraction(), id));
-                }
-
                 switch (type) {
                     case "DISCORD_BOT" -> discordConfigs.getFilters().add(new DISCORD_BOT(
                             type,
                             id,
                             commentedConfig.getOrElse("discordBotIds", new ArrayList<>()),
                             commentedConfig.getOrElse("whitelist", false),
-                            denyOrders
+                            getOrdersByIds(denyActionsIds, allOrders)
                     ));
                     case "ROLE" -> discordConfigs.getFilters().add(new ROLE(
                             type,
                             id,
                             commentedConfig.getOrElse("roles", new ArrayList<>()),
                             commentedConfig.getOrElse("whitelist", false),
-                            commentedConfig.getOrElse("containsALL", false)
+                            commentedConfig.getOrElse("containsALL", false),
+                            getOrdersByIds(denyActionsIds, allOrders)
                     ));
                     case "USER" -> discordConfigs.getFilters().add(new USER(
                             type,
                             id,
                             commentedConfig.getOrElse("users", new ArrayList<>()),
-                            commentedConfig.getOrElse("whitelist", false)
+                            commentedConfig.getOrElse("whitelist", false),
+                            getOrdersByIds(denyActionsIds, allOrders)
                     ));
                     default -> logger.error(String.format(CustomBot.getLang().getErrorLoadFilters(), id));
                 }
@@ -140,22 +135,12 @@ public class DiscordUtils extends EnableLogger {
                 final String id = commentedConfig.getOrElse("id", "not_set");
                 final ArrayList<String> actionIds = commentedConfig.getOrElse("actionIds", new ArrayList<>());
 
-                final ArrayList<DiscordConfigs.Order> orders = new ArrayList<>();
-                final ArrayList<DiscordConfigs.Order> allOrders = new ArrayList<>();
-                allOrders.addAll(discordConfigs.getActions());
-                allOrders.addAll(discordConfigs.getFilters());
-                try {
-                    actionIds.forEach(actionId -> orders.add(allOrders.stream().filter(order -> order.getId().equals(actionId)).findFirst().orElseThrow()));
-                } catch (NoSuchElementException ignored) {
-                    logger.error(String.format(CustomBot.getLang().getErrorLoadActionInInteraction(), id));
-                }
-
                 switch (type) {
                     case "COMMAND_INTERACTION" -> discordConfigs.getInteractions().add(new COMMAND_INTERACTION(
                             type,
                             id,
                             commentedConfig.getOrElse("commandDescription", "not_set"),
-                            orders,
+                            getOrdersByIds(actionIds, allOrders),
                             commentedConfig.getOrElse("allowedGuilds", new ArrayList<>()),
                             commentedConfig.getOrElse("allowedBots", new ArrayList<>()),
                             commentedConfig.getOrElse("guildOnly", true),
@@ -183,6 +168,21 @@ public class DiscordUtils extends EnableLogger {
         }
 
         return this;
+    }
+
+    private ArrayList<DiscordConfigs.Order> getOrdersByIds(ArrayList<String> ids, ArrayList<DiscordConfigs.Order> allOrders) {
+        ArrayList<DiscordConfigs.Order> filteredOrders = new ArrayList<>();
+
+        for (String id: ids) {
+            DiscordConfigs.Order resultOrder = null;
+            for (DiscordConfigs.Order order: allOrders) {
+                if (order.getId().equals(id)) resultOrder = order;
+            }
+            if (resultOrder != null) filteredOrders.add(resultOrder);
+            else logger.error(String.format(CustomBot.getLang().getErrorLoadActionInInteraction(), id));
+        }
+
+        return filteredOrders;
     }
 
 }
