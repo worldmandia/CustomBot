@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 @Getter
 public class ConfigUtils extends EnableLogger {
 
-    private final static ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
     private final static ConfigParser<CommentedConfig> tomlParser = TomlFormat.instance().createParser();
     private final static ConfigWriter tomlWriter = TomlFormat.instance().createWriter();
     private final ArrayList<CommentedFileConfig> commentedConfigs = new ArrayList<>();

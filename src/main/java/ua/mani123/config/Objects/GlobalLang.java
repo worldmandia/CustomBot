@@ -35,6 +35,9 @@ public class GlobalLang extends ConfigDefaults {
     @Path("LoadedFilters")
     @SpecNotNull
     String loadedFilters = "Loaded %s filters";
+    @Path("LoadedAdditions")
+    @SpecNotNull
+    String loadedAdditions = "Loaded %s additions";
     @Path("LoadedInteractions")
     @SpecNotNull
     String loadedInteractions = "Loaded and enabled %s interactions";
@@ -48,6 +51,9 @@ public class GlobalLang extends ConfigDefaults {
     @Path("ErrorLoadInteractions")
     @SpecNotNull
     String errorLoadInteractions = "Failed load interaction with id: %s";
+    @Path("ErrorLoadAdditions")
+    @SpecNotNull
+    String errorLoadAdditions = "Failed load addition with id: %s";
 
     @Path("ErrorLoadActionInInteraction")
     @SpecNotNull

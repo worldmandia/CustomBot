@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.interactions.Interaction;
 import ua.mani123.config.Objects.DiscordConfigs;
+import ua.mani123.discordModule.TempData;
 import ua.mani123.discordModule.Utils;
 
 import java.util.ArrayList;
@@ -18,20 +19,24 @@ import java.util.List;
 public class ROLE extends DiscordConfigs.Filter {
 
     private ArrayList<String> roles;
+    private boolean checkTempDataRoles;
     private boolean whitelist;
     private boolean containsALL;
 
-    public ROLE(String type, String id, ArrayList<String> roles, boolean whitelist, boolean containsALL) {
+    public ROLE(String type, String id, ArrayList<String> roles, boolean whitelist, boolean containsALL, boolean checkTempDataRoles, ArrayList<DiscordConfigs.Order> actions) {
         super(type, id);
         this.roles = roles;
         this.whitelist = whitelist;
         this.containsALL = containsALL;
+        this.checkTempDataRoles = checkTempDataRoles;
+        this.getDenyOrders().addAll(actions);
     }
 
     @Override
-    public boolean canNext(GenericEvent event) {
+    public boolean canNext(GenericEvent event, TempData tempData) {
         if (event instanceof Interaction interaction) {
             Member member = interaction.getMember();
+
             if (member != null) {
                 ArrayList<Role> guildRoles = new ArrayList<>();
                 for (String roleString : roles) {
@@ -49,13 +54,21 @@ public class ROLE extends DiscordConfigs.Filter {
                     }
                 }
 
-                boolean result = (!containsALL) ?
-                        guildRoles.stream().anyMatch(member.getRoles()::contains) :
-                        new HashSet<>(member.getRoles()).containsAll(guildRoles);
+                boolean result;
+
+                if (checkTempDataRoles) {
+                    result = (!containsALL) ?
+                            guildRoles.stream().anyMatch(tempData.getRoles()::contains) :
+                            new HashSet<>(tempData.getRoles()).containsAll(guildRoles);
+                } else {
+                    result = (!containsALL) ?
+                            guildRoles.stream().anyMatch(member.getRoles()::contains) :
+                            new HashSet<>(member.getRoles()).containsAll(guildRoles);
+                }
 
                 result = whitelist == result;
                 if (!result) {
-                    Utils.runOrdersWithFilterSystem(event, getDenyOrders());
+                    Utils.runOrdersWithFilterSystem(event, getDenyOrders(), tempData);
                 }
                 return result;
             } else {
