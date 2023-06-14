@@ -13,18 +13,18 @@ public class COMMAND_OPTION extends DiscordConfigs.Addition {
     ArrayList<String> choices;
     String optionType;
     String description;
-    boolean isRequired;
-    boolean isAutoComplete;
+    boolean required;
+    boolean autoComplete;
 
     List<Command.Choice> choiceList = new ArrayList<>();
 
-    public COMMAND_OPTION(String type, String id, ArrayList<String> choices, String optionType, String description, boolean isRequired, boolean isAutoComplete) {
+    public COMMAND_OPTION(String type, String id, ArrayList<String> choices, String optionType, String description, boolean required, boolean autoComplete) {
         super(type, id);
         this.choices = choices;
         this.optionType = optionType.toUpperCase();
         this.description = description;
-        this.isRequired = isRequired;
-        this.isAutoComplete = isAutoComplete;
+        this.required = required;
+        this.autoComplete = autoComplete;
 
         for (String s: choices) {
             String[] parts = s.split(":");
@@ -34,6 +34,11 @@ public class COMMAND_OPTION extends DiscordConfigs.Addition {
     }
 
     public OptionData get() {
-        return new OptionData(OptionType.valueOf(optionType), getId(), description, isRequired, isAutoComplete).addChoices(choiceList);
+        try {
+            return new OptionData(OptionType.valueOf(optionType), getId().toLowerCase(), description, required, autoComplete).addChoices(choiceList);
+        } catch (Exception e) {
+            getLogger().warn(e.getMessage() + " in addition with id: " + getId());
+            return null;
+        }
     }
 }

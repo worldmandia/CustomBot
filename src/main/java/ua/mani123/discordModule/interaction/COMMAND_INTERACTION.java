@@ -18,6 +18,7 @@ import ua.mani123.discordModule.listeners.ReadyListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -45,7 +46,7 @@ public class COMMAND_INTERACTION extends DiscordConfigs.Interaction {
     @Override
     public void init(JDA jda) {
         SlashCommandData command = Commands.slash(getId().toLowerCase(), commandDescription).setGuildOnly(guildOnly).setNSFW(nsfw);
-        command.addOptions(additions.stream().filter(addition -> addition instanceof COMMAND_OPTION).map(c -> ((COMMAND_OPTION) command).get()).collect(Collectors.toList()));
+        command.addOptions(additions.stream().filter(addition -> addition instanceof COMMAND_OPTION).map(option -> ((COMMAND_OPTION) option).get()).filter(Objects::nonNull).collect(Collectors.toList()));
         if (!allowedGuilds.isEmpty()) {
             jda.getGuilds().stream().filter(guild -> allowedGuilds.contains(guild.getId())).forEach(guild -> {
                 if (ReadyListener.commandsPerGuild.containsKey(guild.getId())) {

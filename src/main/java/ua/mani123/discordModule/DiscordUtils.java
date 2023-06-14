@@ -68,17 +68,13 @@ public class DiscordUtils extends EnableLogger {
                             commentedConfig.getOrElse("choices", new ArrayList<>()),
                             commentedConfig.getOrElse("optionType", "STRING"),
                             commentedConfig.getOrElse("description", "not_set"),
-                            commentedConfig.getOrElse("isRequired", false),
-                            commentedConfig.getOrElse("isAutoComplete", false)
+                            commentedConfig.getOrElse("required", false),
+                            commentedConfig.getOrElse("autoComplete", false)
                     ));
                 }
             });
             logger.info(String.format(CustomBot.getLang().getLoadedAdditions(), discordConfigs.getAdditions().size()));
         }
-
-        final ArrayList<DiscordConfigs.Order> allOrders = new ArrayList<>();
-        allOrders.addAll(discordConfigs.getActions());
-        allOrders.addAll(discordConfigs.getFilters());
 
         if (discordConfigs.getActionConfigs() != null) {
             discordConfigs.getActionConfigs().forEach(commentedConfig -> {
@@ -115,6 +111,8 @@ public class DiscordUtils extends EnableLogger {
             logger.info(String.format(CustomBot.getLang().getLoadedActions(), discordConfigs.getActions().size()));
         }
 
+        ArrayList<DiscordConfigs.Order> allOrders = new ArrayList<>(discordConfigs.getActions());
+
         if (discordConfigs.getFilterConfigs() != null) {
             discordConfigs.getFilterConfigs().forEach(commentedConfig -> {
                 String type = commentedConfig.getOrElse("type", "").toUpperCase();
@@ -149,6 +147,8 @@ public class DiscordUtils extends EnableLogger {
             });
             logger.info(String.format(CustomBot.getLang().getLoadedFilters(), discordConfigs.getFilters().size()));
         }
+
+        allOrders.addAll(discordConfigs.getFilters());
 
         if (discordConfigs.getInteractionConfigs() != null) {
             discordConfigs.getInteractionConfigs().forEach(commentedConfig -> {
