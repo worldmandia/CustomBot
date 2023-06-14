@@ -71,22 +71,24 @@ public class COMMAND_INTERACTION extends DiscordConfigs.Interaction {
     @Override
     public void run(GenericEvent event, TempData tempData) {
         if (event instanceof SlashCommandInteraction slashCommandInteraction) {
-            for (OptionMapping option : slashCommandInteraction.getOptions()) {
-                switch (option.getType()) {
-                    case ROLE -> tempData.getRoles().add(option.getAsRole());
-                    case STRING -> tempData.getStrings().put(option.getName(), option.getAsString());
-                    case USER -> tempData.getUsers().add(option.getAsUser());
-                    case NUMBER -> tempData.getNumbers().put(option.getName(), option.getAsInt());
-                    case BOOLEAN -> tempData.getBooleans().put(option.getName(), option.getAsBoolean());
-                    case MENTIONABLE -> {
-                        if (option.getAsMentionable() instanceof UserSnowflake userSnowflake) tempData.getUsers().add(userSnowflake);
-                        else if (option.getAsMentionable() instanceof Role role) tempData.getRoles().add(role);
+            if (slashCommandInteraction.getName().equalsIgnoreCase(getId())) {
+                for (OptionMapping option : slashCommandInteraction.getOptions()) {
+                    switch (option.getType()) {
+                        case ROLE -> tempData.getRoles().add(option.getAsRole());
+                        case STRING -> tempData.getStrings().put(option.getName(), option.getAsString());
+                        case USER -> tempData.getUsers().add(option.getAsUser());
+                        case NUMBER -> tempData.getNumbers().put(option.getName(), option.getAsInt());
+                        case BOOLEAN -> tempData.getBooleans().put(option.getName(), option.getAsBoolean());
+                        case MENTIONABLE -> {
+                            if (option.getAsMentionable() instanceof UserSnowflake userSnowflake) tempData.getUsers().add(userSnowflake);
+                            else if (option.getAsMentionable() instanceof Role role) tempData.getRoles().add(role);
+                        }
+                        case CHANNEL -> tempData.getChannels().put(option.getName(), option.getAsChannel());
+                        default -> getLogger().warn("Option: " + option.getName() + " with type " + option.getType() + " dont support");
                     }
-                    case CHANNEL -> tempData.getChannels().put(option.getName(), option.getAsChannel());
-                    default -> getLogger().warn("Option: " + option.getName() + " with type " + option.getType() + " dont support");
                 }
+                Utils.runOrdersWithFilterSystem(event, orders, tempData);
             }
-            Utils.runOrdersWithFilterSystem(event, orders, tempData);
         }
     }
 }
