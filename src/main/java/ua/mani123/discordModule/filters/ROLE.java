@@ -19,14 +19,16 @@ import java.util.List;
 public class ROLE extends DiscordConfigs.Filter {
 
     private ArrayList<String> roles;
+    private boolean checkTempDataRoles;
     private boolean whitelist;
     private boolean containsALL;
 
-    public ROLE(String type, String id, ArrayList<String> roles, boolean whitelist, boolean containsALL, ArrayList<DiscordConfigs.Order> actions) {
+    public ROLE(String type, String id, ArrayList<String> roles, boolean whitelist, boolean containsALL, boolean checkTempDataRoles, ArrayList<DiscordConfigs.Order> actions) {
         super(type, id);
         this.roles = roles;
         this.whitelist = whitelist;
         this.containsALL = containsALL;
+        this.checkTempDataRoles = checkTempDataRoles;
         this.getDenyOrders().addAll(actions);
     }
 
@@ -34,6 +36,7 @@ public class ROLE extends DiscordConfigs.Filter {
     public boolean canNext(GenericEvent event, TempData tempData) {
         if (event instanceof Interaction interaction) {
             Member member = interaction.getMember();
+
             if (member != null) {
                 ArrayList<Role> guildRoles = new ArrayList<>();
                 for (String roleString : roles) {
@@ -51,9 +54,17 @@ public class ROLE extends DiscordConfigs.Filter {
                     }
                 }
 
-                boolean result = (!containsALL) ?
-                        guildRoles.stream().anyMatch(member.getRoles()::contains) :
-                        new HashSet<>(member.getRoles()).containsAll(guildRoles);
+                boolean result;
+
+                if (checkTempDataRoles) {
+                    result = (!containsALL) ?
+                            guildRoles.stream().anyMatch(tempData.getRoles()::contains) :
+                            new HashSet<>(tempData.getRoles()).containsAll(guildRoles);
+                } else {
+                    result = (!containsALL) ?
+                            guildRoles.stream().anyMatch(member.getRoles()::contains) :
+                            new HashSet<>(member.getRoles()).containsAll(guildRoles);
+                }
 
                 result = whitelist == result;
                 if (!result) {

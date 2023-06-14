@@ -142,6 +142,7 @@ public class DiscordUtils extends EnableLogger {
                             commentedConfig.getOrElse("roles", new ArrayList<>()),
                             commentedConfig.getOrElse("whitelist", false),
                             commentedConfig.getOrElse("containsALL", false),
+                            commentedConfig.getOrElse("checkTempDataRoles", false),
                             getOrdersByIds(denyActionsIds, allOrders)
                     ));
                     case "USER" -> discordConfigs.getFilters().add(new USER(
