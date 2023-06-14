@@ -27,6 +27,8 @@ public class DiscordConfigs extends ConfigDefaults {
     ArrayList<CommentedConfig> filterConfigs = new ArrayList<>();
     @Path("Interaction")
     ArrayList<CommentedConfig> interactionConfigs = new ArrayList<>();
+    @Path("Addition")
+    ArrayList<CommentedConfig> additionConfigs = new ArrayList<>();
 
     @IgnoreValue
     ArrayList<Action> actions = new ArrayList<>();
@@ -36,6 +38,9 @@ public class DiscordConfigs extends ConfigDefaults {
 
     @IgnoreValue
     ArrayList<Interaction> interactions = new ArrayList<>();
+
+    @IgnoreValue
+    ArrayList<Addition> additions = new ArrayList<>();
 
     @Getter
     @Setter
@@ -72,6 +77,15 @@ public class DiscordConfigs extends ConfigDefaults {
         String id;
         public abstract void init(JDA jda);
         public abstract void run(GenericEvent event, TempData tempData);
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public abstract static class Addition {
+        private final Logger logger = LoggerFactory.getLogger(this.getClass());
+        String type;
+        String id;
     }
 
     @Getter

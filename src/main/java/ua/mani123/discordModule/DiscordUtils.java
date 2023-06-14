@@ -12,6 +12,7 @@ import ua.mani123.config.Objects.DiscordConfigs;
 import ua.mani123.config.Objects.Settings;
 import ua.mani123.discordModule.actions.SEND_EMBED;
 import ua.mani123.discordModule.actions.SEND_MESSAGE;
+import ua.mani123.discordModule.additions.COMMAND_OPTION;
 import ua.mani123.discordModule.filters.DISCORD_BOT;
 import ua.mani123.discordModule.filters.ROLE;
 import ua.mani123.discordModule.filters.USER;
@@ -55,14 +56,34 @@ public class DiscordUtils extends EnableLogger {
     public DiscordUtils loadDiscordActions() {
         discordConfigs = new ConfigUtils(defaultFolder + "/" + CustomBot.getSettings().getDefaultDiscordConfigFolder()).loadAsFolder(new DiscordConfigs());
 
+        if (discordConfigs.getAdditionConfigs() != null) {
+            discordConfigs.getAdditionConfigs().forEach(commentedConfig -> {
+                String type = commentedConfig.getOrElse("type", "").toUpperCase();
+                String id = commentedConfig.getOrElse("id", "not_set");
+
+                switch (type) {
+                    case "COMMAND_OPTION" -> discordConfigs.getAdditions().add(new COMMAND_OPTION(
+                            type,
+                            id,
+                            commentedConfig.getOrElse("choices", new ArrayList<>()),
+                            commentedConfig.getOrElse("optionType", "STRING"),
+                            commentedConfig.getOrElse("description", "not_set"),
+                            commentedConfig.getOrElse("isRequired", false),
+                            commentedConfig.getOrElse("isAutoComplete", false)
+                    ));
+                }
+            });
+            logger.info(String.format(CustomBot.getLang().getLoadedAdditions(), discordConfigs.getAdditions().size()));
+        }
+
         final ArrayList<DiscordConfigs.Order> allOrders = new ArrayList<>();
         allOrders.addAll(discordConfigs.getActions());
         allOrders.addAll(discordConfigs.getFilters());
 
         if (discordConfigs.getActionConfigs() != null) {
             discordConfigs.getActionConfigs().forEach(commentedConfig -> {
-                final String type = commentedConfig.getOrElse("type", "").toUpperCase();
-                final String id = commentedConfig.getOrElse("id", "not_set");
+                String type = commentedConfig.getOrElse("type", "").toUpperCase();
+                String id = commentedConfig.getOrElse("id", "not_set");
                 switch (type) {
                     case "SEND_EMBED" -> discordConfigs.getActions().add(new SEND_EMBED(
                             type,
@@ -96,9 +117,9 @@ public class DiscordUtils extends EnableLogger {
 
         if (discordConfigs.getFilterConfigs() != null) {
             discordConfigs.getFilterConfigs().forEach(commentedConfig -> {
-                final String type = commentedConfig.getOrElse("type", "").toUpperCase();
-                final String id = commentedConfig.getOrElse("id", "not_set");
-                final ArrayList<String> denyActionsIds = commentedConfig.getOrElse("denyActionsIds", new ArrayList<>());
+                String type = commentedConfig.getOrElse("type", "").toUpperCase();
+                String id = commentedConfig.getOrElse("id", "not_set");
+                ArrayList<String> denyActionsIds = commentedConfig.getOrElse("denyActionsIds", new ArrayList<>());
 
                 switch (type) {
                     case "DISCORD_BOT" -> discordConfigs.getFilters().add(new DISCORD_BOT(
@@ -131,9 +152,10 @@ public class DiscordUtils extends EnableLogger {
 
         if (discordConfigs.getInteractionConfigs() != null) {
             discordConfigs.getInteractionConfigs().forEach(commentedConfig -> {
-                final String type = commentedConfig.getOrElse("type", "").toUpperCase();
-                final String id = commentedConfig.getOrElse("id", "not_set");
-                final ArrayList<String> actionIds = commentedConfig.getOrElse("actionIds", new ArrayList<>());
+                String type = commentedConfig.getOrElse("type", "").toUpperCase();
+                String id = commentedConfig.getOrElse("id", "not_set");
+                ArrayList<String> actionIds = commentedConfig.getOrElse("actionIds", new ArrayList<>());
+                ArrayList<String> additionIds = commentedConfig.getOrElse("additionIds", new ArrayList<>());
 
                 switch (type) {
                     case "COMMAND_INTERACTION" -> discordConfigs.getInteractions().add(new COMMAND_INTERACTION(
@@ -141,6 +163,7 @@ public class DiscordUtils extends EnableLogger {
                             id,
                             commentedConfig.getOrElse("commandDescription", "not_set"),
                             getOrdersByIds(actionIds, allOrders),
+                            getAdditionsByIds(additionIds, discordConfigs.getAdditions()),
                             commentedConfig.getOrElse("allowedGuilds", new ArrayList<>()),
                             commentedConfig.getOrElse("allowedBots", new ArrayList<>()),
                             commentedConfig.getOrElse("guildOnly", true),
@@ -173,9 +196,9 @@ public class DiscordUtils extends EnableLogger {
     private ArrayList<DiscordConfigs.Order> getOrdersByIds(ArrayList<String> ids, ArrayList<DiscordConfigs.Order> allOrders) {
         ArrayList<DiscordConfigs.Order> filteredOrders = new ArrayList<>();
 
-        for (String id: ids) {
+        for (String id : ids) {
             DiscordConfigs.Order resultOrder = null;
-            for (DiscordConfigs.Order order: allOrders) {
+            for (DiscordConfigs.Order order : allOrders) {
                 if (order.getId().equals(id)) resultOrder = order;
             }
             if (resultOrder != null) filteredOrders.add(resultOrder);
@@ -183,6 +206,21 @@ public class DiscordUtils extends EnableLogger {
         }
 
         return filteredOrders;
+    }
+
+    private ArrayList<DiscordConfigs.Addition> getAdditionsByIds(ArrayList<String> ids, ArrayList<DiscordConfigs.Addition> allAdditions) {
+        ArrayList<DiscordConfigs.Addition> filteredAdditions = new ArrayList<>();
+
+        for (String id : ids) {
+            DiscordConfigs.Addition resultAddition = null;
+            for (DiscordConfigs.Addition addition : allAdditions) {
+                if (addition.getId().equals(id)) resultAddition = addition;
+            }
+            if (resultAddition != null) filteredAdditions.add(resultAddition);
+            else logger.error(String.format(CustomBot.getLang().getErrorLoadActionInInteraction(), id));
+        }
+
+        return filteredAdditions;
     }
 
 }
