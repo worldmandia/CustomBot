@@ -105,6 +105,15 @@ public class DiscordUtils extends EnableLogger {
                             commentedConfig.getOrElse("reply", false),
                             commentedConfig.getOrElse("ephemeral", false)
                     ));
+                    case "ROLE" -> discordConfigs.getActions().add(new ua.mani123.discordModule.actions.ROLE(
+                            type,
+                            id,
+                            commentedConfig.getOrElse("rolesIds", new ArrayList<>()),
+                            commentedConfig.getOrElse("remove", false),
+                            commentedConfig.getOrElse("removeIfHave", false),
+                            commentedConfig.getOrElse("useTempDataRoles", false),
+                            commentedConfig.getOrElse("replace", false)
+                    ));
                     default -> logger.error(String.format(CustomBot.getLang().getErrorLoadActions(), id));
                 }
             });
