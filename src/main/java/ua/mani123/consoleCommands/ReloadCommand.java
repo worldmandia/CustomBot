@@ -5,7 +5,7 @@ import ua.mani123.EnableLogger;
 
 import java.util.List;
 
-public class reloadCommand extends EnableLogger {
+public class ReloadCommand extends EnableLogger {
 
     public void run(List<String> parts) {
         if (parts.size() > 1) {

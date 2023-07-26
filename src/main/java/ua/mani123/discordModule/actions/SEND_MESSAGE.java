@@ -1,5 +1,6 @@
 package ua.mani123.discordModule.actions;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -17,11 +18,11 @@ public class SEND_MESSAGE extends DiscordConfigs.Action {
     private boolean reply;
     private boolean ephemeral;
 
-    public SEND_MESSAGE(String type, String id, String message, boolean reply, boolean ephemeral) {
-        super(type, id);
-        this.message = message;
-        this.reply = reply;
-        this.ephemeral = ephemeral;
+    public SEND_MESSAGE(String type, CommentedConfig config) {
+        super(type, config.getOrElse("id", "not_set"));
+        this.message = config.getOrElse("message", "");
+        this.reply = config.getOrElse("reply", false);
+        this.ephemeral = config.getOrElse("ephemeral", false);
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import ua.mani123.config.ConfigUtils;
 import ua.mani123.config.Objects.GlobalLang;
 import ua.mani123.config.Objects.Settings;
-import ua.mani123.consoleCommands.consoleUtils;
+import ua.mani123.consoleCommands.ConsoleUtils;
 import ua.mani123.discordModule.DiscordUtils;
 
 @Getter
@@ -32,7 +32,7 @@ public class CustomBot {
             discordUtils = new DiscordUtils().init(settings.getDefaultConfigFolder()).enableBots().loadDiscordActions().registerListeners(settings);
         }
         logger.info("Done!");
-        new Thread(new consoleUtils()).start();
+        new Thread(new ConsoleUtils()).start();
     }
 
     public static void disable() {

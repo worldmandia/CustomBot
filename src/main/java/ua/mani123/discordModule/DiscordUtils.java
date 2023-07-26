@@ -59,17 +59,10 @@ public class DiscordUtils extends EnableLogger {
         if (discordConfigs.getAdditionConfigs() != null) {
             discordConfigs.getAdditionConfigs().forEach(commentedConfig -> {
                 String type = commentedConfig.getOrElse("type", "").toUpperCase();
-                String id = commentedConfig.getOrElse("id", "not_set");
 
                 switch (type) {
                     case "COMMAND_OPTION" -> discordConfigs.getAdditions().add(new COMMAND_OPTION(
-                            type,
-                            id,
-                            commentedConfig.getOrElse("choices", new ArrayList<>()),
-                            commentedConfig.getOrElse("optionType", "STRING"),
-                            commentedConfig.getOrElse("description", "not_set"),
-                            commentedConfig.getOrElse("required", false),
-                            commentedConfig.getOrElse("autoComplete", false)
+                            type, commentedConfig
                     ));
                 }
             });
@@ -79,42 +72,21 @@ public class DiscordUtils extends EnableLogger {
         if (discordConfigs.getActionConfigs() != null) {
             discordConfigs.getActionConfigs().forEach(commentedConfig -> {
                 String type = commentedConfig.getOrElse("type", "").toUpperCase();
-                String id = commentedConfig.getOrElse("id", "not_set");
                 switch (type) {
                     case "SEND_EMBED" -> discordConfigs.getActions().add(new SEND_EMBED(
                             type,
-                            id,
-                            commentedConfig.getOrElse("url", ""),
-                            commentedConfig.getOrElse("title", ""),
-                            commentedConfig.getOrElse("description", ""),
-                            commentedConfig.getOrElse("timestamp", ""),
-                            commentedConfig.getOrElse("color", ""),
-                            commentedConfig.getOrElse("thumbnail", ""),
-                            commentedConfig.getOrElse("author", ""),
-                            commentedConfig.getOrElse("footer", ""),
-                            commentedConfig.getOrElse("image", ""),
-                            new ArrayList<>(),
-                            commentedConfig.getOrElse("reply", false),
-                            commentedConfig.getOrElse("ephemeral", false)
-
+                            commentedConfig
                     ));
                     case "SEND_MESSAGE" -> discordConfigs.getActions().add(new SEND_MESSAGE(
                             type,
-                            id,
-                            commentedConfig.getOrElse("message", ""),
-                            commentedConfig.getOrElse("reply", false),
-                            commentedConfig.getOrElse("ephemeral", false)
+                            commentedConfig
                     ));
                     case "ROLE" -> discordConfigs.getActions().add(new ua.mani123.discordModule.actions.ROLE(
                             type,
-                            id,
-                            commentedConfig.getOrElse("rolesIds", new ArrayList<>()),
-                            commentedConfig.getOrElse("remove", false),
-                            commentedConfig.getOrElse("removeIfHave", false),
-                            commentedConfig.getOrElse("useTempDataRoles", false),
-                            commentedConfig.getOrElse("replace", false)
+                            commentedConfig
                     ));
-                    default -> logger.error(String.format(CustomBot.getLang().getErrorLoadActions(), id));
+                    default ->
+                            logger.error(String.format(CustomBot.getLang().getErrorLoadActions(), commentedConfig.getOrElse("id", "not_set")));
                 }
             });
             logger.info(String.format(CustomBot.getLang().getLoadedActions(), discordConfigs.getActions().size()));

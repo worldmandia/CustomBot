@@ -21,8 +21,10 @@ dependencies {
 
     //implementation("com.electronwill.night-config:toml:3.6.6")
 
-    implementation("ch.qos.logback:logback-classic:1.4.7")
-    implementation("net.dv8tion:JDA:5.0.0-beta.10")
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    implementation("ch.qos.logback:logback-classic:1.4.8")
+
+    implementation("net.dv8tion:JDA:5.0.0-beta.12")
 
     implementation(files(fileTree("lib") {
         include("*.jar")

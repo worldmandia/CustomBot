@@ -1,5 +1,6 @@
 package ua.mani123.discordModule.actions;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.interactions.Interaction;
@@ -17,13 +18,13 @@ public class ROLE extends DiscordConfigs.Action {
     boolean useTempDataRoles;
     boolean replace;
 
-    public ROLE(String type, String id, ArrayList<String> rolesIds, boolean remove, boolean removeIfHave, boolean useTempDataRoles, boolean replace) {
-        super(type, id);
-        this.rolesIds = rolesIds;
-        this.remove = remove;
-        this.removeIfHave = removeIfHave;
-        this.useTempDataRoles = useTempDataRoles;
-        this.replace = replace;
+    public ROLE(String type, CommentedConfig config) {
+        super(type, config.getOrElse("id", "not_set"));
+        this.rolesIds = config.getOrElse("rolesIds", new ArrayList<>());
+        this.remove = config.getOrElse("remove", false);
+        this.removeIfHave = config.getOrElse("removeIfHave", false);
+        this.useTempDataRoles = config.getOrElse("useTempDataRoles", false);
+        this.replace = config.getOrElse("replace", false);
     }
 
     @Override
@@ -46,8 +47,10 @@ public class ROLE extends DiscordConfigs.Action {
                     allRoles.forEach(role -> Objects.requireNonNull(interaction.getGuild()).removeRoleFromMember(Objects.requireNonNull(interaction.getMember()), role).queue());
                 } else {
                     allRoles.forEach(role -> {
-                        if (!Objects.requireNonNull(interaction.getMember()).getRoles().contains(role)) Objects.requireNonNull(interaction.getGuild()).addRoleToMember(Objects.requireNonNull(interaction.getMember()), role).queue();
-                        else if (removeIfHave) Objects.requireNonNull(interaction.getGuild()).removeRoleFromMember(Objects.requireNonNull(interaction.getMember()), role).queue();
+                        if (!Objects.requireNonNull(interaction.getMember()).getRoles().contains(role))
+                            Objects.requireNonNull(interaction.getGuild()).addRoleToMember(Objects.requireNonNull(interaction.getMember()), role).queue();
+                        else if (removeIfHave)
+                            Objects.requireNonNull(interaction.getGuild()).removeRoleFromMember(Objects.requireNonNull(interaction.getMember()), role).queue();
                     });
                 }
             }

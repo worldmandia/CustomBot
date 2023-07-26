@@ -1,5 +1,6 @@
 package ua.mani123.discordModule.actions;
 
+import com.electronwill.nightconfig.core.CommentedConfig;
 import lombok.Getter;
 import lombok.Setter;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -15,6 +16,7 @@ import java.awt.*;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -35,17 +37,21 @@ public class SEND_EMBED extends DiscordConfigs.Action {
     private boolean ephemeral;
     private List<MessageEmbed.Field> fields;
 
-    public SEND_EMBED(String type, String id, String url, String title, String description, String timestamp, String color, String thumbnail, String author, String footer, String image, List<MessageEmbed.Field> fields, boolean reply, boolean ephemeral) {
-        super(type, id);
-        this.url = url;
-        this.title = title;
-        this.description = description;
-        this.timestamp = timestamp;
-        this.color = color;
-        this.thumbnail = thumbnail;
-        this.author = author;
-        this.footer = footer;
-        this.image = image;
+    public SEND_EMBED(String type, CommentedConfig config) {
+        super(type, config.getOrElse("id", "not_set"));
+        this.url = config.getOrElse("url", "");
+        this.title = config.getOrElse("title", "");
+        this.description = config.getOrElse("description", "");
+        this.timestamp = config.getOrElse("timestamp", "");
+        this.color = config.getOrElse("color", "");
+        this.thumbnail = config.getOrElse("thumbnail", "");
+        this.author = config.getOrElse("author", "");
+        this.footer = config.getOrElse("footer", "");
+        this.image = config.getOrElse("image", "");
+        this.fields = new ArrayList<>(); // TODO soon
+        this.reply = config.getOrElse("reply", false);
+        this.ephemeral = config.getOrElse("ephemeral", false);
+
         EmbedBuilder embedBuilder = new EmbedBuilder();
         if (!url.equals("")) embedBuilder.setUrl(this.url);
         if (!title.equals("")) embedBuilder.setTitle(this.title);
@@ -57,9 +63,6 @@ public class SEND_EMBED extends DiscordConfigs.Action {
         if (!footer.equals("")) embedBuilder.setFooter(this.footer);
         if (!image.equals("")) embedBuilder.setImage(this.image);
         this.messageEmbed = embedBuilder.build();
-        this.reply = reply;
-        this.ephemeral = ephemeral;
-        this.fields = fields; // TODO soon
     }
 
     @Override

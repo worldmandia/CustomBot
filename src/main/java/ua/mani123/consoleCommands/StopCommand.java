@@ -4,12 +4,12 @@ import ua.mani123.EnableLogger;
 
 import java.util.List;
 
-public class stopCommand extends EnableLogger {
+public class StopCommand extends EnableLogger {
 
     public void run(List<String> parts) {
         if (parts.size() > 1) {
             if (parts.get(1).equals("all")) {
-                consoleUtils.isStopped = true;
+                ConsoleUtils.isStopped = true;
                 System.exit(0);
                 return;
             }
